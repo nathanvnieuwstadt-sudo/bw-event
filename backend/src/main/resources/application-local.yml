@@ -1,0 +1,15 @@
+# Overrides for local development — values also set via docker-compose env vars,
+# this file is a fallback for running the backend directly outside Docker.
+spring:
+  jpa:
+    show-sql: true
+
+app:
+  jwt:
+    secret: local-dev-secret-change-in-production-must-be-32-chars-min
+    expiration-ms: 86400000
+
+logging:
+  level:
+    com.bwevent: DEBUG
+    org.springframework.security: DEBUG

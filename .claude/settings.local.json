@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(python3 -c \"import bcrypt; h = bcrypt.hashpw\\(b'devpassword', bcrypt.gensalt\\(12\\)\\); print\\(h.decode\\(\\)\\)\")",
+      "Bash(python3 -c \"import subprocess; result = subprocess.run\\(['htpasswd', '-bnBC', '12', '', 'devpassword'], capture_output=True, text=True\\); print\\(result.stdout.strip\\(\\).lstrip\\(':'\\)\\)\")",
+      "Bash(npx playwright *)",
+      "Bash(npm --version)",
+      "Bash(python3 *)",
+      "Bash(curl *)",
+      "Skill(impeccable)",
+      "Bash(node /Users/macbookpronathan/.claude/skills/impeccable/scripts/load-context.mjs)",
+      "Bash(npx tsc *)",
+      "Bash(./mvnw compile *)",
+      "Bash(mvn compile *)",
+      "Bash(java -version)",
+      "Bash(/Users/macbookpronathan/.m2/wrapper/dists/apache-maven-3.9.11-bin/6mqf5t809d9geo83kj4ttckcbc/apache-maven-3.9.11/bin/mvn compile *)",
+      "Bash(docker-compose down *)",
+      "Bash(docker-compose up *)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
+    ]
+  }
+}

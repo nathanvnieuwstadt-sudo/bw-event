@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply antialiased bg-stone-50 text-stone-900;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  input, select, textarea {
+    @apply outline-none;
+  }
+}
+
+@layer utilities {
+  .section-label {
+    @apply text-[10px] font-semibold uppercase tracking-widest text-stone-400;
+  }
+}
+
+@media print {
+  aside, header { display: none !important; }
+  main { padding: 0 !important; overflow: visible !important; }
+}

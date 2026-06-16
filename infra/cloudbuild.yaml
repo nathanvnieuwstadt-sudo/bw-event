@@ -1,0 +1,67 @@
+steps:
+  # Build backend
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - build
+      - -t
+      - europe-west1-docker.pkg.dev/$PROJECT_ID/bwevent/backend:$COMMIT_SHA
+      - ./backend
+    id: build-backend
+
+  # Build frontend
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - build
+      - -t
+      - europe-west1-docker.pkg.dev/$PROJECT_ID/bwevent/frontend:$COMMIT_SHA
+      - --build-arg
+      - VITE_API_BASE_URL=https://api.$_DOMAIN
+      - ./frontend
+    id: build-frontend
+
+  # Push backend
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - push
+      - europe-west1-docker.pkg.dev/$PROJECT_ID/bwevent/backend:$COMMIT_SHA
+    waitFor: [build-backend]
+
+  # Push frontend
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - push
+      - europe-west1-docker.pkg.dev/$PROJECT_ID/bwevent/frontend:$COMMIT_SHA
+    waitFor: [build-frontend]
+
+  # Deploy backend to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - bwevent-backend
+      - --image=europe-west1-docker.pkg.dev/$PROJECT_ID/bwevent/backend:$COMMIT_SHA
+      - --region=europe-west1
+      - --platform=managed
+      - --allow-unauthenticated
+    waitFor: [build-backend]
+
+  # Deploy frontend to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - bwevent-frontend
+      - --image=europe-west1-docker.pkg.dev/$PROJECT_ID/bwevent/frontend:$COMMIT_SHA
+      - --region=europe-west1
+      - --platform=managed
+      - --allow-unauthenticated
+    waitFor: [build-frontend]
+
+substitutions:
+  _DOMAIN: bwevent.example.com
+
+images:
+  - europe-west1-docker.pkg.dev/$PROJECT_ID/bwevent/backend:$COMMIT_SHA
+  - europe-west1-docker.pkg.dev/$PROJECT_ID/bwevent/frontend:$COMMIT_SHA
