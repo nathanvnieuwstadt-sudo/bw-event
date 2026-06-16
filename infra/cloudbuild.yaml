@@ -3,6 +3,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - build
+      - --platform=linux/amd64
       - -t
       - europe-west1-docker.pkg.dev/$PROJECT_ID/bwevent/backend:$COMMIT_SHA
       - ./backend
@@ -12,10 +13,11 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - build
+      - --platform=linux/amd64
       - -t
       - europe-west1-docker.pkg.dev/$PROJECT_ID/bwevent/frontend:$COMMIT_SHA
       - --build-arg
-      - VITE_API_BASE_URL=https://api.$_DOMAIN
+      - VITE_API_BASE_URL=https://bwevent-backend-806738769373.europe-west1.run.app
       - ./frontend
     id: build-frontend
 
@@ -25,6 +27,7 @@ steps:
       - push
       - europe-west1-docker.pkg.dev/$PROJECT_ID/bwevent/backend:$COMMIT_SHA
     waitFor: [build-backend]
+    id: push-backend
 
   # Push frontend
   - name: 'gcr.io/cloud-builders/docker'
@@ -32,6 +35,7 @@ steps:
       - push
       - europe-west1-docker.pkg.dev/$PROJECT_ID/bwevent/frontend:$COMMIT_SHA
     waitFor: [build-frontend]
+    id: push-frontend
 
   # Deploy backend to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -43,8 +47,14 @@ steps:
       - --image=europe-west1-docker.pkg.dev/$PROJECT_ID/bwevent/backend:$COMMIT_SHA
       - --region=europe-west1
       - --platform=managed
+      - --service-account=bwevent-backend@$PROJECT_ID.iam.gserviceaccount.com
       - --allow-unauthenticated
-    waitFor: [build-backend]
+      - --add-cloudsql-instances=$PROJECT_ID:europe-west1:bwevent-db
+      - --set-secrets=DB_NAME=bwevent-db-name:latest,DB_USER=bwevent-db-user:latest,DB_PASSWORD=bwevent-db-password:latest,JWT_SECRET=bwevent-jwt-secret:latest
+      - --set-env-vars=SPRING_PROFILES_ACTIVE=prod
+      - --min-instances=1
+      - --memory=512Mi
+    waitFor: [push-backend]
 
   # Deploy frontend to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -57,11 +67,14 @@ steps:
       - --region=europe-west1
       - --platform=managed
       - --allow-unauthenticated
-    waitFor: [build-frontend]
-
-substitutions:
-  _DOMAIN: bwevent.example.com
+      - --port=8080
+      - --min-instances=1
+      - --memory=256Mi
+    waitFor: [push-frontend]
 
 images:
   - europe-west1-docker.pkg.dev/$PROJECT_ID/bwevent/backend:$COMMIT_SHA
   - europe-west1-docker.pkg.dev/$PROJECT_ID/bwevent/frontend:$COMMIT_SHA
+
+options:
+  machineType: E2_HIGHCPU_8

@@ -1,0 +1,3 @@
+spring:
+  datasource:
+    url: jdbc:postgresql:///bwevent?cloudSqlInstance=bw-event-499612:europe-west1:bwevent-db&socketFactory=com.google.cloud.sql.postgres.SocketFactory
