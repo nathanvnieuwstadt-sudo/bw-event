@@ -34,11 +34,23 @@ Dev seed user (created by V2 migration):
 
 ```
 bw-event/
-├── backend/         Spring Boot application
+├── backend/         Spring Boot application (GCP Cloud Run target)
+├── backend-vercel/  Node/TypeScript backend (Vercel + Supabase target — see below)
 ├── frontend/        React + Vite SPA
 ├── infra/           GCP Cloud Run / Cloud Build configs
 └── docker-compose.yml
 ```
+
+**Two interchangeable backends target two different infra paths.** `backend/`
+(Java/Spring Boot) deploys to GCP per the section below. `backend-vercel/`
+(Hono + postgres.js, no ORM) is a from-scratch reimplementation of the exact
+same API contract — same routes, same `{data,message,timestamp}` envelope,
+same JWT claims, same bcrypt hashes — built to run as Vercel serverless
+functions against a Supabase Postgres database instead of Cloud Run/Cloud
+SQL. The frontend works against either unmodified; only `VITE_API_BASE_URL`
+changes. See `backend-vercel/README.md` for deploy steps and the one
+deliberate behavior deviation (401 instead of Spring Security's bare 403 on
+a missing/invalid token).
 
 ### Backend: `backend/src/main/java/com/bwevent/`
 
