@@ -13,5 +13,5 @@
     "noUnusedParameters": true,
     "types": ["node"]
   },
-  "include": ["api", "src", "scripts"]
+  "include": ["src", "scripts"]
 }

@@ -60,3 +60,5 @@ app.onError((err, c) => {
   console.error("Unhandled error", err);
   return c.json(errorBody("Internal server error", 500), 500);
 });
+
+export default app;
