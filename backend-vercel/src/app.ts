@@ -6,6 +6,7 @@ import { attachAuth } from "./middleware/auth.js";
 import type { AppEnv } from "./middleware/auth.js";
 import { errorBody } from "./lib/response.js";
 import { HttpError } from "./lib/errors.js";
+import { sql } from "./db.js";
 import { authRoutes } from "./modules/auth/routes.js";
 import { usersRoutes } from "./modules/users/routes.js";
 import { restaurantsRoutes } from "./modules/restaurants/routes.js";
@@ -34,6 +35,17 @@ app.use(
 app.use("*", attachAuth);
 
 app.get("/actuator/health", (c) => c.json({ status: "UP" }));
+
+// Hit daily by Vercel Cron (see vercel.json) so a real query against Supabase
+// keeps the project's usage-based auto-pause timer from expiring.
+app.get("/cron/keepalive", async (c) => {
+  const secret = process.env.CRON_SECRET;
+  if (secret && c.req.header("Authorization") !== `Bearer ${secret}`) {
+    return c.json(errorBody("Unauthorized", 401), 401);
+  }
+  await sql`SELECT 1`;
+  return c.json({ status: "UP" });
+});
 
 app.route("/auth", authRoutes);
 app.route("/users", usersRoutes);
