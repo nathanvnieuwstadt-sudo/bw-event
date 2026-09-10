@@ -135,10 +135,19 @@ export function Sidebar() {
 
   const initial = email?.[0]?.toUpperCase() ?? '?'
 
+  const navItemCls = ({ isActive }: { isActive: boolean }) =>
+    [
+      'group flex min-h-[52px] items-center gap-3.5 rounded-xl px-4 py-3.5',
+      'text-[15px] font-medium transition-colors duration-100 active:scale-[0.98]',
+      isActive
+        ? 'bg-neutral-800 text-neutral-100 ring-1 ring-inset ring-neutral-700'
+        : 'bg-neutral-900/60 text-neutral-400 ring-1 ring-inset ring-neutral-800/60 hover:bg-neutral-900 hover:text-neutral-100 active:bg-neutral-800',
+    ].join(' ')
+
   return (
-    <aside className="flex h-full w-60 flex-col bg-neutral-950">
+    <aside className="flex h-full w-72 flex-col bg-neutral-950">
       {/* Brand */}
-      <div className="flex h-14 items-center border-b border-neutral-800 px-5">
+      <div className="flex h-16 items-center border-b border-neutral-800 px-5">
         <Link
           to="/"
           className="text-[13px] font-semibold tracking-[0.08em] text-neutral-100 uppercase hover:text-neutral-300 transition-colors duration-100"
@@ -149,42 +158,21 @@ export function Sidebar() {
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto p-3">
-        <ul className="space-y-0.5 mb-4">
+        <ul className="space-y-2 mb-5">
           <li>
-            <NavLink
-              to={HOME.to}
-              end
-              className={({ isActive }) =>
-                [
-                  'group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-100',
-                  isActive
-                    ? 'bg-neutral-800 text-neutral-100'
-                    : 'text-neutral-400 hover:bg-neutral-900 hover:text-neutral-100',
-                ].join(' ')
-              }
-            >
-              {HOME.icon}
+            <NavLink to={HOME.to} end className={navItemCls}>
+              <span className="[&>svg]:h-[22px] [&>svg]:w-[22px]">{HOME.icon}</span>
               {HOME.label}
             </NavLink>
           </li>
         </ul>
 
         <p className="section-label mb-3 px-3 text-neutral-600">Navigation</p>
-        <ul className="space-y-0.5">
+        <ul className="space-y-2">
           {roleItems.map((item) => (
             <li key={item.to}>
-              <NavLink
-                to={item.to}
-                className={({ isActive }) =>
-                  [
-                    'group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-100',
-                    isActive
-                      ? 'bg-neutral-800 text-neutral-100'
-                      : 'text-neutral-400 hover:bg-neutral-900 hover:text-neutral-100',
-                  ].join(' ')
-                }
-              >
-                {item.icon}
+              <NavLink to={item.to} className={navItemCls}>
+                <span className="[&>svg]:h-[22px] [&>svg]:w-[22px]">{item.icon}</span>
                 {item.label}
               </NavLink>
             </li>
@@ -193,12 +181,12 @@ export function Sidebar() {
       </nav>
 
       {/* User / role footer */}
-      <div className="flex items-center gap-2.5 border-t border-neutral-800 px-4 py-3.5">
-        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-600 text-[11px] font-semibold text-white">
+      <div className="flex items-center gap-3 border-t border-neutral-800 px-4 py-4">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-600 text-sm font-semibold text-white">
           {initial}
         </div>
         <div className="min-w-0">
-          <p className="truncate text-xs font-medium text-neutral-300">{email}</p>
+          <p className="truncate text-sm font-medium text-neutral-300">{email}</p>
           <p className="text-[10px] font-medium uppercase tracking-wide text-neutral-600">
             {ROLE_LABELS[role ?? ''] ?? role}
           </p>

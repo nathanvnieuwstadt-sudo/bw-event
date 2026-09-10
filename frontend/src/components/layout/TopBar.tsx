@@ -23,12 +23,12 @@ export function TopBar() {
   }
 
   return (
-    <header className="flex h-14 shrink-0 items-center justify-between border-b border-neutral-800 bg-neutral-900 px-6">
+    <header className="flex h-16 shrink-0 items-center justify-between border-b border-neutral-800 bg-neutral-900 px-6">
       <div>
         {!isHome && (
           <button
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 text-sm text-neutral-400 transition-colors duration-100 hover:text-neutral-100 active:scale-[0.97]"
+            className="flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-sm font-medium text-neutral-400 transition-colors duration-100 hover:bg-neutral-800 hover:text-neutral-100 active:scale-[0.97] active:bg-neutral-800"
           >
             <IconHome />
             Accueil
@@ -36,12 +36,12 @@ export function TopBar() {
         )}
       </div>
 
-      <div className="flex items-center gap-4">
-        <span className="text-sm text-neutral-400">{email}</span>
-        <div className="h-4 w-px bg-neutral-800" />
+      <div className="flex items-center gap-3">
+        <span className="hidden text-sm text-neutral-400 sm:inline">{email}</span>
+        <div className="hidden h-4 w-px bg-neutral-800 sm:block" />
         <button
           onClick={handleLogout}
-          className="text-sm text-neutral-400 transition-colors duration-100 hover:text-neutral-100 active:scale-[0.97]"
+          className="flex min-h-[44px] items-center rounded-lg px-3.5 text-sm font-medium text-neutral-400 transition-colors duration-100 hover:bg-neutral-800 hover:text-neutral-100 active:scale-[0.97] active:bg-neutral-800"
         >
           Se déconnecter
         </button>
