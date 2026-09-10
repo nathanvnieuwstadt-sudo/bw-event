@@ -15,7 +15,7 @@ function ViewToggle({ view, onChange }: { view: View; onChange: (v: View) => voi
       <button
         onClick={() => onChange('calendar')}
         className={[
-          'flex items-center gap-1.5 rounded px-3 py-1.5 text-xs font-medium transition-colors duration-100 active:scale-[0.97]',
+          'flex min-h-[40px] items-center gap-1.5 rounded px-4 py-2 text-sm font-medium transition-colors duration-100 active:scale-[0.97]',
           view === 'calendar' ? 'bg-neutral-100 text-neutral-900' : 'text-neutral-400 hover:text-neutral-100',
         ].join(' ')}
       >
@@ -28,7 +28,7 @@ function ViewToggle({ view, onChange }: { view: View; onChange: (v: View) => voi
       <button
         onClick={() => onChange('table')}
         className={[
-          'flex items-center gap-1.5 rounded px-3 py-1.5 text-xs font-medium transition-colors duration-100 active:scale-[0.97]',
+          'flex min-h-[40px] items-center gap-1.5 rounded px-4 py-2 text-sm font-medium transition-colors duration-100 active:scale-[0.97]',
           view === 'table' ? 'bg-neutral-100 text-neutral-900' : 'text-neutral-400 hover:text-neutral-100',
         ].join(' ')}
       >
@@ -124,7 +124,7 @@ export function BanquetListPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Rechercher un contact…"
-                className="w-full rounded-md border border-neutral-700 bg-neutral-900 py-1.5 pl-9 pr-3 text-sm text-neutral-100 placeholder:text-neutral-500 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none"
+                className="w-full min-h-[44px] rounded-md border border-neutral-700 bg-neutral-900 py-2.5 pl-9 pr-3 text-sm text-neutral-100 placeholder:text-neutral-500 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none"
               />
             </div>
             <BanquetTable banquets={filtered} />

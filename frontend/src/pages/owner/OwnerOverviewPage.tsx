@@ -101,7 +101,7 @@ function BarChart({ banquets }: { banquets: BanquetSummary[] }) {
               key={g}
               onClick={() => setGrouping(g)}
               className={[
-                'rounded px-2.5 py-1 text-[11px] font-medium transition-colors duration-100',
+                'min-h-[36px] rounded px-3.5 py-1.5 text-xs font-medium transition-colors duration-100',
                 grouping === g ? 'bg-brand-600 text-white' : 'text-neutral-500 hover:text-neutral-200',
               ].join(' ')}
             >

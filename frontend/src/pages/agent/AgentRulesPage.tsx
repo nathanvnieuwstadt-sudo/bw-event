@@ -61,18 +61,16 @@ function InstructionForm({
           className={textareaCls}
         />
       </div>
-      <div className="flex items-center gap-2">
+      <label htmlFor="enabled-check" className="flex min-h-[40px] w-fit cursor-pointer select-none items-center gap-2.5">
         <input
           type="checkbox"
           id="enabled-check"
           checked={form.enabled}
           onChange={(e) => setForm({ ...form, enabled: e.target.checked })}
-          className="h-4 w-4 rounded border-neutral-700 text-neutral-300 cursor-pointer"
+          className="h-5 w-5 rounded border-neutral-700 text-neutral-300 cursor-pointer"
         />
-        <label htmlFor="enabled-check" className="text-sm text-neutral-300 cursor-pointer select-none">
-          Actif
-        </label>
-      </div>
+        <span className="text-sm text-neutral-300">Actif</span>
+      </label>
       <div className="flex justify-end gap-2 border-t border-neutral-800 pt-3">
         <Button type="button" variant="secondary" size="sm" onClick={onCancel}>Annuler</Button>
         <Button type="submit" size="sm" loading={saving}>Enregistrer</Button>
@@ -111,24 +109,26 @@ function InstructionCard({
           <p className="mt-2 text-sm text-neutral-400 leading-relaxed whitespace-pre-line">{item.instruction}</p>
         </div>
         {canEdit && (
-          <div className="flex flex-shrink-0 items-center gap-3">
+          <div className="flex flex-shrink-0 items-center gap-1.5">
             <button
               onClick={onToggle}
               disabled={toggling}
               title={item.enabled ? 'Désactiver' : 'Activer'}
-              className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors duration-200 focus:outline-none ${item.enabled ? 'bg-brand-600' : 'bg-neutral-800'} disabled:opacity-50`}
+              className={`relative inline-flex h-11 w-12 shrink-0 items-center justify-center rounded-md transition-colors duration-100 focus:outline-none ${toggling ? 'opacity-50' : 'hover:bg-neutral-800 active:scale-[0.97]'}`}
             >
-              <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-neutral-100 shadow transition-transform duration-200 ${item.enabled ? 'translate-x-4' : 'translate-x-0.5'}`} />
+              <span className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ${item.enabled ? 'bg-brand-600' : 'bg-neutral-700'}`}>
+                <span className={`inline-block h-5 w-5 transform rounded-full bg-neutral-100 shadow transition-transform duration-200 ${item.enabled ? 'translate-x-5' : 'translate-x-0.5'}`} />
+              </span>
             </button>
             <button
               onClick={onEdit}
-              className="text-xs text-neutral-400 hover:text-neutral-100 transition-colors"
+              className="min-h-[40px] rounded-md px-3 py-2 text-xs font-medium text-neutral-400 transition-colors hover:bg-neutral-800 hover:text-neutral-100 active:scale-[0.97]"
             >
               Modifier
             </button>
             <button
               onClick={onDelete}
-              className="text-xs text-neutral-500 hover:text-red-500 transition-colors"
+              className="min-h-[40px] rounded-md px-3 py-2 text-xs font-medium text-neutral-500 transition-colors hover:bg-red-500/10 hover:text-red-400 active:scale-[0.97]"
             >
               Supprimer
             </button>
@@ -250,7 +250,7 @@ export function AgentRulesPage() {
           {canEdit && (
             <button
               onClick={() => setEditingId('new')}
-              className="mt-2 text-sm text-neutral-400 hover:text-neutral-100 transition-colors"
+              className="mt-2 min-h-[40px] rounded-md px-3 py-2 text-sm text-neutral-400 transition-colors hover:bg-neutral-800 hover:text-neutral-100 active:scale-[0.97]"
             >
               Ajouter la première →
             </button>

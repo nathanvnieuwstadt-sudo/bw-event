@@ -92,7 +92,7 @@ export function BanquetCalendar({ banquets }: Props) {
         <div className="flex items-center gap-2">
           <button
             onClick={prevMonth}
-            className="flex h-7 w-7 items-center justify-center rounded-md text-neutral-500 transition-colors duration-75 hover:bg-neutral-800 hover:text-neutral-300 active:scale-[0.93]"
+            className="flex h-11 w-11 items-center justify-center rounded-md text-neutral-500 transition-colors duration-75 hover:bg-neutral-800 hover:text-neutral-300 active:scale-[0.93]"
             aria-label="Mois précédent"
           >
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
@@ -101,7 +101,7 @@ export function BanquetCalendar({ banquets }: Props) {
           </button>
           <button
             onClick={nextMonth}
-            className="flex h-7 w-7 items-center justify-center rounded-md text-neutral-500 transition-colors duration-75 hover:bg-neutral-800 hover:text-neutral-300 active:scale-[0.93]"
+            className="flex h-11 w-11 items-center justify-center rounded-md text-neutral-500 transition-colors duration-75 hover:bg-neutral-800 hover:text-neutral-300 active:scale-[0.93]"
             aria-label="Mois suivant"
           >
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
@@ -112,7 +112,7 @@ export function BanquetCalendar({ banquets }: Props) {
         </div>
         <button
           onClick={goToday}
-          className="rounded-md border border-neutral-800 px-3 py-1 text-xs font-medium text-neutral-400 transition-colors duration-75 hover:bg-neutral-950 hover:text-neutral-100 active:scale-[0.97]"
+          className="min-h-[40px] rounded-md border border-neutral-800 px-3.5 py-2 text-xs font-medium text-neutral-400 transition-colors duration-75 hover:bg-neutral-950 hover:text-neutral-100 active:scale-[0.97]"
         >
           Aujourd'hui
         </button>
@@ -159,13 +159,13 @@ export function BanquetCalendar({ banquets }: Props) {
                 </span>
               </div>
 
-              <div className="space-y-0.5">
+              <div className="space-y-1">
                 {events.slice(0, 3).map((b) => (
                   <button
                     key={b.id}
                     onClick={() => navigate(`/banquets/${b.id}`)}
                     className={[
-                      'flex w-full items-center gap-1.5 rounded px-1.5 py-0.5 text-left ring-1 ring-inset',
+                      'flex min-h-[26px] w-full items-center gap-1.5 rounded px-1.5 py-1 text-left ring-1 ring-inset',
                       'transition-opacity duration-75 hover:opacity-80 active:scale-[0.97]',
                       STATUS_PILL[b.status],
                     ].join(' ')}

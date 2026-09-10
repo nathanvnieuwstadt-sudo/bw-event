@@ -73,19 +73,19 @@ function FieldEditor({
               />
             )}
           </div>
-          <label className="flex items-center gap-1.5 pt-2.5 shrink-0 text-xs text-neutral-400 cursor-pointer select-none">
+          <label className="flex items-center gap-2 pt-2 shrink-0 text-xs text-neutral-400 cursor-pointer select-none">
             <input
               type="checkbox"
               checked={f.required}
               onChange={(e) => update(i, { required: e.target.checked })}
-              className="h-3.5 w-3.5 rounded border-neutral-700 text-neutral-300 cursor-pointer"
+              className="h-5 w-5 rounded border-neutral-700 text-neutral-300 cursor-pointer"
             />
             Obligatoire
           </label>
           <button
             type="button"
             onClick={() => remove(i)}
-            className="mt-2 shrink-0 text-neutral-500 hover:text-red-500 transition-colors"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-neutral-500 transition-colors hover:bg-red-500/10 hover:text-red-400 active:scale-[0.95]"
             title="Supprimer le champ"
           >
             <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
@@ -97,7 +97,7 @@ function FieldEditor({
       <button
         type="button"
         onClick={add}
-        className="flex items-center gap-1.5 text-sm text-neutral-400 hover:text-neutral-100 transition-colors"
+        className="flex min-h-[40px] items-center gap-1.5 rounded-md px-2.5 text-sm text-neutral-400 transition-colors hover:bg-neutral-800 hover:text-neutral-100 active:scale-[0.97]"
       >
         <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
           <path d="M10 4v12M4 10h12" />
@@ -197,16 +197,16 @@ function EventTypeCard({
           </p>
         </div>
         {canEdit && (
-          <div className="flex gap-2 shrink-0">
+          <div className="flex shrink-0 gap-1.5">
             <button
               onClick={onEdit}
-              className="text-xs text-neutral-400 hover:text-neutral-100 transition-colors"
+              className="min-h-[40px] rounded-md px-3 py-2 text-xs font-medium text-neutral-400 transition-colors hover:bg-neutral-800 hover:text-neutral-100 active:scale-[0.97]"
             >
               Modifier
             </button>
             <button
               onClick={onDelete}
-              className="text-xs text-neutral-500 hover:text-red-500 transition-colors"
+              className="min-h-[40px] rounded-md px-3 py-2 text-xs font-medium text-neutral-500 transition-colors hover:bg-red-500/10 hover:text-red-400 active:scale-[0.97]"
             >
               Supprimer
             </button>
@@ -338,7 +338,7 @@ export function EventTypesPage() {
           {canEdit && (
             <button
               onClick={() => setEditingId('new')}
-              className="mt-2 text-sm text-neutral-400 hover:text-neutral-100 transition-colors"
+              className="mt-2 min-h-[40px] rounded-md px-3 py-2 text-sm text-neutral-400 transition-colors hover:bg-neutral-800 hover:text-neutral-100 active:scale-[0.97]"
             >
               Créer le premier →
             </button>

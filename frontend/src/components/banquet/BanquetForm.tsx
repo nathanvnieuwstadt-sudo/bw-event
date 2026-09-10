@@ -167,12 +167,12 @@ export function BanquetForm({
               {selectedEventType.fields.map((field) => (
                 <div key={field.id}>
                   {field.fieldType === 'BOOLEAN' ? (
-                    <label className="flex cursor-pointer items-center gap-2.5">
+                    <label className="flex min-h-[44px] w-fit cursor-pointer items-center gap-2.5">
                       <input
                         type="checkbox"
                         checked={fieldValues[field.id] === 'true'}
                         onChange={(e) => setFieldValue(field.id, e.target.checked ? 'true' : 'false')}
-                        className="h-4 w-4 rounded border-neutral-700 cursor-pointer"
+                        className="h-5 w-5 rounded border-neutral-700 cursor-pointer"
                       />
                       <span className="text-sm text-neutral-300">
                         {field.fieldLabel}
@@ -304,12 +304,12 @@ export function BanquetForm({
       {/* Deposit */}
       <Card title="Acompte">
         <div className="flex items-center gap-6">
-          <label className="flex cursor-pointer items-center gap-2.5">
+          <label className="flex min-h-[44px] w-fit cursor-pointer items-center gap-2.5">
             <input
               type="checkbox"
               checked={depositPaid}
               onChange={(e) => setDepositPaid(e.target.checked)}
-              className="h-4 w-4 rounded border-neutral-700 cursor-pointer"
+              className="h-5 w-5 rounded border-neutral-700 cursor-pointer"
             />
             <span className="text-sm text-neutral-300">Acompte reçu</span>
           </label>

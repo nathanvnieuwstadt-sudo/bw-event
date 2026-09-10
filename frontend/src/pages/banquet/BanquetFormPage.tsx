@@ -74,7 +74,7 @@ export function BanquetFormPage() {
       <div className="mb-8">
         <button
           onClick={() => navigate(backTo)}
-          className="mb-2 flex items-center gap-1 text-xs text-neutral-500 transition-colors hover:text-neutral-300"
+          className="-ml-2.5 mb-1 flex min-h-[40px] items-center gap-1.5 rounded-md px-2.5 text-xs text-neutral-500 transition-colors hover:bg-neutral-900 hover:text-neutral-300 active:scale-[0.97]"
         >
           <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 4L6 10l6 6" />

@@ -46,7 +46,7 @@ export function Modal({ open, title, onClose, children, footer, width = 'md' }: 
           <h2 className="text-sm font-semibold text-neutral-100">{title}</h2>
           <button
             onClick={onClose}
-            className="rounded-md p-1 text-neutral-500 transition-colors duration-100 hover:bg-neutral-800 hover:text-neutral-300 active:scale-[0.95]"
+            className="flex h-11 w-11 items-center justify-center rounded-md text-neutral-500 transition-colors duration-100 hover:bg-neutral-800 hover:text-neutral-300 active:scale-[0.95]"
             aria-label="Close"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">

@@ -133,11 +133,11 @@ export function ContactListPage() {
               key: 'actions',
               header: '',
               render: (c) => canEdit ? (
-                <div className="flex gap-2 justify-end">
+                <div className="flex justify-end gap-1.5">
                   <button onClick={() => { setEditing(c); setModalOpen(true) }}
-                    className="text-xs text-brand-400 hover:underline">Modifier</button>
+                    className="min-h-[40px] rounded-md px-3 py-2 text-xs font-medium text-brand-400 transition-colors duration-100 hover:bg-neutral-800 active:scale-[0.97]">Modifier</button>
                   <button onClick={() => handleDelete(c)}
-                    className="text-xs text-red-500 hover:underline">Supprimer</button>
+                    className="min-h-[40px] rounded-md px-3 py-2 text-xs font-medium text-red-400 transition-colors duration-100 hover:bg-red-500/10 active:scale-[0.97]">Supprimer</button>
                 </div>
               ) : null,
               className: 'text-right',

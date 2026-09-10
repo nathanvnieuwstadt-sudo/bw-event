@@ -234,14 +234,14 @@ export function AgentDraftPage() {
                           <button
                             onClick={() => handleReject(draft.id)}
                             disabled={busy === draft.id}
-                            className="rounded-md border border-neutral-800 bg-neutral-900 px-3 py-1.5 text-sm font-medium text-neutral-400 hover:border-red-500/50 hover:text-red-400 transition-colors disabled:opacity-50"
+                            className="min-h-[44px] rounded-md border border-neutral-800 bg-neutral-900 px-4 py-2.5 text-sm font-medium text-neutral-400 hover:border-red-500/50 hover:text-red-400 transition-colors disabled:opacity-50"
                           >
                             Rejeter
                           </button>
                           <button
                             onClick={() => handleApprove(draft.id)}
                             disabled={busy === draft.id}
-                            className="rounded-md bg-brand-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-700 transition-colors disabled:opacity-50"
+                            className="min-h-[44px] rounded-md bg-brand-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-700 transition-colors disabled:opacity-50"
                           >
                             {busy === draft.id ? 'Enregistrement…' : 'Approuver et envoyer'}
                           </button>
