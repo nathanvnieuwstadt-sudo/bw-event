@@ -16,14 +16,14 @@ interface Props {
 }
 
 const inputCls =
-  'w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 transition-colors duration-100 focus:border-slate-500 focus:ring-1 focus:ring-slate-500 outline-none'
+  'w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 placeholder:text-neutral-500 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none'
 
 const selectCls =
-  'w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 transition-colors duration-100 focus:border-slate-500 focus:ring-1 focus:ring-slate-500 outline-none appearance-none cursor-pointer'
+  'w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none appearance-none cursor-pointer'
 
 function Label({ children, required }: { children: React.ReactNode; required?: boolean }) {
   return (
-    <label className="mb-1.5 block text-xs font-medium text-stone-600">
+    <label className="mb-1.5 block text-xs font-medium text-neutral-400">
       {children}
       {required && <span className="ml-0.5 text-red-400">*</span>}
     </label>
@@ -32,9 +32,9 @@ function Label({ children, required }: { children: React.ReactNode; required?: b
 
 function Card({ title, children, accent }: { title: string; children: React.ReactNode; accent?: boolean }) {
   return (
-    <div className={`rounded-xl border bg-white shadow-sm ${accent ? 'border-slate-300' : 'border-stone-200'}`}>
-      <div className={`border-b px-6 py-4 ${accent ? 'border-slate-200 bg-slate-50' : 'border-stone-100'}`}>
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-stone-400">{title}</h2>
+    <div className={`rounded-xl border bg-neutral-900 shadow-sm ${accent ? 'border-neutral-700' : 'border-neutral-800'}`}>
+      <div className={`border-b px-6 py-4 ${accent ? 'border-neutral-800 bg-neutral-950' : 'border-neutral-800'}`}>
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-500">{title}</h2>
       </div>
       <div className="p-6">{children}</div>
     </div>
@@ -119,7 +119,7 @@ export function BanquetForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {error && (
-        <div className="rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-700">
+        <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-5 py-4 text-sm text-red-400">
           {error}
         </div>
       )}
@@ -143,7 +143,7 @@ export function BanquetForm({
               ))}
             </select>
             {eventTypes.length === 0 && (
-              <p className="mt-1.5 text-xs text-stone-400">
+              <p className="mt-1.5 text-xs text-neutral-500">
                 Aucun type défini. Un gestionnaire peut en créer sous Types d'événements.
               </p>
             )}
@@ -159,8 +159,8 @@ export function BanquetForm({
         </div>
 
         {selectedEventType && selectedEventType.fields.length > 0 && (
-          <div className="mt-5 rounded-lg border border-slate-200 bg-slate-50 p-4">
-            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
+          <div className="mt-5 rounded-lg border border-neutral-800 bg-neutral-950 p-4">
+            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-neutral-500">
               {selectedEventType.name} — informations requises
             </p>
             <div className="grid grid-cols-2 gap-4">
@@ -172,9 +172,9 @@ export function BanquetForm({
                         type="checkbox"
                         checked={fieldValues[field.id] === 'true'}
                         onChange={(e) => setFieldValue(field.id, e.target.checked ? 'true' : 'false')}
-                        className="h-4 w-4 rounded border-stone-300 cursor-pointer"
+                        className="h-4 w-4 rounded border-neutral-700 cursor-pointer"
                       />
-                      <span className="text-sm text-stone-700">
+                      <span className="text-sm text-neutral-300">
                         {field.fieldLabel}
                         {field.required && <span className="ml-0.5 text-red-400">*</span>}
                       </span>
@@ -309,9 +309,9 @@ export function BanquetForm({
               type="checkbox"
               checked={depositPaid}
               onChange={(e) => setDepositPaid(e.target.checked)}
-              className="h-4 w-4 rounded border-stone-300 cursor-pointer"
+              className="h-4 w-4 rounded border-neutral-700 cursor-pointer"
             />
-            <span className="text-sm text-stone-700">Acompte reçu</span>
+            <span className="text-sm text-neutral-300">Acompte reçu</span>
           </label>
           <div className="w-40">
             <input

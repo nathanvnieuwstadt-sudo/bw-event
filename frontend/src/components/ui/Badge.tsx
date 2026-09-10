@@ -8,11 +8,11 @@ interface Props {
 }
 
 const colorClasses: Record<Color, string> = {
-  stone: 'bg-stone-100 text-stone-600 ring-stone-200',
-  green: 'bg-green-50 text-green-700 ring-green-200',
-  amber: 'bg-amber-50 text-amber-700 ring-amber-200',
-  red:   'bg-red-50 text-red-600 ring-red-200',
-  blue:  'bg-brand-50 text-brand-700 ring-brand-200',
+  stone: 'bg-neutral-800 text-neutral-400 ring-neutral-700',
+  green: 'bg-green-500/10 text-green-400 ring-green-500/30',
+  amber: 'bg-amber-500/10 text-amber-400 ring-amber-500/30',
+  red:   'bg-red-500/10 text-red-400 ring-red-500/30',
+  blue:  'bg-brand-500/10 text-brand-400 ring-brand-500/30',
 }
 
 export function Badge({ color = 'stone', children }: Props) {

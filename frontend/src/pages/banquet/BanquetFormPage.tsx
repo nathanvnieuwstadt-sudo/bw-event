@@ -34,8 +34,8 @@ export function BanquetFormPage() {
   if (loadingExisting) {
     return (
       <div className="mx-auto max-w-4xl py-8 px-4 space-y-4">
-        <div className="h-8 w-48 animate-pulse rounded bg-stone-100" />
-        <div className="h-96 animate-pulse rounded-xl bg-stone-100" />
+        <div className="h-8 w-48 animate-pulse rounded bg-neutral-800" />
+        <div className="h-96 animate-pulse rounded-xl bg-neutral-800" />
       </div>
     )
   }
@@ -74,18 +74,18 @@ export function BanquetFormPage() {
       <div className="mb-8">
         <button
           onClick={() => navigate(backTo)}
-          className="mb-2 flex items-center gap-1 text-xs text-stone-400 transition-colors hover:text-stone-700"
+          className="mb-2 flex items-center gap-1 text-xs text-neutral-500 transition-colors hover:text-neutral-300"
         >
           <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 4L6 10l6 6" />
           </svg>
           {backLabel}
         </button>
-        <h1 className="text-2xl font-semibold text-stone-900">
+        <h1 className="text-2xl font-semibold text-neutral-100">
           {isEdit ? 'Modifier le banquet' : 'Nouveau banquet'}
         </h1>
         {isEdit && existing?.contact?.name && (
-          <p className="mt-1 text-sm text-stone-500">{existing.contact.name}</p>
+          <p className="mt-1 text-sm text-neutral-400">{existing.contact.name}</p>
         )}
       </div>
 

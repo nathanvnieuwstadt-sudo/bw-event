@@ -38,26 +38,26 @@ function ContactForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {error && <div className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>}
+      {error && <div className="rounded-md bg-red-500/10 px-4 py-3 text-sm text-red-400">{error}</div>}
       <div>
-        <label className="block text-xs font-medium text-stone-600 mb-1.5">Nom *</label>
+        <label className="block text-xs font-medium text-neutral-400 mb-1.5">Nom *</label>
         <input required value={name} onChange={(e) => setName(e.target.value)}
-          className="w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none" />
+          className="w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none" />
       </div>
       <div>
-        <label className="block text-xs font-medium text-stone-600 mb-1.5">E-mail *</label>
+        <label className="block text-xs font-medium text-neutral-400 mb-1.5">E-mail *</label>
         <input required type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-          className="w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none" />
+          className="w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none" />
       </div>
       <div>
-        <label className="block text-xs font-medium text-stone-600 mb-1.5">Téléphone</label>
+        <label className="block text-xs font-medium text-neutral-400 mb-1.5">Téléphone</label>
         <input value={phone} onChange={(e) => setPhone(e.target.value)}
-          className="w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none" />
+          className="w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none" />
       </div>
       <div>
-        <label className="block text-xs font-medium text-stone-600 mb-1.5">Organisation</label>
+        <label className="block text-xs font-medium text-neutral-400 mb-1.5">Organisation</label>
         <input value={organization} onChange={(e) => setOrganization(e.target.value)}
-          className="w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none" />
+          className="w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none" />
       </div>
       <div className="flex justify-end gap-3 pt-1">
         <Button type="button" variant="secondary" onClick={onCancel}>Annuler</Button>
@@ -109,23 +109,23 @@ export function ContactListPage() {
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-lg font-semibold text-stone-900">Contacts</h1>
+        <h1 className="text-lg font-semibold text-neutral-100">Contacts</h1>
         {canEdit && (
           <Button onClick={() => { setEditing(null); setModalOpen(true) }}>Nouveau contact</Button>
         )}
       </div>
 
-      {error && <div className="mb-4 rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>}
+      {error && <div className="mb-4 rounded-md bg-red-500/10 px-4 py-3 text-sm text-red-400">{error}</div>}
 
       {loading ? (
-        <div className="text-sm text-stone-400">Chargement…</div>
+        <div className="text-sm text-neutral-500">Chargement…</div>
       ) : (
         <Table
           keyExtractor={(c) => c.id}
           rows={contacts}
           emptyMessage="Aucun contact pour le moment."
           columns={[
-            { key: 'name', header: 'Nom', render: (c) => <span className="font-medium text-stone-800">{c.name}</span> },
+            { key: 'name', header: 'Nom', render: (c) => <span className="font-medium text-neutral-200">{c.name}</span> },
             { key: 'org', header: 'Organisation', render: (c) => c.organization ?? '—' },
             { key: 'email', header: 'E-mail', render: (c) => c.email },
             { key: 'phone', header: 'Téléphone', render: (c) => c.phone ?? '—' },
@@ -135,7 +135,7 @@ export function ContactListPage() {
               render: (c) => canEdit ? (
                 <div className="flex gap-2 justify-end">
                   <button onClick={() => { setEditing(c); setModalOpen(true) }}
-                    className="text-xs text-brand-600 hover:underline">Modifier</button>
+                    className="text-xs text-brand-400 hover:underline">Modifier</button>
                   <button onClick={() => handleDelete(c)}
                     className="text-xs text-red-500 hover:underline">Supprimer</button>
                 </div>

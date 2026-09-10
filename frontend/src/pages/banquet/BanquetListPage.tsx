@@ -11,12 +11,12 @@ type View = 'calendar' | 'table'
 
 function ViewToggle({ view, onChange }: { view: View; onChange: (v: View) => void }) {
   return (
-    <div className="flex rounded-md border border-stone-200 bg-white p-0.5 shadow-card">
+    <div className="flex rounded-md border border-neutral-800 bg-neutral-900 p-0.5 shadow-card">
       <button
         onClick={() => onChange('calendar')}
         className={[
           'flex items-center gap-1.5 rounded px-3 py-1.5 text-xs font-medium transition-colors duration-100 active:scale-[0.97]',
-          view === 'calendar' ? 'bg-stone-900 text-white' : 'text-stone-500 hover:text-stone-900',
+          view === 'calendar' ? 'bg-neutral-100 text-neutral-900' : 'text-neutral-400 hover:text-neutral-100',
         ].join(' ')}
       >
         <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
@@ -29,7 +29,7 @@ function ViewToggle({ view, onChange }: { view: View; onChange: (v: View) => voi
         onClick={() => onChange('table')}
         className={[
           'flex items-center gap-1.5 rounded px-3 py-1.5 text-xs font-medium transition-colors duration-100 active:scale-[0.97]',
-          view === 'table' ? 'bg-stone-900 text-white' : 'text-stone-500 hover:text-stone-900',
+          view === 'table' ? 'bg-neutral-100 text-neutral-900' : 'text-neutral-400 hover:text-neutral-100',
         ].join(' ')}
       >
         <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
@@ -42,6 +42,15 @@ function ViewToggle({ view, onChange }: { view: View; onChange: (v: View) => voi
   )
 }
 
+function IconSearch() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="7" cy="7" r="5" />
+      <path d="M14 14l-3-3" />
+    </svg>
+  )
+}
+
 export function BanquetListPage() {
   const { restaurantId, hasRole } = useAuth()
   const navigate = useNavigate()
@@ -49,6 +58,7 @@ export function BanquetListPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [view, setView] = useState<View>('calendar')
+  const [search, setSearch] = useState('')
 
   useEffect(() => {
     if (!restaurantId) {
@@ -62,13 +72,21 @@ export function BanquetListPage() {
       .finally(() => setLoading(false))
   }, [restaurantId])
 
+  const q = search.trim().toLowerCase()
+  const filtered = q
+    ? banquets.filter((b) =>
+        (b.contactName ?? '').toLowerCase().includes(q) ||
+        (b.contactOrganization ?? '').toLowerCase().includes(q)
+      )
+    : banquets
+
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-lg font-semibold text-stone-900">Banquets</h1>
+          <h1 className="text-lg font-semibold text-neutral-100">Banquets</h1>
           {!loading && !error && (
-            <p className="mt-0.5 text-sm text-stone-400">
+            <p className="mt-0.5 text-sm text-neutral-500">
               {banquets.length} {banquets.length === 1 ? 'événement' : 'événements'}
             </p>
           )}
@@ -82,21 +100,36 @@ export function BanquetListPage() {
       </div>
 
       {error && (
-        <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <div className="rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
           {error}
         </div>
       )}
 
       {loading ? (
-        <div className="space-y-px overflow-hidden rounded-lg border border-stone-200">
+        <div className="space-y-px overflow-hidden rounded-lg border border-neutral-800">
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-14 animate-pulse bg-stone-100" />
+            <div key={i} className="h-14 animate-pulse bg-neutral-800" />
           ))}
         </div>
       ) : !error ? (
-        view === 'calendar'
-          ? <BanquetCalendar banquets={banquets} />
-          : <BanquetTable banquets={banquets} />
+        view === 'calendar' ? (
+          <BanquetCalendar banquets={banquets} />
+        ) : (
+          <div className="space-y-3">
+            <div className="relative max-w-xs">
+              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500">
+                <IconSearch />
+              </span>
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Rechercher un contact…"
+                className="w-full rounded-md border border-neutral-700 bg-neutral-900 py-1.5 pl-9 pr-3 text-sm text-neutral-100 placeholder:text-neutral-500 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none"
+              />
+            </div>
+            <BanquetTable banquets={filtered} />
+          </div>
+        )
       ) : null}
     </div>
   )

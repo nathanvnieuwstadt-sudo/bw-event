@@ -10,7 +10,7 @@ interface NavCard {
 
 function IconCalendar() {
   return (
-    <svg width="28" height="28" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <rect x="3" y="5" width="14" height="13" rx="2" />
       <path d="M3 9h14" />
       <path d="M7 3v4M13 3v4" />
@@ -20,7 +20,7 @@ function IconCalendar() {
 
 function IconUsers() {
   return (
-    <svg width="28" height="28" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="7.5" cy="7" r="3" />
       <path d="M1 17c0-3 2.91-5.5 6.5-5.5" />
       <circle cx="14" cy="9" r="2.5" />
@@ -31,7 +31,7 @@ function IconUsers() {
 
 function IconBot() {
   return (
-    <svg width="28" height="28" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <rect x="3" y="8" width="14" height="10" rx="2" />
       <path d="M7 8V6a3 3 0 0 1 6 0v2" />
       <circle cx="7.5" cy="13" r="1" fill="currentColor" stroke="none" />
@@ -43,7 +43,7 @@ function IconBot() {
 
 function IconCutlery() {
   return (
-    <svg width="28" height="28" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M7 3v5a3 3 0 0 1-3 3h0v6" />
       <path d="M7 3H5M7 3H9" />
       <path d="M7 8V3" />
@@ -55,7 +55,7 @@ function IconCutlery() {
 
 function IconGrid() {
   return (
-    <svg width="28" height="28" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <rect x="3" y="3" width="6" height="6" rx="1" />
       <rect x="11" y="3" width="6" height="6" rx="1" />
       <rect x="3" y="11" width="6" height="6" rx="1" />
@@ -66,7 +66,7 @@ function IconGrid() {
 
 function IconTag() {
   return (
-    <svg width="28" height="28" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M3 3h6l8 8a2 2 0 0 1 0 2.83l-3.17 3.17a2 2 0 0 1-2.83 0L3 9V3z" />
       <circle cx="7" cy="7" r="1" fill="currentColor" stroke="none" />
     </svg>
@@ -120,6 +120,13 @@ const roleCardKeys: Record<string, string[]> = {
   KITCHEN:         ['kitchen'],
 }
 
+function greetingWord(): string {
+  const hour = new Date().getHours()
+  if (hour < 12) return 'Bonjour'
+  if (hour < 18) return 'Bon après-midi'
+  return 'Bonsoir'
+}
+
 export function DashboardPage() {
   const { role, email } = useAuth()
   const navigate = useNavigate()
@@ -127,28 +134,30 @@ export function DashboardPage() {
   const cardKeys = roleCardKeys[role ?? ''] ?? ['banquets']
   const cards = cardKeys.map((k) => allCards[k]).filter(Boolean)
 
-  const greeting = email ? `Bienvenue, ${email.split('@')[0]}` : 'Bienvenue'
+  const firstName = email ? email.split('@')[0] : ''
 
   return (
-    <div className="mx-auto max-w-3xl py-12 px-4">
-      <div className="mb-10">
-        <h1 className="text-2xl font-semibold text-stone-900">{greeting}</h1>
-        <p className="mt-1 text-sm text-stone-500">Où souhaitez-vous aller ?</p>
+    <div className="mx-auto max-w-4xl py-4">
+      <div className="mb-8">
+        <h1 className="text-2xl font-semibold text-neutral-100">
+          {greetingWord()}{firstName ? `, ${firstName}` : ''}
+        </h1>
+        <p className="mt-1 text-sm text-neutral-500">Où souhaitez-vous aller ?</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {cards.map((card) => (
           <button
             key={card.to}
             onClick={() => navigate(card.to)}
-            className="group flex items-start gap-4 rounded-xl border border-stone-200 bg-white p-5 text-left shadow-sm transition-all duration-150 hover:border-slate-400 hover:shadow-md active:scale-[0.98]"
+            className="group flex items-start gap-4 rounded-xl border border-neutral-800 bg-neutral-900 p-5 text-left shadow-card transition-all duration-150 hover:border-neutral-700 hover:bg-neutral-800/60 active:scale-[0.98]"
           >
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition-colors duration-150 group-hover:bg-slate-900 group-hover:text-white">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-500/10 text-brand-400 transition-colors duration-150 group-hover:bg-brand-500/20">
               {card.icon}
             </div>
             <div className="pt-0.5">
-              <p className="text-sm font-semibold text-stone-900">{card.label}</p>
-              <p className="mt-0.5 text-xs leading-relaxed text-stone-500">{card.description}</p>
+              <p className="text-sm font-semibold text-neutral-100">{card.label}</p>
+              <p className="mt-0.5 text-xs leading-relaxed text-neutral-500">{card.description}</p>
             </div>
           </button>
         ))}

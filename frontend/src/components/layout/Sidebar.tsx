@@ -1,6 +1,15 @@
 import { NavLink, Link } from 'react-router-dom'
 import { useAuth } from '../../auth/useAuth'
 
+function IconHome() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 9.5L10 3l7 6.5" />
+      <path d="M5 8v9h4v-4h2v4h4V8" />
+    </svg>
+  )
+}
+
 function IconCalendar() {
   return (
     <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -62,11 +71,22 @@ function IconRules() {
   )
 }
 
+function IconTag() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 3h6l8 8a2 2 0 0 1 0 2.83l-3.17 3.17a2 2 0 0 1-2.83 0L3 9V3z" />
+      <circle cx="7" cy="7" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  )
+}
+
 interface NavItem {
   label: string
   to: string
   icon: React.ReactNode
 }
+
+const HOME: NavItem = { label: 'Accueil', to: '/', icon: <IconHome /> }
 
 const managerItems: NavItem[] = [
   { label: 'Banquets',          to: '/banquets',     icon: <IconCalendar /> },
@@ -86,6 +106,7 @@ const ownerItems: NavItem[] = [
 const devItems: NavItem[] = [
   { label: 'Banquets',          to: '/banquets',     icon: <IconCalendar /> },
   { label: 'Contacts',          to: '/contacts',     icon: <IconUsers /> },
+  { label: 'Types d\'événements', to: '/event-types', icon: <IconTag /> },
   { label: 'Cuisine',           to: '/kitchen',      icon: <IconCutlery /> },
   { label: 'Vue d\'ensemble',   to: '/overview',     icon: <IconGrid /> },
   { label: 'Boîte de l\'agent', to: '/agent',        icon: <IconBot /> },
@@ -101,9 +122,9 @@ const ROLE_LABELS: Record<string, string> = {
 }
 
 export function Sidebar() {
-  const { role } = useAuth()
+  const { role, email } = useAuth()
 
-  const items =
+  const roleItems =
     role === 'DEV'
       ? devItems
       : role === 'KITCHEN'
@@ -112,13 +133,15 @@ export function Sidebar() {
       ? ownerItems
       : managerItems
 
+  const initial = email?.[0]?.toUpperCase() ?? '?'
+
   return (
-    <aside className="flex h-full w-60 flex-col bg-slate-900">
+    <aside className="flex h-full w-60 flex-col bg-neutral-950">
       {/* Brand */}
-      <div className="flex h-14 items-center border-b border-slate-800 px-5">
+      <div className="flex h-14 items-center border-b border-neutral-800 px-5">
         <Link
           to="/"
-          className="text-[13px] font-semibold tracking-[0.08em] text-white uppercase hover:text-slate-300 transition-colors duration-100"
+          className="text-[13px] font-semibold tracking-[0.08em] text-neutral-100 uppercase hover:text-neutral-300 transition-colors duration-100"
         >
           BW Event
         </Link>
@@ -126,9 +149,29 @@ export function Sidebar() {
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto p-3">
-        <p className="section-label mb-3 px-3 text-slate-500">Navigation</p>
+        <ul className="space-y-0.5 mb-4">
+          <li>
+            <NavLink
+              to={HOME.to}
+              end
+              className={({ isActive }) =>
+                [
+                  'group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-100',
+                  isActive
+                    ? 'bg-neutral-800 text-neutral-100'
+                    : 'text-neutral-400 hover:bg-neutral-900 hover:text-neutral-100',
+                ].join(' ')
+              }
+            >
+              {HOME.icon}
+              {HOME.label}
+            </NavLink>
+          </li>
+        </ul>
+
+        <p className="section-label mb-3 px-3 text-neutral-600">Navigation</p>
         <ul className="space-y-0.5">
-          {items.map((item) => (
+          {roleItems.map((item) => (
             <li key={item.to}>
               <NavLink
                 to={item.to}
@@ -136,8 +179,8 @@ export function Sidebar() {
                   [
                     'group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-100',
                     isActive
-                      ? 'bg-slate-700 text-white'
-                      : 'text-slate-400 hover:bg-slate-800 hover:text-white',
+                      ? 'bg-neutral-800 text-neutral-100'
+                      : 'text-neutral-400 hover:bg-neutral-900 hover:text-neutral-100',
                   ].join(' ')
                 }
               >
@@ -149,9 +192,17 @@ export function Sidebar() {
         </ul>
       </nav>
 
-      {/* Role indicator */}
-      <div className="border-t border-slate-800 px-5 py-4">
-        <p className="section-label text-slate-600">{ROLE_LABELS[role ?? ''] ?? role}</p>
+      {/* User / role footer */}
+      <div className="flex items-center gap-2.5 border-t border-neutral-800 px-4 py-3.5">
+        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-600 text-[11px] font-semibold text-white">
+          {initial}
+        </div>
+        <div className="min-w-0">
+          <p className="truncate text-xs font-medium text-neutral-300">{email}</p>
+          <p className="text-[10px] font-medium uppercase tracking-wide text-neutral-600">
+            {ROLE_LABELS[role ?? ''] ?? role}
+          </p>
+        </div>
       </div>
     </aside>
   )

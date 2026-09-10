@@ -19,11 +19,14 @@ Floor manager at a Belgian restaurant, standing at the front-desk or moving thro
 ## Brand tone
 Professional, unhurried, precise. Not corporate-cold. Not trendy-startup. Like a well-run restaurant: everything in its place, nothing flashy, quality in the details.
 
+## Visual direction
+Dark UI (near-black surfaces, layered neutral-900/950 panels) with a single restrained blue accent — chosen for the low-light, mid-service usage pattern described in Scene. Precise and quiet, not loud: no neon, no monospace/glitch styling, no green-on-black terminal tropes.
+
 ## Anti-references
 - Generic SaaS dashboards with gradient hero numbers
 - Loud startup branding with bright gradient accents
 - Healthcare or hospitality beige
-- Dark "hacker" terminal aesthetics
+- Neon or green-on-black "hacker" terminal aesthetics
 
 ## Strategic principles
 - Clarity first: every screen should answer the user's question before they have to hunt

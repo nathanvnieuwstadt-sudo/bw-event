@@ -23,12 +23,12 @@ export function TopBar() {
   }
 
   return (
-    <header className="flex h-14 shrink-0 items-center justify-between border-b border-stone-200 bg-white px-6">
+    <header className="flex h-14 shrink-0 items-center justify-between border-b border-neutral-800 bg-neutral-900 px-6">
       <div>
         {!isHome && (
           <button
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 text-sm text-stone-500 transition-colors duration-100 hover:text-stone-900 active:scale-[0.97]"
+            className="flex items-center gap-2 text-sm text-neutral-400 transition-colors duration-100 hover:text-neutral-100 active:scale-[0.97]"
           >
             <IconHome />
             Accueil
@@ -37,11 +37,11 @@ export function TopBar() {
       </div>
 
       <div className="flex items-center gap-4">
-        <span className="text-sm text-stone-500">{email}</span>
-        <div className="h-4 w-px bg-stone-200" />
+        <span className="text-sm text-neutral-400">{email}</span>
+        <div className="h-4 w-px bg-neutral-800" />
         <button
           onClick={handleLogout}
-          className="text-sm text-stone-500 transition-colors duration-100 hover:text-stone-900 active:scale-[0.97]"
+          className="text-sm text-neutral-400 transition-colors duration-100 hover:text-neutral-100 active:scale-[0.97]"
         >
           Se déconnecter
         </button>

@@ -29,24 +29,24 @@ export function Modal({ open, title, onClose, children, footer, width = 'md' }: 
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/30 backdrop-blur-[2px]"
+        className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
         onClick={onClose}
       />
 
       {/* Panel */}
       <div
         className={[
-          'relative z-10 w-full rounded-xl bg-white shadow-card-md',
-          'ring-1 ring-stone-200',
+          'relative z-10 w-full rounded-xl bg-neutral-900 shadow-card-md',
+          'ring-1 ring-neutral-800',
           widthClasses[width],
         ].join(' ')}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-stone-100 px-6 py-4">
-          <h2 className="text-sm font-semibold text-stone-900">{title}</h2>
+        <div className="flex items-center justify-between border-b border-neutral-800 px-6 py-4">
+          <h2 className="text-sm font-semibold text-neutral-100">{title}</h2>
           <button
             onClick={onClose}
-            className="rounded-md p-1 text-stone-400 transition-colors duration-100 hover:bg-stone-100 hover:text-stone-700 active:scale-[0.95]"
+            className="rounded-md p-1 text-neutral-500 transition-colors duration-100 hover:bg-neutral-800 hover:text-neutral-300 active:scale-[0.95]"
             aria-label="Close"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
@@ -60,7 +60,7 @@ export function Modal({ open, title, onClose, children, footer, width = 'md' }: 
 
         {/* Footer */}
         {footer && (
-          <div className="flex justify-end gap-2 border-t border-stone-100 px-6 py-4">
+          <div className="flex justify-end gap-2 border-t border-neutral-800 px-6 py-4">
             {footer}
           </div>
         )}

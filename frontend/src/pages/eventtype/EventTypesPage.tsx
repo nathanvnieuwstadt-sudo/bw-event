@@ -12,9 +12,9 @@ const FIELD_TYPES: { value: FieldType; label: string }[] = [
 ]
 
 const inputCls =
-  'w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-slate-500 focus:ring-1 focus:ring-slate-500 outline-none transition-colors'
+  'w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 placeholder:text-neutral-500 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none transition-colors'
 const selectCls =
-  'w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-slate-500 focus:ring-1 focus:ring-slate-500 outline-none transition-colors appearance-none cursor-pointer'
+  'w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none transition-colors appearance-none cursor-pointer'
 
 function emptyField(order: number): EventTypeFieldRequest {
   return { fieldLabel: '', fieldType: 'TEXT', options: '', required: false, displayOrder: order }
@@ -47,7 +47,7 @@ function FieldEditor({
   return (
     <div className="space-y-2">
       {fields.map((f, i) => (
-        <div key={i} className="flex items-start gap-2 rounded-lg border border-stone-200 bg-stone-50 p-3">
+        <div key={i} className="flex items-start gap-2 rounded-lg border border-neutral-800 bg-neutral-950 p-3">
           <div className="flex-1 grid grid-cols-2 gap-2">
             <input
               placeholder="Libellé du champ (ex. Code vestimentaire)"
@@ -73,19 +73,19 @@ function FieldEditor({
               />
             )}
           </div>
-          <label className="flex items-center gap-1.5 pt-2.5 shrink-0 text-xs text-stone-600 cursor-pointer select-none">
+          <label className="flex items-center gap-1.5 pt-2.5 shrink-0 text-xs text-neutral-400 cursor-pointer select-none">
             <input
               type="checkbox"
               checked={f.required}
               onChange={(e) => update(i, { required: e.target.checked })}
-              className="h-3.5 w-3.5 rounded border-stone-300 text-slate-700 cursor-pointer"
+              className="h-3.5 w-3.5 rounded border-neutral-700 text-neutral-300 cursor-pointer"
             />
             Obligatoire
           </label>
           <button
             type="button"
             onClick={() => remove(i)}
-            className="mt-2 shrink-0 text-stone-400 hover:text-red-500 transition-colors"
+            className="mt-2 shrink-0 text-neutral-500 hover:text-red-500 transition-colors"
             title="Supprimer le champ"
           >
             <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
@@ -97,7 +97,7 @@ function FieldEditor({
       <button
         type="button"
         onClick={add}
-        className="flex items-center gap-1.5 text-sm text-slate-600 hover:text-slate-900 transition-colors"
+        className="flex items-center gap-1.5 text-sm text-neutral-400 hover:text-neutral-100 transition-colors"
       >
         <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
           <path d="M10 4v12M4 10h12" />
@@ -131,7 +131,7 @@ function EventTypeForm({
     >
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-stone-600">Nom</label>
+          <label className="mb-1.5 block text-xs font-medium text-neutral-400">Nom</label>
           <input
             required
             placeholder="ex. Mariage"
@@ -141,7 +141,7 @@ function EventTypeForm({
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-stone-600">Description</label>
+          <label className="mb-1.5 block text-xs font-medium text-neutral-400">Description</label>
           <input
             placeholder="Description courte (facultatif)"
             value={form.description}
@@ -152,14 +152,14 @@ function EventTypeForm({
       </div>
 
       <div>
-        <p className="mb-2 text-xs font-medium text-stone-600">Champs personnalisés</p>
+        <p className="mb-2 text-xs font-medium text-neutral-400">Champs personnalisés</p>
         <FieldEditor
           fields={form.fields}
           onChange={(fields) => setForm({ ...form, fields })}
         />
       </div>
 
-      <div className="flex justify-end gap-2 border-t border-stone-100 pt-3">
+      <div className="flex justify-end gap-2 border-t border-neutral-800 pt-3">
         <Button type="button" variant="secondary" size="sm" onClick={onCancel}>
           Annuler
         </Button>
@@ -183,14 +183,14 @@ function EventTypeCard({
   onDelete: () => void
 }) {
   return (
-    <div className="rounded-xl border border-stone-200 bg-white shadow-sm">
+    <div className="rounded-xl border border-neutral-800 bg-neutral-900 shadow-sm">
       <div className="flex items-start justify-between p-5">
         <div>
-          <p className="text-sm font-semibold text-stone-900">{eventType.name}</p>
+          <p className="text-sm font-semibold text-neutral-100">{eventType.name}</p>
           {eventType.description && (
-            <p className="mt-0.5 text-xs text-stone-500">{eventType.description}</p>
+            <p className="mt-0.5 text-xs text-neutral-400">{eventType.description}</p>
           )}
-          <p className="mt-2 text-xs text-stone-400">
+          <p className="mt-2 text-xs text-neutral-500">
             {eventType.fields.length === 0
               ? 'Aucun champ personnalisé'
               : `${eventType.fields.length} champ${eventType.fields.length !== 1 ? 's' : ''}`}
@@ -200,13 +200,13 @@ function EventTypeCard({
           <div className="flex gap-2 shrink-0">
             <button
               onClick={onEdit}
-              className="text-xs text-stone-500 hover:text-stone-900 transition-colors"
+              className="text-xs text-neutral-400 hover:text-neutral-100 transition-colors"
             >
               Modifier
             </button>
             <button
               onClick={onDelete}
-              className="text-xs text-stone-400 hover:text-red-500 transition-colors"
+              className="text-xs text-neutral-500 hover:text-red-500 transition-colors"
             >
               Supprimer
             </button>
@@ -215,16 +215,16 @@ function EventTypeCard({
       </div>
 
       {eventType.fields.length > 0 && (
-        <div className="border-t border-stone-100 px-5 pb-4">
+        <div className="border-t border-neutral-800 px-5 pb-4">
           <div className="mt-3 flex flex-wrap gap-2">
             {eventType.fields.map((f) => (
               <span
                 key={f.id}
-                className="inline-flex items-center gap-1 rounded-full border border-stone-200 bg-stone-50 px-2.5 py-1 text-xs text-stone-600"
+                className="inline-flex items-center gap-1 rounded-full border border-neutral-800 bg-neutral-950 px-2.5 py-1 text-xs text-neutral-400"
               >
                 {f.fieldLabel}
                 {f.required && <span className="text-red-400">*</span>}
-                <span className="text-stone-400">· {FIELD_TYPES.find((t) => t.value === f.fieldType)?.label ?? f.fieldType}</span>
+                <span className="text-neutral-500">· {FIELD_TYPES.find((t) => t.value === f.fieldType)?.label ?? f.fieldType}</span>
               </span>
             ))}
           </div>
@@ -302,8 +302,8 @@ export function EventTypesPage() {
     <div className="mx-auto max-w-3xl py-6 px-4">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-stone-900">Types d'événements</h1>
-          <p className="mt-1 text-sm text-stone-500">
+          <h1 className="text-2xl font-semibold text-neutral-100">Types d'événements</h1>
+          <p className="mt-1 text-sm text-neutral-400">
             Définissez les types d'événements que vous organisez et les informations nécessaires pour chacun.
           </p>
         </div>
@@ -315,8 +315,8 @@ export function EventTypesPage() {
       </div>
 
       {editingId === 'new' && (
-        <div className="mb-6 rounded-xl border border-slate-300 bg-white p-5 shadow-sm">
-          <p className="mb-4 text-sm font-semibold text-stone-900">Nouveau type d'événement</p>
+        <div className="mb-6 rounded-xl border border-neutral-700 bg-neutral-900 p-5 shadow-sm">
+          <p className="mb-4 text-sm font-semibold text-neutral-100">Nouveau type d'événement</p>
           <EventTypeForm
             initial={{ name: '', description: '', fields: [] }}
             onSave={handleSave}
@@ -329,16 +329,16 @@ export function EventTypesPage() {
       {loading ? (
         <div className="space-y-4">
           {[1, 2].map((n) => (
-            <div key={n} className="h-28 animate-pulse rounded-xl bg-stone-100" />
+            <div key={n} className="h-28 animate-pulse rounded-xl bg-neutral-800" />
           ))}
         </div>
       ) : eventTypes.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-stone-300 p-10 text-center">
-          <p className="text-sm text-stone-500">Aucun type d'événement pour le moment.</p>
+        <div className="rounded-xl border border-dashed border-neutral-700 p-10 text-center">
+          <p className="text-sm text-neutral-400">Aucun type d'événement pour le moment.</p>
           {canEdit && (
             <button
               onClick={() => setEditingId('new')}
-              className="mt-2 text-sm text-slate-600 hover:text-slate-900 transition-colors"
+              className="mt-2 text-sm text-neutral-400 hover:text-neutral-100 transition-colors"
             >
               Créer le premier →
             </button>
@@ -348,8 +348,8 @@ export function EventTypesPage() {
         <div className="space-y-4">
           {eventTypes.map((et) =>
             editingId === et.id ? (
-              <div key={et.id} className="rounded-xl border border-slate-300 bg-white p-5 shadow-sm">
-                <p className="mb-4 text-sm font-semibold text-stone-900">Modifier — {et.name}</p>
+              <div key={et.id} className="rounded-xl border border-neutral-700 bg-neutral-900 p-5 shadow-sm">
+                <p className="mb-4 text-sm font-semibold text-neutral-100">Modifier — {et.name}</p>
                 <EventTypeForm
                   initial={toFormState(et)}
                   onSave={handleSave}

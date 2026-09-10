@@ -8,7 +8,7 @@ interface Props {
 }
 
 const inputCls =
-  'rounded-md border border-stone-300 bg-white px-3 py-1.5 text-sm text-stone-900 placeholder:text-stone-400 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none disabled:bg-stone-50 disabled:text-stone-400'
+  'rounded-md border border-neutral-700 bg-neutral-900 px-3 py-1.5 text-sm text-neutral-100 placeholder:text-neutral-500 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none disabled:bg-neutral-950 disabled:text-neutral-500'
 
 export function MenuItemEditor({ items, onChange, readOnly = false }: Props) {
   function add() {
@@ -65,7 +65,7 @@ export function MenuItemEditor({ items, onChange, readOnly = false }: Props) {
             <button
               type="button"
               onClick={() => remove(index)}
-              className="flex items-center justify-center rounded text-stone-300 transition-colors duration-100 hover:text-red-500 active:scale-[0.9]"
+              className="flex items-center justify-center rounded text-neutral-700 transition-colors duration-100 hover:text-red-500 active:scale-[0.9]"
               aria-label="Supprimer"
             >
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
@@ -85,7 +85,7 @@ export function MenuItemEditor({ items, onChange, readOnly = false }: Props) {
       )}
 
       {items.length === 0 && readOnly && (
-        <p className="text-sm text-stone-400">Aucun plat enregistré.</p>
+        <p className="text-sm text-neutral-500">Aucun plat enregistré.</p>
       )}
     </div>
   )

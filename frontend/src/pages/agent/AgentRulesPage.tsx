@@ -5,9 +5,9 @@ import { Button } from '../../components/ui/Button'
 import type { AgentInstruction, AgentInstructionRequest } from '../../types/agent'
 
 const inputCls =
-  'w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-slate-500 focus:ring-1 focus:ring-slate-500 outline-none transition-colors'
+  'w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 placeholder:text-neutral-500 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none transition-colors'
 const textareaCls =
-  'w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-slate-500 focus:ring-1 focus:ring-slate-500 outline-none transition-colors resize-none'
+  'w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 placeholder:text-neutral-500 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none transition-colors resize-none'
 
 interface FormState {
   title: string
@@ -41,7 +41,7 @@ function InstructionForm({
       className="space-y-4"
     >
       <div>
-        <label className="mb-1.5 block text-xs font-medium text-stone-600">Titre</label>
+        <label className="mb-1.5 block text-xs font-medium text-neutral-400">Titre</label>
         <input
           required
           placeholder="ex. Mentionner l'acompte requis"
@@ -51,7 +51,7 @@ function InstructionForm({
         />
       </div>
       <div>
-        <label className="mb-1.5 block text-xs font-medium text-stone-600">Instruction</label>
+        <label className="mb-1.5 block text-xs font-medium text-neutral-400">Instruction</label>
         <textarea
           required
           rows={4}
@@ -67,13 +67,13 @@ function InstructionForm({
           id="enabled-check"
           checked={form.enabled}
           onChange={(e) => setForm({ ...form, enabled: e.target.checked })}
-          className="h-4 w-4 rounded border-stone-300 text-slate-700 cursor-pointer"
+          className="h-4 w-4 rounded border-neutral-700 text-neutral-300 cursor-pointer"
         />
-        <label htmlFor="enabled-check" className="text-sm text-stone-700 cursor-pointer select-none">
+        <label htmlFor="enabled-check" className="text-sm text-neutral-300 cursor-pointer select-none">
           Actif
         </label>
       </div>
-      <div className="flex justify-end gap-2 border-t border-stone-100 pt-3">
+      <div className="flex justify-end gap-2 border-t border-neutral-800 pt-3">
         <Button type="button" variant="secondary" size="sm" onClick={onCancel}>Annuler</Button>
         <Button type="submit" size="sm" loading={saving}>Enregistrer</Button>
       </div>
@@ -97,18 +97,18 @@ function InstructionCard({
   toggling: boolean
 }) {
   return (
-    <div className={`rounded-xl border bg-white shadow-sm transition-opacity ${item.enabled ? 'border-stone-200' : 'border-stone-100 opacity-60'}`}>
+    <div className={`rounded-xl border bg-neutral-900 shadow-sm transition-opacity ${item.enabled ? 'border-neutral-800' : 'border-neutral-800 opacity-60'}`}>
       <div className="flex items-start justify-between px-5 pt-5 pb-4">
         <div className="flex-1 min-w-0 pr-4">
           <div className="flex items-center gap-2.5">
-            <p className="text-sm font-semibold text-stone-900">{item.title}</p>
+            <p className="text-sm font-semibold text-neutral-100">{item.title}</p>
             {!item.enabled && (
-              <span className="rounded-full border border-stone-200 bg-stone-50 px-2 py-0.5 text-[10px] font-medium text-stone-400 uppercase tracking-wide">
+              <span className="rounded-full border border-neutral-800 bg-neutral-950 px-2 py-0.5 text-[10px] font-medium text-neutral-500 uppercase tracking-wide">
                 Désactivé
               </span>
             )}
           </div>
-          <p className="mt-2 text-sm text-stone-600 leading-relaxed whitespace-pre-line">{item.instruction}</p>
+          <p className="mt-2 text-sm text-neutral-400 leading-relaxed whitespace-pre-line">{item.instruction}</p>
         </div>
         {canEdit && (
           <div className="flex flex-shrink-0 items-center gap-3">
@@ -116,19 +116,19 @@ function InstructionCard({
               onClick={onToggle}
               disabled={toggling}
               title={item.enabled ? 'Désactiver' : 'Activer'}
-              className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors duration-200 focus:outline-none ${item.enabled ? 'bg-slate-700' : 'bg-stone-200'} disabled:opacity-50`}
+              className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors duration-200 focus:outline-none ${item.enabled ? 'bg-brand-600' : 'bg-neutral-800'} disabled:opacity-50`}
             >
-              <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform duration-200 ${item.enabled ? 'translate-x-4' : 'translate-x-0.5'}`} />
+              <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-neutral-100 shadow transition-transform duration-200 ${item.enabled ? 'translate-x-4' : 'translate-x-0.5'}`} />
             </button>
             <button
               onClick={onEdit}
-              className="text-xs text-stone-500 hover:text-stone-900 transition-colors"
+              className="text-xs text-neutral-400 hover:text-neutral-100 transition-colors"
             >
               Modifier
             </button>
             <button
               onClick={onDelete}
-              className="text-xs text-stone-400 hover:text-red-500 transition-colors"
+              className="text-xs text-neutral-500 hover:text-red-500 transition-colors"
             >
               Supprimer
             </button>
@@ -211,8 +211,8 @@ export function AgentRulesPage() {
     <div className="mx-auto max-w-3xl py-6 px-4">
       <div className="mb-8 flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-stone-900">Instructions de l'agent</h1>
-          <p className="mt-1 text-sm text-stone-500">
+          <h1 className="text-2xl font-semibold text-neutral-100">Instructions de l'agent</h1>
+          <p className="mt-1 text-sm text-neutral-400">
             Règles que l'IA suit lors de la rédaction des réponses.{' '}
             {!loading && (
               <span>{activeCount} sur {instructions.length} actives.</span>
@@ -227,8 +227,8 @@ export function AgentRulesPage() {
       </div>
 
       {editingId === 'new' && (
-        <div className="mb-6 rounded-xl border border-slate-300 bg-white p-5 shadow-sm">
-          <p className="mb-4 text-sm font-semibold text-stone-900">Nouvelle instruction</p>
+        <div className="mb-6 rounded-xl border border-neutral-700 bg-neutral-900 p-5 shadow-sm">
+          <p className="mb-4 text-sm font-semibold text-neutral-100">Nouvelle instruction</p>
           <InstructionForm
             initial={emptyForm()}
             onSave={handleSave}
@@ -241,16 +241,16 @@ export function AgentRulesPage() {
       {loading ? (
         <div className="space-y-4">
           {[1, 2, 3].map((n) => (
-            <div key={n} className="h-24 animate-pulse rounded-xl bg-stone-100" />
+            <div key={n} className="h-24 animate-pulse rounded-xl bg-neutral-800" />
           ))}
         </div>
       ) : instructions.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-stone-300 p-10 text-center">
-          <p className="text-sm text-stone-500">Aucune instruction pour le moment.</p>
+        <div className="rounded-xl border border-dashed border-neutral-700 p-10 text-center">
+          <p className="text-sm text-neutral-400">Aucune instruction pour le moment.</p>
           {canEdit && (
             <button
               onClick={() => setEditingId('new')}
-              className="mt-2 text-sm text-slate-600 hover:text-slate-900 transition-colors"
+              className="mt-2 text-sm text-neutral-400 hover:text-neutral-100 transition-colors"
             >
               Ajouter la première →
             </button>
@@ -260,8 +260,8 @@ export function AgentRulesPage() {
         <div className="space-y-3">
           {instructions.map((item) =>
             editingId === item.id ? (
-              <div key={item.id} className="rounded-xl border border-slate-300 bg-white p-5 shadow-sm">
-                <p className="mb-4 text-sm font-semibold text-stone-900">Modifier — {item.title}</p>
+              <div key={item.id} className="rounded-xl border border-neutral-700 bg-neutral-900 p-5 shadow-sm">
+                <p className="mb-4 text-sm font-semibold text-neutral-100">Modifier — {item.title}</p>
                 <InstructionForm
                   initial={toFormState(item)}
                   onSave={handleSave}

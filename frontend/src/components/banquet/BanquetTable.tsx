@@ -35,7 +35,7 @@ export function BanquetTable({ banquets }: Props) {
           key: 'date',
           header: 'Date',
           render: (b) => (
-            <span className="font-medium text-stone-800">{formatDate(b.date)}</span>
+            <span className="font-medium text-neutral-200">{formatDate(b.date)}</span>
           ),
         },
         {
@@ -45,16 +45,16 @@ export function BanquetTable({ banquets }: Props) {
             b.startTime
               ? `${formatTime(b.startTime)} – ${formatTime(b.endTime)}`
               : '—',
-          className: 'text-stone-500',
+          className: 'text-neutral-400',
         },
         {
           key: 'contact',
           header: 'Contact',
           render: (b) => (
             <div>
-              <div className="font-medium text-stone-800">{b.contactName ?? '—'}</div>
+              <div className="font-medium text-neutral-200">{b.contactName ?? '—'}</div>
               {b.contactOrganization && (
-                <div className="text-xs text-stone-400 mt-0.5">{b.contactOrganization}</div>
+                <div className="text-xs text-neutral-500 mt-0.5">{b.contactOrganization}</div>
               )}
             </div>
           ),
@@ -78,7 +78,7 @@ export function BanquetTable({ banquets }: Props) {
           key: 'source',
           header: 'Source',
           render: (b) => (
-            <span className="text-[11px] font-medium uppercase tracking-wide text-stone-400">
+            <span className="text-[11px] font-medium uppercase tracking-wide text-neutral-500">
               {b.source}
             </span>
           ),

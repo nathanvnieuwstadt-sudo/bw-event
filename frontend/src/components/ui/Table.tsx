@@ -23,15 +23,15 @@ export function Table<T>({
   emptyMessage = 'No records found.',
 }: Props<T>) {
   return (
-    <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-card">
-      <table className="min-w-full divide-y divide-stone-100">
+    <div className="overflow-hidden rounded-lg border border-neutral-800 bg-neutral-900 shadow-card">
+      <table className="min-w-full divide-y divide-neutral-800">
         <thead>
-          <tr className="bg-stone-50">
+          <tr className="bg-neutral-950">
             {columns.map((col) => (
               <th
                 key={col.key}
                 className={[
-                  'px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-widest text-stone-400',
+                  'px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-widest text-neutral-500',
                   col.className ?? '',
                 ].join(' ')}
               >
@@ -40,12 +40,12 @@ export function Table<T>({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-stone-100 bg-white">
+        <tbody className="divide-y divide-neutral-800 bg-neutral-900">
           {rows.length === 0 ? (
             <tr>
               <td
                 colSpan={columns.length}
-                className="px-4 py-10 text-center text-sm text-stone-400"
+                className="px-4 py-10 text-center text-sm text-neutral-500"
               >
                 {emptyMessage}
               </td>
@@ -58,14 +58,14 @@ export function Table<T>({
                 className={[
                   'transition-colors duration-75',
                   onRowClick
-                    ? 'cursor-pointer hover:bg-stone-50 active:bg-stone-100'
+                    ? 'cursor-pointer hover:bg-neutral-800 active:bg-neutral-700'
                     : '',
                 ].join(' ')}
               >
                 {columns.map((col) => (
                   <td
                     key={col.key}
-                    className={['px-4 py-3 text-sm text-stone-700', col.className ?? ''].join(' ')}
+                    className={['px-4 py-3 text-sm text-neutral-300', col.className ?? ''].join(' ')}
                   >
                     {col.render(row)}
                   </td>

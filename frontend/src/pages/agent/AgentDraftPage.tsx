@@ -14,10 +14,10 @@ function formatDateTime(iso: string | null) {
 }
 
 const STATUS_STYLES: Record<DraftStatus, { label: string; cls: string }> = {
-  PENDING:  { label: 'En attente', cls: 'bg-amber-50 text-amber-700 border-amber-200' },
-  APPROVED: { label: 'Approuvé',   cls: 'bg-green-50 text-green-700 border-green-200' },
-  REJECTED: { label: 'Rejeté',     cls: 'bg-red-50 text-red-600 border-red-200' },
-  SENT:     { label: 'Envoyé',     cls: 'bg-slate-50 text-slate-600 border-slate-200' },
+  PENDING:  { label: 'En attente', cls: 'bg-amber-500/10 text-amber-400 border-amber-500/30' },
+  APPROVED: { label: 'Approuvé',   cls: 'bg-green-500/10 text-green-400 border-green-500/30' },
+  REJECTED: { label: 'Rejeté',     cls: 'bg-red-500/10 text-red-400 border-red-500/30' },
+  SENT:     { label: 'Envoyé',     cls: 'bg-neutral-950 text-neutral-400 border-neutral-800' },
 }
 
 function StatusBadge({ status }: { status: DraftStatus }) {
@@ -118,8 +118,8 @@ export function AgentDraftPage() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-lg font-semibold text-stone-900">Boîte de l'agent</h1>
-          <p className="mt-0.5 text-sm text-stone-400">
+          <h1 className="text-lg font-semibold text-neutral-100">Boîte de l'agent</h1>
+          <p className="mt-0.5 text-sm text-neutral-500">
             {loading ? 'Chargement…' : pendingTotal > 0
               ? `${pendingTotal} brouillon${pendingTotal !== 1 ? 's' : ''} en attente de relecture`
               : 'Tous les brouillons ont été vérifiés'}
@@ -130,14 +130,14 @@ export function AgentDraftPage() {
       {loading ? (
         <div className="flex gap-5">
           <div className="w-64 space-y-1.5">
-            {[...Array(4)].map((_, i) => <div key={i} className="h-16 animate-pulse rounded-md bg-stone-100" />)}
+            {[...Array(4)].map((_, i) => <div key={i} className="h-16 animate-pulse rounded-md bg-neutral-800" />)}
           </div>
-          <div className="flex-1 h-64 animate-pulse rounded-lg bg-stone-100" />
+          <div className="flex-1 h-64 animate-pulse rounded-lg bg-neutral-800" />
         </div>
       ) : threads.length === 0 ? (
-        <div className="flex items-start gap-4 rounded-lg border border-stone-200 bg-white p-6 shadow-card">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-stone-200 bg-stone-50">
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-stone-400">
+        <div className="flex items-start gap-4 rounded-lg border border-neutral-800 bg-neutral-900 p-6 shadow-card">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-neutral-800 bg-neutral-950">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-neutral-500">
               <rect x="3" y="8" width="14" height="10" rx="2" />
               <path d="M7 8V6a3 3 0 0 1 6 0v2" />
               <circle cx="7.5" cy="13" r="1" fill="currentColor" stroke="none" />
@@ -146,8 +146,8 @@ export function AgentDraftPage() {
             </svg>
           </div>
           <div>
-            <p className="text-sm font-medium text-stone-700">Aucun brouillon</p>
-            <p className="mt-1 text-sm text-stone-400 leading-relaxed">
+            <p className="text-sm font-medium text-neutral-300">Aucun brouillon</p>
+            <p className="mt-1 text-sm text-neutral-500 leading-relaxed">
               Une fois connecté, les e-mails de réservation entrants seront analysés par l'agent IA et les brouillons de réponse apparaîtront ici pour relecture.
             </p>
           </div>
@@ -155,7 +155,7 @@ export function AgentDraftPage() {
       ) : (
         <div className="flex gap-5 items-start">
           {/* Thread list */}
-          <div className="w-64 flex-none overflow-hidden rounded-lg border border-stone-200 bg-white shadow-card divide-y divide-stone-100">
+          <div className="w-64 flex-none overflow-hidden rounded-lg border border-neutral-800 bg-neutral-900 shadow-card divide-y divide-neutral-800">
             {threads.map((t) => (
               <button
                 key={t.threadId}
@@ -163,12 +163,12 @@ export function AgentDraftPage() {
                 className={[
                   'w-full px-4 py-3.5 text-left transition-colors duration-75',
                   selectedThreadId === t.threadId
-                    ? 'bg-brand-50'
-                    : 'hover:bg-stone-50 active:bg-stone-100',
+                    ? 'bg-brand-500/10'
+                    : 'hover:bg-neutral-950 active:bg-neutral-800',
                 ].join(' ')}
               >
                 <div className="flex items-start justify-between gap-2">
-                  <p className={`text-sm font-medium leading-snug line-clamp-2 ${selectedThreadId === t.threadId ? 'text-brand-700' : 'text-stone-800'}`}>
+                  <p className={`text-sm font-medium leading-snug line-clamp-2 ${selectedThreadId === t.threadId ? 'text-brand-400' : 'text-neutral-200'}`}>
                     {t.subject ?? 'Sans objet'}
                   </p>
                   {t.pendingCount > 0 && (
@@ -177,7 +177,7 @@ export function AgentDraftPage() {
                     </span>
                   )}
                 </div>
-                <p className="mt-1 text-xs text-stone-400">
+                <p className="mt-1 text-xs text-neutral-500">
                   {t.contactName ?? 'Expéditeur inconnu'} · {formatDate(t.lastMessageAt)}
                 </p>
               </button>
@@ -190,18 +190,18 @@ export function AgentDraftPage() {
               <>
                 {/* Incoming email */}
                 {selectedThread.senderMessage && (
-                  <div className="rounded-lg border border-stone-200 bg-white shadow-card">
-                    <div className="flex items-center justify-between border-b border-stone-100 px-5 py-3.5">
+                  <div className="rounded-lg border border-neutral-800 bg-neutral-900 shadow-card">
+                    <div className="flex items-center justify-between border-b border-neutral-800 px-5 py-3.5">
                       <div>
-                        <p className="text-sm font-semibold text-stone-900">{selectedThread.subject}</p>
-                        <p className="mt-0.5 text-xs text-stone-400">
+                        <p className="text-sm font-semibold text-neutral-100">{selectedThread.subject}</p>
+                        <p className="mt-0.5 text-xs text-neutral-500">
                           {selectedThread.contactName ?? 'Client'} · {formatDateTime(selectedThread.lastMessageAt)}
                         </p>
                       </div>
-                      <span className="text-xs text-stone-400 bg-stone-100 rounded px-2 py-1">Reçu</span>
+                      <span className="text-xs text-neutral-500 bg-neutral-800 rounded px-2 py-1">Reçu</span>
                     </div>
                     <div className="px-5 py-4">
-                      <pre className="whitespace-pre-wrap font-sans text-sm text-stone-700 leading-relaxed">
+                      <pre className="whitespace-pre-wrap font-sans text-sm text-neutral-300 leading-relaxed">
                         {selectedThread.senderMessage}
                       </pre>
                     </div>
@@ -213,35 +213,35 @@ export function AgentDraftPage() {
                   .slice()
                   .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
                   .map((draft) => (
-                    <div key={draft.id} className="rounded-lg border border-stone-200 bg-white shadow-card">
-                      <div className="flex items-center justify-between border-b border-stone-100 px-5 py-3.5">
+                    <div key={draft.id} className="rounded-lg border border-neutral-800 bg-neutral-900 shadow-card">
+                      <div className="flex items-center justify-between border-b border-neutral-800 px-5 py-3.5">
                         <div className="flex items-center gap-3">
-                          <span className="text-xs font-medium text-stone-500">Brouillon IA</span>
-                          <span className="text-stone-200">·</span>
-                          <span className="text-xs text-stone-400">{formatDateTime(draft.createdAt)}</span>
+                          <span className="text-xs font-medium text-neutral-400">Brouillon IA</span>
+                          <span className="text-neutral-800">·</span>
+                          <span className="text-xs text-neutral-500">{formatDateTime(draft.createdAt)}</span>
                         </div>
                         <StatusBadge status={draft.status} />
                       </div>
 
                       <div className="px-5 py-4">
-                        <pre className="whitespace-pre-wrap font-sans text-sm text-stone-700 leading-relaxed">
+                        <pre className="whitespace-pre-wrap font-sans text-sm text-neutral-300 leading-relaxed">
                           {draft.draftBody}
                         </pre>
                       </div>
 
                       {draft.status === 'PENDING' && canReview && (
-                        <div className="flex items-center justify-end gap-2 border-t border-stone-100 px-5 py-3">
+                        <div className="flex items-center justify-end gap-2 border-t border-neutral-800 px-5 py-3">
                           <button
                             onClick={() => handleReject(draft.id)}
                             disabled={busy === draft.id}
-                            className="rounded-md border border-stone-200 bg-white px-3 py-1.5 text-sm font-medium text-stone-600 hover:border-red-300 hover:text-red-600 transition-colors disabled:opacity-50"
+                            className="rounded-md border border-neutral-800 bg-neutral-900 px-3 py-1.5 text-sm font-medium text-neutral-400 hover:border-red-500/50 hover:text-red-400 transition-colors disabled:opacity-50"
                           >
                             Rejeter
                           </button>
                           <button
                             onClick={() => handleApprove(draft.id)}
                             disabled={busy === draft.id}
-                            className="rounded-md bg-slate-800 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-700 transition-colors disabled:opacity-50"
+                            className="rounded-md bg-brand-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-700 transition-colors disabled:opacity-50"
                           >
                             {busy === draft.id ? 'Enregistrement…' : 'Approuver et envoyer'}
                           </button>
@@ -249,8 +249,8 @@ export function AgentDraftPage() {
                       )}
 
                       {(draft.status === 'APPROVED' || draft.status === 'REJECTED') && draft.reviewedAt && (
-                        <div className="border-t border-stone-100 px-5 py-2.5">
-                          <p className="text-xs text-stone-400">
+                        <div className="border-t border-neutral-800 px-5 py-2.5">
+                          <p className="text-xs text-neutral-500">
                             {draft.status === 'APPROVED' ? 'Approuvé' : 'Rejeté'} le {formatDateTime(draft.reviewedAt)}
                           </p>
                         </div>
@@ -259,7 +259,7 @@ export function AgentDraftPage() {
                   ))}
               </>
             ) : (
-              <div className="flex h-48 items-center justify-center rounded-lg border border-dashed border-stone-200 text-sm text-stone-400">
+              <div className="flex h-48 items-center justify-center rounded-lg border border-dashed border-neutral-800 text-sm text-neutral-500">
                 Sélectionnez un fil pour voir les brouillons
               </div>
             )}
