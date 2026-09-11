@@ -27,6 +27,16 @@ public class EmailThread {
     @JoinColumn(name = "banquet_id")
     private Banquet banquet;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contact_id")
+    private Contact contact;
+
+    @Column(name = "sender_name")
+    private String senderName;
+
+    @Column(name = "sender_email")
+    private String senderEmail;
+
     @Column(name = "gmail_thread_id")
     private String gmailThreadId;
 

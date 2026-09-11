@@ -29,6 +29,10 @@ public class AgentDraftResponse {
         String contactName = null;
         if (d.getBanquet() != null && d.getBanquet().getContact() != null) {
             contactName = d.getBanquet().getContact().getName();
+        } else if (d.getEmailThread() != null && d.getEmailThread().getContact() != null) {
+            contactName = d.getEmailThread().getContact().getName();
+        } else if (d.getEmailThread() != null && d.getEmailThread().getSenderName() != null) {
+            contactName = d.getEmailThread().getSenderName();
         }
         return AgentDraftResponse.builder()
                 .id(d.getId())
