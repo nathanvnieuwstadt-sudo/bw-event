@@ -45,8 +45,11 @@ function SimulateEmailForm({
         senderName: contactId ? undefined : senderName || undefined,
       })
       onCreated(draft)
-    } catch {
-      setError('Impossible de simuler cet e-mail. Veuillez réessayer.')
+    } catch (err: unknown) {
+      const msg =
+        (err as { response?: { data?: { error?: string } } })?.response?.data?.error ??
+        'Impossible de simuler cet e-mail. Veuillez réessayer.'
+      setError(msg)
     } finally {
       setLoading(false)
     }
