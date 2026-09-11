@@ -1,8 +1,13 @@
 import api from './client'
-import type { AgentDraft, AgentInstruction, AgentInstructionRequest } from '../types/agent'
+import type { AgentDraft, AgentInstruction, AgentInstructionRequest, SimulateEmailRequest } from '../types/agent'
 
 export async function listDrafts(restaurantId: string): Promise<AgentDraft[]> {
   const res = await api.get(`/restaurants/${restaurantId}/agent/drafts`)
+  return res.data.data
+}
+
+export async function simulateIncomingEmail(restaurantId: string, req: SimulateEmailRequest): Promise<AgentDraft> {
+  const res = await api.post(`/restaurants/${restaurantId}/agent/threads`, req)
   return res.data.data
 }
 

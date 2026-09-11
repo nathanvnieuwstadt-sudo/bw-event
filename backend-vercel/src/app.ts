@@ -15,6 +15,7 @@ import { eventTypesRoutes } from "./modules/eventTypes/routes.js";
 import { banquetsRoutes } from "./modules/banquets/routes.js";
 import { agentDraftsRoutes } from "./modules/agent/drafts.routes.js";
 import { agentInstructionsRoutes } from "./modules/agent/instructions.routes.js";
+import { agentThreadsRoutes } from "./modules/agent/threads.routes.js";
 
 export const app = new Hono<AppEnv>().basePath("/api/v1");
 
@@ -55,6 +56,7 @@ app.route("/restaurants/:restaurantId/event-types", eventTypesRoutes);
 app.route("/restaurants/:restaurantId/banquets", banquetsRoutes);
 app.route("/restaurants/:restaurantId/agent/drafts", agentDraftsRoutes);
 app.route("/restaurants/:restaurantId/agent/instructions", agentInstructionsRoutes);
+app.route("/restaurants/:restaurantId/agent/threads", agentThreadsRoutes);
 
 app.notFound((c) => c.json(errorBody("Not found", 404), 404));
 

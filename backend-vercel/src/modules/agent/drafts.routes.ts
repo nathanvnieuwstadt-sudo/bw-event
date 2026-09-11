@@ -26,7 +26,7 @@ interface DraftRow {
 const DRAFT_COLUMNS = `
   d.id, d.restaurant_id, d.email_thread_id, et.subject AS email_subject,
   et.last_message_body AS email_sender_message, et.last_message_at AS email_last_message_at,
-  d.banquet_id, ct.name AS contact_name, d.draft_body, d.status,
+  d.banquet_id, COALESCE(ct.name, tct.name, et.sender_name) AS contact_name, d.draft_body, d.status,
   d.created_at, d.reviewed_by, d.reviewed_at
 `;
 
@@ -55,6 +55,7 @@ async function findOrThrow(id: string): Promise<DraftRow> {
     JOIN email_threads et ON et.id = d.email_thread_id
     LEFT JOIN banquets b ON b.id = d.banquet_id
     LEFT JOIN contacts ct ON ct.id = b.contact_id
+    LEFT JOIN contacts tct ON tct.id = et.contact_id
     WHERE d.id = ${id}`;
   const draft = rows[0];
   if (!draft) throw new NotFoundError(`AgentDraft not found: ${id}`);
@@ -76,6 +77,7 @@ agentDraftsRoutes.get(
       JOIN email_threads et ON et.id = d.email_thread_id
       LEFT JOIN banquets b ON b.id = d.banquet_id
       LEFT JOIN contacts ct ON ct.id = b.contact_id
+      LEFT JOIN contacts tct ON tct.id = et.contact_id
       WHERE d.restaurant_id = ${restaurantId}
       ORDER BY d.created_at DESC`;
     return c.json(success(rows.map(toResponse)));
@@ -93,6 +95,7 @@ agentDraftsRoutes.get(
       JOIN email_threads et ON et.id = d.email_thread_id
       LEFT JOIN banquets b ON b.id = d.banquet_id
       LEFT JOIN contacts ct ON ct.id = b.contact_id
+      LEFT JOIN contacts tct ON tct.id = et.contact_id
       WHERE d.restaurant_id = ${restaurantId} AND d.status = 'PENDING'
       ORDER BY d.created_at DESC`;
     return c.json(success(rows.map(toResponse)));

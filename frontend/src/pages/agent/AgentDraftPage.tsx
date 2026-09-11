@@ -1,7 +1,125 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../auth/useAuth'
-import { listDrafts, approveDraft, rejectDraft } from '../../api/agent'
+import { listDrafts, approveDraft, rejectDraft, simulateIncomingEmail } from '../../api/agent'
+import { listContacts } from '../../api/contacts'
+import { Button } from '../../components/ui/Button'
+import { Modal } from '../../components/ui/Modal'
 import type { AgentDraft, DraftStatus } from '../../types/agent'
+import type { Contact } from '../../types/contact'
+
+const inputCls =
+  'w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-500 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none'
+const selectCls =
+  'w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2.5 text-sm text-neutral-100 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none appearance-none cursor-pointer'
+
+function SimulateEmailForm({
+  restaurantId,
+  onCreated,
+  onCancel,
+}: {
+  restaurantId: string
+  onCreated: (draft: AgentDraft) => void
+  onCancel: () => void
+}) {
+  const [contacts, setContacts] = useState<Contact[]>([])
+  const [contactId, setContactId] = useState('')
+  const [senderName, setSenderName] = useState('')
+  const [subject, setSubject] = useState('')
+  const [messageBody, setMessageBody] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    listContacts(restaurantId).then(setContacts).catch(() => setContacts([]))
+  }, [restaurantId])
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+    try {
+      const draft = await simulateIncomingEmail(restaurantId, {
+        subject,
+        messageBody,
+        contactId: contactId || undefined,
+        senderName: contactId ? undefined : senderName || undefined,
+      })
+      onCreated(draft)
+    } catch {
+      setError('Impossible de simuler cet e-mail. Veuillez réessayer.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <p className="text-sm text-neutral-400 leading-relaxed">
+        Aucune boîte Gmail n'est encore connectée. Utilisez ce formulaire pour simuler un e-mail
+        entrant — l'agent générera un brouillon de réponse comme il le ferait pour un vrai message.
+      </p>
+
+      {error && (
+        <div className="rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+          {error}
+        </div>
+      )}
+
+      <div>
+        <label className="mb-1.5 block text-xs font-medium text-neutral-400">Contact</label>
+        <select value={contactId} onChange={(e) => setContactId(e.target.value)} className={selectCls}>
+          <option value="">— Nouveau contact —</option>
+          {contacts.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name}{c.organization ? ` — ${c.organization}` : ''}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {!contactId && (
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-neutral-400">Nom de l'expéditeur</label>
+          <input
+            required
+            value={senderName}
+            onChange={(e) => setSenderName(e.target.value)}
+            placeholder="ex. Eva Storms"
+            className={inputCls}
+          />
+        </div>
+      )}
+
+      <div>
+        <label className="mb-1.5 block text-xs font-medium text-neutral-400">Objet</label>
+        <input
+          required
+          value={subject}
+          onChange={(e) => setSubject(e.target.value)}
+          placeholder="ex. Demande pour un mariage — 30 août"
+          className={inputCls}
+        />
+      </div>
+
+      <div>
+        <label className="mb-1.5 block text-xs font-medium text-neutral-400">Message</label>
+        <textarea
+          required
+          rows={6}
+          value={messageBody}
+          onChange={(e) => setMessageBody(e.target.value)}
+          placeholder="Collez ou rédigez le contenu de l'e-mail entrant…"
+          className={`${inputCls} resize-none`}
+        />
+      </div>
+
+      <div className="flex justify-end gap-2 pt-1">
+        <Button type="button" variant="secondary" onClick={onCancel}>Annuler</Button>
+        <Button type="submit" loading={loading}>Générer le brouillon</Button>
+      </div>
+    </form>
+  )
+}
 
 function formatDate(iso: string | null) {
   if (!iso) return '—'
@@ -71,8 +189,15 @@ export function AgentDraftPage() {
   const [loading, setLoading] = useState(true)
   const [selectedThreadId, setSelectedThreadId] = useState<string | null>(null)
   const [busy, setBusy] = useState<string | null>(null)
+  const [simulateOpen, setSimulateOpen] = useState(false)
 
   const canReview = hasRole('DEV', 'GENERAL_MANAGER', 'FLOOR_MANAGER')
+
+  function handleSimulated(draft: AgentDraft) {
+    setDrafts((prev) => [draft, ...prev])
+    setSelectedThreadId(draft.emailThreadId)
+    setSimulateOpen(false)
+  }
 
   useEffect(() => {
     if (!restaurantId) { setLoading(false); return }
@@ -125,6 +250,9 @@ export function AgentDraftPage() {
               : 'Tous les brouillons ont été vérifiés'}
           </p>
         </div>
+        {canReview && (
+          <Button size="sm" onClick={() => setSimulateOpen(true)}>Simuler un e-mail</Button>
+        )}
       </div>
 
       {loading ? (
@@ -150,6 +278,14 @@ export function AgentDraftPage() {
             <p className="mt-1 text-sm text-neutral-500 leading-relaxed">
               Une fois connecté, les e-mails de réservation entrants seront analysés par l'agent IA et les brouillons de réponse apparaîtront ici pour relecture.
             </p>
+            {canReview && (
+              <button
+                onClick={() => setSimulateOpen(true)}
+                className="mt-3 min-h-[40px] rounded-md px-3 py-2 -ml-3 text-sm font-medium text-brand-400 transition-colors hover:bg-neutral-800 active:scale-[0.97]"
+              >
+                Simuler un e-mail pour tester →
+              </button>
+            )}
           </div>
         </div>
       ) : (
@@ -265,6 +401,16 @@ export function AgentDraftPage() {
             )}
           </div>
         </div>
+      )}
+
+      {restaurantId && (
+        <Modal open={simulateOpen} title="Simuler un e-mail entrant" onClose={() => setSimulateOpen(false)} width="lg">
+          <SimulateEmailForm
+            restaurantId={restaurantId}
+            onCreated={handleSimulated}
+            onCancel={() => setSimulateOpen(false)}
+          />
+        </Modal>
       )}
     </div>
   )

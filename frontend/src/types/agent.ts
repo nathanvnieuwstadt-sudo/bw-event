@@ -33,3 +33,11 @@ export interface AgentInstructionRequest {
   enabled: boolean
   displayOrder: number
 }
+
+export interface SimulateEmailRequest {
+  subject: string
+  messageBody: string
+  contactId?: string
+  senderName?: string
+  senderEmail?: string
+}
