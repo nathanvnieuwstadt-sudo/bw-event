@@ -14,8 +14,14 @@ function createClient() {
     prepare: false,
     ssl: "require",
     max: 5,
-    idle_timeout: 20,
+    idle_timeout: 60,
     connect_timeout: 10,
+    // The schema has no custom enum/domain/composite types, so skip the
+    // pg_type/pg_attribute/pg_range introspection query postgres.js would
+    // otherwise run on every fresh connection — on Supabase that query
+    // scans thousands of catalog rows and was a major source of avoidable
+    // disk IO given how often serverless cold starts open new connections.
+    fetch_types: false,
   });
 }
 
