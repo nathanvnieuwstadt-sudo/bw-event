@@ -7,6 +7,7 @@ import { requireAuth, requireRole } from "../../middleware/auth.js";
 import type { AppEnv } from "../../middleware/auth.js";
 import { requiredParam } from "../../lib/params.js";
 import { generateDraft } from "./mockDraftGenerator.js";
+import { generateReplyDraft } from "./claudeApiService.js";
 
 const threadSchema = z
   .object({
@@ -89,6 +90,20 @@ agentThreadsRoutes.post(
       SELECT title, instruction, enabled FROM agent_instructions
       WHERE restaurant_id = ${restaurantId} AND enabled = TRUE`;
 
+    const eventTypeRows = await sql<{ name: string; field_label: string | null }[]>`
+      SELECT et.name, etf.field_label
+      FROM event_types et
+      LEFT JOIN event_type_fields etf ON etf.event_type_id = et.id
+      WHERE et.restaurant_id = ${restaurantId}
+      ORDER BY et.name, etf.display_order`;
+    const eventTypes = Object.values(
+      eventTypeRows.reduce<Record<string, { name: string; fieldLabels: string[] }>>((acc, row) => {
+        acc[row.name] ??= { name: row.name, fieldLabels: [] };
+        if (row.field_label) acc[row.name].fieldLabels.push(row.field_label);
+        return acc;
+      }, {}),
+    );
+
     const threadRows = await sql<{ id: string }[]>`
       INSERT INTO email_threads
         (restaurant_id, contact_id, sender_name, sender_email, subject, last_message_at, last_message_body)
@@ -99,12 +114,20 @@ agentThreadsRoutes.post(
       RETURNING id`;
     const threadId = threadRows[0].id;
 
-    const draftBody = generateDraft({
-      contactName,
-      subject: body.subject,
-      messageBody: body.messageBody,
-      instructions,
-    });
+    const draftBody =
+      (await generateReplyDraft({
+        contactName,
+        subject: body.subject,
+        messageBody: body.messageBody,
+        eventTypes,
+        instructions,
+      })) ??
+      generateDraft({
+        contactName,
+        subject: body.subject,
+        messageBody: body.messageBody,
+        instructions,
+      });
 
     const draftRows = await sql<DraftRow[]>`
       WITH inserted AS (

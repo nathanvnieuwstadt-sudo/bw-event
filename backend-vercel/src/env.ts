@@ -14,4 +14,8 @@ export const env = {
   get jwtExpirationMs() {
     return Number(process.env.JWT_EXPIRATION_MS ?? 86_400_000);
   },
+  /** Optional — when unset, the agent falls back to the mock draft generator. */
+  get claudeApiKey() {
+    return process.env.CLAUDE_API_KEY;
+  },
 };

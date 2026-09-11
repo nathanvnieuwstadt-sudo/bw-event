@@ -14,7 +14,7 @@ Single-restaurant banquet management platform. Scaffolded as a multi-tenant foun
 | Auth | JWT (HS256), role-based via Spring Security |
 | Infra | GCP: Cloud Run, Cloud SQL, Artifact Registry, Secret Manager (europe-west1) |
 | Email | Gmail API (scaffold only — not implemented) |
-| AI Agent | Claude API (scaffold only — not implemented) |
+| AI Agent | Claude API — real draft generation implemented in `backend-vercel` (see below); Gmail send still not implemented |
 
 ## Local Development
 
@@ -127,17 +127,31 @@ components/
 | FLOOR_MANAGER | create/edit | — | — | approve drafts | — |
 | KITCHEN | — | read+print | — | — | — |
 
-## Agent Architecture (scaffold — not implemented)
+## Agent Architecture
 
-`AgentMode` per restaurant: `APPROVAL` (floor manager approves every draft) or `AUTONOMOUS` (auto-send).
+`AgentMode` per restaurant: `APPROVAL` (floor manager approves every draft) or `AUTONOMOUS` (auto-send — not
+implemented; every draft currently requires review).
 
-Placeholder service classes in `agent/service/`:
-- `GmailPollingService` — poll inbox for new threads
-- `EmailParsingService` — extract banquet details from email body
-- `ClaudeApiService` — call Claude API to generate reply draft
-- `DraftCreationService` — persist AgentDraft, notify floor manager
+There is no Gmail inbox yet — inbound email is simulated. The "Simuler un e-mail" action on the agent
+inbox page (staff pick a contact or type a sender, subject, and message) stands in for `GmailPollingService`
+until real Gmail polling is built, creating an `EmailThread` and immediately generating an `AgentDraft`.
 
-Flow: Gmail poll → parse → Claude → AgentDraft(PENDING) → [APPROVAL mode: floor manager reviews] → send
+Draft generation, in `backend-vercel/src/modules/agent/`:
+- `claudeApiService.ts` — real call to the Claude API (`claude-opus-5`), given the email thread, the
+  restaurant's event types + required fields, and its enabled agent instructions as context. Requires
+  `CLAUDE_API_KEY`; returns `null` on any failure (missing key, auth error, rate limit, refusal) rather
+  than throwing.
+- `mockDraftGenerator.ts` — template/heuristic fallback used whenever `claudeApiService` returns `null`,
+  so the agent inbox still produces something reviewable without a configured key.
+
+The Java backend (`backend/src/main/java/com/bwevent/agent/service/`) mirrors the simulate-email endpoint
+and `DraftCreationService`, but its `ClaudeApiService` is still the original placeholder (throws
+`UnsupportedOperationException`) — only `backend-vercel` calls the real API today.
+
+Approving a draft only marks it `APPROVED` — there is no send path (no Gmail/SMTP integration), so nothing
+is actually emailed yet.
+
+Flow: (simulated) inbound email → Claude (or mock fallback) → AgentDraft(PENDING) → floor manager reviews → marked APPROVED/REJECTED
 
 ## GCP / Cloud SQL Migration Path
 
