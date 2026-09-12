@@ -76,3 +76,21 @@ vercel dev              # runs the functions locally, or use your own Node harne
   each row is not yet enforced against the JWT's `restaurantId` claim —
   endpoints trust the `:restaurantId` path param, matching the "not
   FK-enforced yet" scaffold status noted in the root CLAUDE.md.
+
+## Row Level Security (Supabase only)
+
+Every table has RLS enabled with no policies (`migrations/V10__enable_row_level_security.sql`).
+This app never talks to Supabase's auto-generated PostgREST API — it connects
+directly to Postgres as the `postgres` role (see `src/db.ts`), which has
+`BYPASSRLS`, so this is transparent to the app. What it does is close off
+PostgREST itself: every Supabase project exposes a REST API at `/rest/v1`
+regardless of whether you use it, and without RLS the `anon`/`authenticated`
+roles it runs as have unrestricted read/write on every row, to anyone who
+has (or finds) this project's anon key. RLS-with-no-policies denies those
+roles by default, which is the correct policy here since this app was never
+meant to be reachable that way.
+
+This migration is Supabase-specific and is not mirrored to the Java
+backend's Flyway migrations — the `anon`/`authenticated`/`service_role`
+roles it targets are created by the Supabase platform and don't exist on a
+plain Cloud SQL instance.
