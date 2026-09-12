@@ -8,6 +8,12 @@ export interface User {
   createdAt: string
 }
 
+export interface CreateStaffRequest {
+  email: string
+  password: string
+  role: Exclude<UserRole, 'DEV'>
+}
+
 export interface LoginRequest {
   email: string
   password: string

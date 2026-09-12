@@ -80,6 +80,17 @@ function IconTag() {
   )
 }
 
+function IconIdCard() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="4" width="16" height="12" rx="2" />
+      <circle cx="7" cy="10" r="1.8" />
+      <path d="M4.5 14.2c0-1.5 1.1-2.4 2.5-2.4s2.5 0.9 2.5 2.4" />
+      <path d="M12 8.5h3.5M12 11.5h3.5" />
+    </svg>
+  )
+}
+
 interface NavItem {
   label: string
   to: string
@@ -95,6 +106,8 @@ const managerItems: NavItem[] = [
   { label: 'Règles de l\'agent',to: '/agent/rules',  icon: <IconRules /> },
 ]
 
+const staffItem: NavItem = { label: 'Personnel', to: '/staff', icon: <IconIdCard /> }
+
 const kitchenItems: NavItem[] = [
   { label: 'Cuisine',           to: '/kitchen',      icon: <IconCutlery /> },
 ]
@@ -107,6 +120,7 @@ const devItems: NavItem[] = [
   { label: 'Banquets',          to: '/banquets',     icon: <IconCalendar /> },
   { label: 'Contacts',          to: '/contacts',     icon: <IconUsers /> },
   { label: 'Types d\'événements', to: '/event-types', icon: <IconTag /> },
+  { label: 'Personnel',         to: '/staff',        icon: <IconIdCard /> },
   { label: 'Cuisine',           to: '/kitchen',      icon: <IconCutlery /> },
   { label: 'Vue d\'ensemble',   to: '/overview',     icon: <IconGrid /> },
   { label: 'Boîte de l\'agent', to: '/agent',        icon: <IconBot /> },
@@ -131,6 +145,8 @@ export function Sidebar() {
       ? kitchenItems
       : role === 'OWNER'
       ? ownerItems
+      : role === 'GENERAL_MANAGER'
+      ? [...managerItems, staffItem]
       : managerItems
 
   const initial = email?.[0]?.toUpperCase() ?? '?'

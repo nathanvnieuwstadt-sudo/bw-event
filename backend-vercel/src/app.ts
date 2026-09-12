@@ -9,6 +9,7 @@ import { HttpError } from "./lib/errors.js";
 import { sql } from "./db.js";
 import { authRoutes } from "./modules/auth/routes.js";
 import { usersRoutes } from "./modules/users/routes.js";
+import { staffRoutes } from "./modules/users/staff.routes.js";
 import { restaurantsRoutes } from "./modules/restaurants/routes.js";
 import { contactsRoutes } from "./modules/contacts/routes.js";
 import { eventTypesRoutes } from "./modules/eventTypes/routes.js";
@@ -51,6 +52,7 @@ app.get("/cron/keepalive", async (c) => {
 app.route("/auth", authRoutes);
 app.route("/users", usersRoutes);
 app.route("/restaurants", restaurantsRoutes);
+app.route("/restaurants/:restaurantId/users", staffRoutes);
 app.route("/restaurants/:restaurantId/contacts", contactsRoutes);
 app.route("/restaurants/:restaurantId/event-types", eventTypesRoutes);
 app.route("/restaurants/:restaurantId/banquets", banquetsRoutes);

@@ -123,9 +123,16 @@ components/
 |---|---|---|---|---|---|
 | DEV | full | ✓ | ✓ | ✓ | ✓ |
 | OWNER | read-only | — | ✓ | read | — |
-| GENERAL_MANAGER | full | — | ✓ | ✓ | — |
+| GENERAL_MANAGER | full | — | ✓ | ✓ | ✓ |
 | FLOOR_MANAGER | create/edit | — | — | approve drafts | — |
 | KITCHEN | — | read+print | — | — | — |
+
+User Mgmt (DEV/GENERAL_MANAGER) means create/list/remove staff accounts for their
+own restaurant — `POST/GET /restaurants/{id}/users`, `DELETE /restaurants/{id}/users/{userId}`
+in both backends, and the "Personnel" page in the frontend. DEV is deliberately not an
+assignable role through this endpoint — it's reserved for whoever maintains the app, not
+restaurant staff. There is no self-service password reset yet; a new account's password is
+set once at creation time and communicated to the staff member directly.
 
 ## Agent Architecture
 

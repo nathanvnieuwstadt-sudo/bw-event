@@ -13,6 +13,7 @@ import { AgentDraftPage } from './pages/agent/AgentDraftPage'
 import { AgentRulesPage } from './pages/agent/AgentRulesPage'
 import { ContactListPage } from './pages/contact/ContactListPage'
 import { EventTypesPage } from './pages/eventtype/EventTypesPage'
+import { StaffListPage } from './pages/user/StaffListPage'
 
 export default function App() {
   return (
@@ -53,6 +54,7 @@ export default function App() {
                 element={<ProtectedRoute allowedRoles={['DEV', 'GENERAL_MANAGER']} />}
               >
                 <Route path="/event-types" element={<EventTypesPage />} />
+                <Route path="/staff" element={<StaffListPage />} />
               </Route>
 
               {/* Kitchen */}
