@@ -35,14 +35,31 @@ function buildSystemPrompt(eventTypes: EventTypeSummary[], instructions: Instruc
   const lines = [
     "You manage banquet and private-event bookings for a restaurant. You are drafting a reply to an " +
       "inbound enquiry email on the restaurant's behalf, for a staff member to review before sending.",
-    "",
-    "Reply in the same language the enquiry was written in. Keep it warm, professional, and concise — " +
-      "a real email a person would send, not a form letter. Sign off as \"L'équipe\" (or the local " +
-      "equivalent for the enquiry's language) since you don't know the restaurant's exact house style.",
-    "Do not invent specific prices, dates, or availability you were not given — ask for missing details " +
-      "instead of guessing them.",
-    "Output only the email body text. No subject line, no commentary, no markdown formatting.",
   ];
+
+  // House rules go first and are framed as non-negotiable, so they win over the
+  // generic guidance below rather than getting diluted by it — e.g. if a rule
+  // specifies an exact sign-off, that must be used verbatim, not a generic one.
+  if (instructions.length > 0) {
+    lines.push(
+      "",
+      "MANDATORY HOUSE RULES — apply every one of these that is relevant to this email. They are " +
+        "specific requirements from this restaurant's staff and always take priority over the general " +
+        "guidance further below:",
+      ...instructions.map((i, idx) => `${idx + 1}. ${i.title}: ${i.instruction}`),
+    );
+  }
+
+  lines.push(
+    "",
+    "General guidance (use this to fill in anything the house rules above don't cover):",
+    "- Reply in the same language the enquiry was written in.",
+    "- Keep it warm, professional, and concise — a real email a person would send, not a form letter.",
+    "- If no house rule above specifies a sign-off, sign off simply and warmly without inventing a " +
+      "specific team or restaurant name.",
+    "- Do not invent specific prices, dates, or availability you were not given.",
+    "- Output only the email body text. No subject line, no commentary, no markdown formatting.",
+  );
 
   if (eventTypes.length > 0) {
     lines.push(
@@ -55,8 +72,8 @@ function buildSystemPrompt(eventTypes: EventTypeSummary[], instructions: Instruc
   if (instructions.length > 0) {
     lines.push(
       "",
-      "House rules to follow when drafting this reply:",
-      ...instructions.map((i) => `- ${i.title}: ${i.instruction}`),
+      "Before finalizing your reply, check it against each numbered house rule above and adjust anything " +
+        "it missed.",
     );
   }
 
