@@ -35,9 +35,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             Claims claims = jwtTokenProvider.parseToken(token);
             String role = claims.get("role", String.class);
             UUID userId = UUID.fromString(claims.getSubject());
+            String restaurantIdClaim = claims.get("restaurantId", String.class);
+            UUID restaurantId = restaurantIdClaim != null ? UUID.fromString(restaurantIdClaim) : null;
 
+            AuthPrincipal principal = new AuthPrincipal(userId, restaurantId, UserRole.valueOf(role));
             var auth = new UsernamePasswordAuthenticationToken(
-                    userId,
+                    principal,
                     null,
                     List.of(new SimpleGrantedAuthority("ROLE_" + role))
             );

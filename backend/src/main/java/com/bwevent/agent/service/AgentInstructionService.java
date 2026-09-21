@@ -24,13 +24,15 @@ public class AgentInstructionService {
     }
 
     @Transactional
-    public AgentInstructionResponse create(UUID restaurantId, AgentInstructionRequest req) {
+    public AgentInstructionResponse create(UUID restaurantId, UUID createdBy, AgentInstructionRequest req) {
         AgentInstruction i = AgentInstruction.builder()
                 .restaurantId(restaurantId)
                 .title(req.getTitle())
                 .instruction(req.getInstruction())
                 .enabled(req.isEnabled())
                 .displayOrder(req.getDisplayOrder())
+                .createdBy(createdBy)
+                .checkableType(req.getCheckableType())
                 .build();
         return AgentInstructionResponse.from(repo.save(i));
     }
@@ -42,6 +44,7 @@ public class AgentInstructionService {
         i.setInstruction(req.getInstruction());
         i.setEnabled(req.isEnabled());
         i.setDisplayOrder(req.getDisplayOrder());
+        i.setCheckableType(req.getCheckableType());
         return AgentInstructionResponse.from(repo.save(i));
     }
 

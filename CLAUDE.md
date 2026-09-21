@@ -2,7 +2,7 @@
 
 ## Overview
 
-Single-restaurant banquet management platform. Scaffolded as a multi-tenant foundation so adding a `restaurantId` enforcement layer and tenant isolation later requires minimal structural change.
+Single-restaurant banquet management platform, scaffolded as a multi-tenant foundation. Plan: develop against Vercel + Supabase (`backend-vercel`) for fast iteration, then run the real, launched product on the Java/Spring Boot backend on GCP (Cloud Run + Cloud SQL) — see "Which backend is live" below. The Java backend now enforces restaurantId against the caller's JWT on every `/restaurants/{restaurantId}/**` endpoint (see `config/TenantGuard.java`) rather than trusting the URL path.
 
 ## Stack
 
@@ -51,6 +51,16 @@ SQL. The frontend works against either unmodified; only `VITE_API_BASE_URL`
 changes. See `backend-vercel/README.md` for deploy steps and the one
 deliberate behavior deviation (401 instead of Spring Security's bare 403 on
 a missing/invalid token).
+
+**Which backend is live.** `backend-vercel` + Supabase is what's actually deployed
+and in front of the client today (Vercel projects `bw-event` / `bw-event-frontend`).
+`backend/` (Java) has never been deployed anywhere — it exists to reach feature
+parity during development and become the real production backend at launch (GCP
+Cloud Run + Cloud SQL, europe-west1). Going forward, large new features (starting
+with the real AI email agent — see Agent Architecture below) are being built
+directly in `backend/` rather than ported over later, since building something
+that size twice isn't worth it. Smaller features still land in `backend-vercel`
+first per the established pattern.
 
 ### Backend: `backend/src/main/java/com/bwevent/`
 
@@ -139,26 +149,68 @@ set once at creation time and communicated to the staff member directly.
 `AgentMode` per restaurant: `APPROVAL` (floor manager approves every draft) or `AUTONOMOUS` (auto-send — not
 implemented; every draft currently requires review).
 
-There is no Gmail inbox yet — inbound email is simulated. The "Simuler un e-mail" action on the agent
-inbox page (staff pick a contact or type a sender, subject, and message) stands in for `GmailPollingService`
-until real Gmail polling is built, creating an `EmailThread` and immediately generating an `AgentDraft`.
+**Two generations of this feature exist, in two different backends — don't confuse them.**
+
+### backend-vercel (deployed, simulated intake, mock/Claude draft only)
+
+There is no Gmail inbox — inbound email is simulated. The "Simuler un e-mail" action on the agent inbox
+page (staff pick a contact or type a sender, subject, and message) stands in for real Gmail polling,
+creating an `EmailThread` and immediately generating an `AgentDraft`.
 
 Draft generation, in `backend-vercel/src/modules/agent/`:
 - `claudeApiService.ts` — real call to the Claude API (`claude-opus-5`), given the email thread, the
   restaurant's event types + required fields, and its enabled agent instructions as context. Requires
   `CLAUDE_API_KEY`; returns `null` on any failure (missing key, auth error, rate limit, refusal) rather
   than throwing.
-- `mockDraftGenerator.ts` — template/heuristic fallback used whenever `claudeApiService` returns `null`,
-  so the agent inbox still produces something reviewable without a configured key.
+- `mockDraftGenerator.ts` — template/heuristic fallback used whenever `claudeApiService` returns `null`.
 
-The Java backend (`backend/src/main/java/com/bwevent/agent/service/`) mirrors the simulate-email endpoint
-and `DraftCreationService`, but its `ClaudeApiService` is still the original placeholder (throws
-`UnsupportedOperationException`) — only `backend-vercel` calls the real API today.
+Approving a draft only marks it `APPROVED` — no send path. This generation of the feature is frozen; new
+work goes to the Java backend below.
 
-Approving a draft only marks it `APPROVED` — there is no send path (no Gmail/SMTP integration), so nothing
-is actually emailed yet.
+### backend/ (Java — the real build, in progress, not yet deployed)
 
-Flow: (simulated) inbound email → Claude (or mock fallback) → AgentDraft(PENDING) → floor manager reviews → marked APPROVED/REJECTED
+Full spec: rules-aware, human-gated AI agent with real Gmail ingestion (classification with a
+default-to-`uncertain` fallback, never silently dropped), a knowledge base the model may draw facts
+from, an approval-gated real Gmail send, and a scheduled correction-analysis loop that proposes rule/KB
+changes for staff to accept or dismiss — never auto-applied.
+
+Built so far (foundation slice):
+- Tenant isolation is now real: `config/AuthPrincipal.java` carries the JWT's restaurantId through Spring
+  Security, and `config/TenantGuard.java` backs `@tenantGuard.check(#restaurantId)`, added to every
+  `@PreAuthorize` on a `/restaurants/{restaurantId}/**` endpoint. A caller whose JWT restaurantId doesn't
+  match the path gets a 403 (DEV is exempt — it's the cross-restaurant vendor role).
+- `agent_instructions` **is** the rules table (`drafting_rules` from the spec) — extended with
+  `created_by` and `checkable_type` (`domain/enums/CheckableRuleType.java`) rather than duplicated.
+  `checkable_type` is null for the vast majority of rules, which are prompt-only by nature (not every
+  plain-language rule reduces to something a program can verify) — only flip it for a rule the
+  post-generation validator can actually check against knowledge-base data (unlisted-price, blackout-date
+  confirmation), once that validator exists.
+- New `com.bwevent.knowledgebase` module (entity/DTO/repository/service/controller) —
+  `/restaurants/{restaurantId}/agent/knowledge-base` CRUD for menu/pricing/policy/deposit/capacity/
+  blackout-date facts, with an optional `structuredValue` JSON field for whatever a rule check needs to
+  compare against (a number, a date) alongside the human-readable `content`.
+- Migration `V10__ai_agent_gmail_rules_and_knowledge_base.sql` also creates `gmail_connections`,
+  `pipeline_health_events`, `processed_emails` (the ingestion ledger — every email seen, regardless of
+  classification, for a "did we see everything" audit), `agent_suggestions`, and `agent_analysis_runs`,
+  and extends `agent_drafts` with the generation/review audit trail (`generation_prompt`,
+  `model_raw_output`, `rules_snapshot`, `knowledge_base_snapshot`, `rule_violations`, `final_body`,
+  `edit_diff`). These tables/columns exist ahead of the code that uses them — the ingestion poller, the
+  send gate, and the analysis job are later slices, not yet built.
+- Honest limitation, stated here so it isn't oversold later: classification confidence is a self-reported
+  number from the model, not a calibrated probability — the threshold is deliberately conservative (biased
+  toward `uncertain` over a false-confident miss) but can't guarantee it matches what a human would call
+  ambiguous. Likewise, only a small, explicitly-typed subset of rules (`CheckableRuleType`) is ever
+  mechanically verified; everything else is "the model was asked to," not "guaranteed."
+
+Not yet built: Gmail OAuth connect/poll, the classifier, the draft-generation audit trail actually being
+populated, the approval-gated real send, and the correction-analysis job. `ClaudeApiService` in this
+backend is still the original placeholder.
+
+Flow (target): Gmail poll → classify → (event_request/event_followup/uncertain) EmailThread → Claude
+draft, constrained by knowledge base + active rules → AgentDraft(PENDING) → floor manager reviews/edits →
+approve triggers the real Gmail send; reject stores nothing further. Corrections (draft vs. approved
+final) feed a scheduled analysis job that proposes rule/KB changes — staff approve, edit, or dismiss each
+one; nothing is applied automatically.
 
 ## GCP / Cloud SQL Migration Path
 

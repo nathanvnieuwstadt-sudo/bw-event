@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +22,8 @@ public class AgentThreadController {
     private final AgentThreadService agentThreadService;
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('DEV', 'GENERAL_MANAGER', 'FLOOR_MANAGER')")
-    public ResponseEntity<ApiResponse<AgentDraftResponse>> simulate(@PathVariable UUID restaurantId,
+    @PreAuthorize("hasAnyRole('DEV', 'GENERAL_MANAGER', 'FLOOR_MANAGER') and @tenantGuard.check(#restaurantId)")
+    public ResponseEntity<ApiResponse<AgentDraftResponse>> simulate(@PathVariable @P("restaurantId") UUID restaurantId,
                                                                      @Valid @RequestBody SimulateEmailRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(agentThreadService.simulateIncomingEmail(restaurantId, request)));

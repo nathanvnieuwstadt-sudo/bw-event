@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,41 +23,41 @@ public class EventTypeController {
     private final EventTypeService eventTypeService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('DEV', 'OWNER', 'GENERAL_MANAGER', 'FLOOR_MANAGER')")
-    public ResponseEntity<ApiResponse<List<EventTypeResponse>>> list(@PathVariable UUID restaurantId) {
+    @PreAuthorize("hasAnyRole('DEV', 'OWNER', 'GENERAL_MANAGER', 'FLOOR_MANAGER') and @tenantGuard.check(#restaurantId)")
+    public ResponseEntity<ApiResponse<List<EventTypeResponse>>> list(@PathVariable @P("restaurantId") UUID restaurantId) {
         return ResponseEntity.ok(ApiResponse.success(eventTypeService.listByRestaurant(restaurantId)));
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('DEV', 'OWNER', 'GENERAL_MANAGER', 'FLOOR_MANAGER')")
+    @PreAuthorize("hasAnyRole('DEV', 'OWNER', 'GENERAL_MANAGER', 'FLOOR_MANAGER') and @tenantGuard.check(#restaurantId)")
     public ResponseEntity<ApiResponse<EventTypeResponse>> getById(
-            @PathVariable UUID restaurantId,
+            @PathVariable @P("restaurantId") UUID restaurantId,
             @PathVariable UUID id) {
         return ResponseEntity.ok(ApiResponse.success(eventTypeService.getById(id)));
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('DEV', 'GENERAL_MANAGER')")
+    @PreAuthorize("hasAnyRole('DEV', 'GENERAL_MANAGER') and @tenantGuard.check(#restaurantId)")
     public ResponseEntity<ApiResponse<EventTypeResponse>> create(
-            @PathVariable UUID restaurantId,
+            @PathVariable @P("restaurantId") UUID restaurantId,
             @Valid @RequestBody EventTypeRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(eventTypeService.create(restaurantId, request)));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('DEV', 'GENERAL_MANAGER')")
+    @PreAuthorize("hasAnyRole('DEV', 'GENERAL_MANAGER') and @tenantGuard.check(#restaurantId)")
     public ResponseEntity<ApiResponse<EventTypeResponse>> update(
-            @PathVariable UUID restaurantId,
+            @PathVariable @P("restaurantId") UUID restaurantId,
             @PathVariable UUID id,
             @Valid @RequestBody EventTypeRequest request) {
         return ResponseEntity.ok(ApiResponse.success(eventTypeService.update(id, request)));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('DEV', 'GENERAL_MANAGER')")
+    @PreAuthorize("hasAnyRole('DEV', 'GENERAL_MANAGER') and @tenantGuard.check(#restaurantId)")
     public ResponseEntity<Void> delete(
-            @PathVariable UUID restaurantId,
+            @PathVariable @P("restaurantId") UUID restaurantId,
             @PathVariable UUID id) {
         eventTypeService.delete(id);
         return ResponseEntity.noContent().build();

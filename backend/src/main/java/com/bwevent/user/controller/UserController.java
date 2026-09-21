@@ -1,6 +1,7 @@
 package com.bwevent.user.controller;
 
 import com.bwevent.config.ApiResponse;
+import com.bwevent.config.AuthPrincipal;
 import com.bwevent.user.dto.UserResponse;
 import com.bwevent.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,8 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/me")
-    public ResponseEntity<ApiResponse<UserResponse>> getMe(@AuthenticationPrincipal UUID userId) {
-        return ResponseEntity.ok(ApiResponse.success(userService.getById(userId)));
+    public ResponseEntity<ApiResponse<UserResponse>> getMe(@AuthenticationPrincipal AuthPrincipal principal) {
+        return ResponseEntity.ok(ApiResponse.success(userService.getById(principal.getUserId())));
     }
 
     @GetMapping("/{id}")

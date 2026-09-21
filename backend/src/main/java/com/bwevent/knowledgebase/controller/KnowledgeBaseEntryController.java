@@ -1,10 +1,10 @@
-package com.bwevent.agent.controller;
+package com.bwevent.knowledgebase.controller;
 
-import com.bwevent.agent.dto.AgentInstructionRequest;
-import com.bwevent.agent.dto.AgentInstructionResponse;
-import com.bwevent.agent.service.AgentInstructionService;
 import com.bwevent.config.ApiResponse;
 import com.bwevent.config.AuthPrincipal;
+import com.bwevent.knowledgebase.dto.KnowledgeBaseEntryRequest;
+import com.bwevent.knowledgebase.dto.KnowledgeBaseEntryResponse;
+import com.bwevent.knowledgebase.service.KnowledgeBaseEntryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,42 +18,41 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/restaurants/{restaurantId}/agent/instructions")
+@RequestMapping("/restaurants/{restaurantId}/agent/knowledge-base")
 @RequiredArgsConstructor
-public class AgentInstructionController {
+public class KnowledgeBaseEntryController {
 
-    private final AgentInstructionService service;
+    private final KnowledgeBaseEntryService service;
 
     @GetMapping
     @PreAuthorize("hasAnyRole('DEV', 'GENERAL_MANAGER', 'FLOOR_MANAGER') and @tenantGuard.check(#restaurantId)")
-    public ResponseEntity<ApiResponse<List<AgentInstructionResponse>>> list(@PathVariable @P("restaurantId") UUID restaurantId) {
-        return ResponseEntity.ok(ApiResponse.success(service.listAll(restaurantId)));
+    public ResponseEntity<ApiResponse<List<KnowledgeBaseEntryResponse>>> list(@PathVariable @P("restaurantId") UUID restaurantId) {
+        return ResponseEntity.ok(ApiResponse.success(service.listByRestaurant(restaurantId)));
     }
 
     @PostMapping
     @PreAuthorize("hasAnyRole('DEV', 'GENERAL_MANAGER') and @tenantGuard.check(#restaurantId)")
-    public ResponseEntity<ApiResponse<AgentInstructionResponse>> create(
+    public ResponseEntity<ApiResponse<KnowledgeBaseEntryResponse>> create(
             @PathVariable @P("restaurantId") UUID restaurantId,
             @AuthenticationPrincipal AuthPrincipal principal,
-            @Valid @RequestBody AgentInstructionRequest request) {
+            @Valid @RequestBody KnowledgeBaseEntryRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(service.create(restaurantId, principal.getUserId(), request)));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('DEV', 'GENERAL_MANAGER') and @tenantGuard.check(#restaurantId)")
-    public ResponseEntity<ApiResponse<AgentInstructionResponse>> update(
+    public ResponseEntity<ApiResponse<KnowledgeBaseEntryResponse>> update(
             @PathVariable @P("restaurantId") UUID restaurantId,
             @PathVariable UUID id,
-            @Valid @RequestBody AgentInstructionRequest request) {
-        return ResponseEntity.ok(ApiResponse.success(service.update(id, request)));
+            @AuthenticationPrincipal AuthPrincipal principal,
+            @Valid @RequestBody KnowledgeBaseEntryRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(service.update(id, principal.getUserId(), request)));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('DEV', 'GENERAL_MANAGER') and @tenantGuard.check(#restaurantId)")
-    public ResponseEntity<Void> delete(
-            @PathVariable @P("restaurantId") UUID restaurantId,
-            @PathVariable UUID id) {
+    public ResponseEntity<Void> delete(@PathVariable @P("restaurantId") UUID restaurantId, @PathVariable UUID id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }

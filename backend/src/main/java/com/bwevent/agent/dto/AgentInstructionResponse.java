@@ -1,5 +1,6 @@
 package com.bwevent.agent.dto;
 
+import com.bwevent.domain.enums.CheckableRuleType;
 import com.bwevent.domain.model.AgentInstruction;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +18,8 @@ public class AgentInstructionResponse {
     private boolean enabled;
     private int displayOrder;
     private Instant createdAt;
+    private UUID createdBy;
+    private CheckableRuleType checkableType;
 
     public static AgentInstructionResponse from(AgentInstruction i) {
         return AgentInstructionResponse.builder()
@@ -27,6 +30,8 @@ public class AgentInstructionResponse {
                 .enabled(i.isEnabled())
                 .displayOrder(i.getDisplayOrder())
                 .createdAt(i.getCreatedAt())
+                .createdBy(i.getCreatedBy())
+                .checkableType(i.getCheckableType())
                 .build();
     }
 }

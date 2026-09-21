@@ -1,5 +1,6 @@
 package com.bwevent.domain.model;
 
+import com.bwevent.domain.enums.CheckableRuleType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -40,4 +41,16 @@ public class AgentInstruction {
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private Instant createdAt;
+
+    @Column(name = "created_by")
+    private UUID createdBy;
+
+    /**
+     * Which programmatic check (if any) validates this rule against source data
+     * before a draft is shown for review — see CheckableRuleType. Null means the
+     * rule is prompt-only: requested of the model, not mechanically guaranteed.
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "checkable_type")
+    private CheckableRuleType checkableType;
 }
