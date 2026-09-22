@@ -2,10 +2,8 @@ package com.bwevent.agent.service;
 
 import com.bwevent.agent.dto.AgentDraftResponse;
 import com.bwevent.agent.dto.SimulateEmailRequest;
-import com.bwevent.agent.repository.AgentInstructionRepository;
 import com.bwevent.agent.repository.EmailThreadRepository;
 import com.bwevent.contact.repository.ContactRepository;
-import com.bwevent.domain.model.AgentInstruction;
 import com.bwevent.domain.model.Contact;
 import com.bwevent.domain.model.EmailThread;
 import jakarta.persistence.EntityNotFoundException;
@@ -14,13 +12,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 /**
- * Simulates an inbound email (no live Gmail integration yet — see CLAUDE.md).
- * Creates the thread and immediately runs the mock draft generator so the
- * agent inbox has something to review, exercising the same approve/reject
+ * Simulates an inbound email (no live Gmail integration yet for this path —
+ * see CLAUDE.md; real ingestion lives in GmailPollingService). Creates the
+ * thread and drafts a reply via the real Claude API when configured, falling
+ * back to the mock generator otherwise, exercising the same approve/reject
  * pipeline a real Gmail-sourced thread would use.
  */
 @Service
@@ -29,8 +27,7 @@ public class AgentThreadService {
 
     private final EmailThreadRepository emailThreadRepository;
     private final ContactRepository contactRepository;
-    private final AgentInstructionRepository agentInstructionRepository;
-    private final MockDraftGenerator mockDraftGenerator;
+    private final DraftGenerationService draftGenerationService;
     private final DraftCreationService draftCreationService;
 
     @Transactional
@@ -55,14 +52,10 @@ public class AgentThreadService {
                 .build();
         thread = emailThreadRepository.save(thread);
 
-        List<AgentInstruction> enabledInstructions = agentInstructionRepository
-                .findAllByRestaurantIdOrderByDisplayOrderAscCreatedAtAsc(restaurantId)
-                .stream().filter(AgentInstruction::isEnabled).toList();
-
         String contactName = contact != null ? contact.getName() : request.getSenderName();
-        String draftBody = mockDraftGenerator.generateDraft(
-                contactName, request.getSubject(), request.getMessageBody(), enabledInstructions);
+        DraftGenerationService.Result result = draftGenerationService.generate(
+                restaurantId, contactName, request.getSubject(), request.getMessageBody());
 
-        return draftCreationService.createDraft(restaurantId, thread, draftBody);
+        return draftCreationService.createDraft(restaurantId, thread, result.draftBody(), result.meta());
     }
 }

@@ -202,15 +202,49 @@ Built so far (foundation slice):
   ambiguous. Likewise, only a small, explicitly-typed subset of rules (`CheckableRuleType`) is ever
   mechanically verified; everything else is "the model was asked to," not "guaranteed."
 
-Not yet built: Gmail OAuth connect/poll, the classifier, the draft-generation audit trail actually being
-populated, the approval-gated real send, and the correction-analysis job. `ClaudeApiService` in this
-backend is still the original placeholder.
+**Claude integration (real, not a placeholder anymore):** `agent/service/ClaudeApiService.java` calls the
+real Claude API (`claude-opus-5`, via the official `anthropic-java` SDK) for both drafting
+(`generateReplyDraft`, given event types + enabled rules + knowledge base — the Java version is ahead of
+backend-vercel's here, which has no knowledge base) and classification (`classify`, JSON-in-text parsed
+with Jackson, since this task doesn't need the structured-outputs feature). Needs `CLAUDE_API_KEY`; any
+failure (no key, auth, rate limit, refusal, unparseable response) returns `null`/`UNCERTAIN` rather than
+throwing, so callers fall back to `MockDraftGenerator`. `agent/service/DraftGenerationService.java` is the
+shared "fetch rules+event-types+KB, call Claude, fall back to mock" logic both `AgentThreadService`
+(simulate-email) and `GmailPollingService` (real ingestion) call, so the two don't duplicate it. The
+`agent_drafts` audit-trail columns (V10) are now actually populated, not just present in the schema.
 
-Flow (target): Gmail poll → classify → (event_request/event_followup/uncertain) EmailThread → Claude
-draft, constrained by knowledge base + active rules → AgentDraft(PENDING) → floor manager reviews/edits →
-approve triggers the real Gmail send; reject stores nothing further. Corrections (draft vs. approved
-final) feed a scheduled analysis job that proposes rule/KB changes — staff approve, edit, or dismiss each
-one; nothing is applied automatically.
+**Gmail ingestion (real, first implementation — untested against a live inbox):**
+- OAuth: `agent/service/GmailConnectionService.java` + `agent/controller/GmailConnectionController.java`
+  (`/restaurants/{id}/agent/gmail/{status,connect,connection}` + one fixed, non-restaurant-scoped
+  `/agent/gmail/callback` — OAuth redirect URIs must be pre-registered exactly with Google, so the
+  restaurant is threaded through via the `state` param instead of the path). Requests only
+  `gmail.readonly` + `gmail.send` scopes — never `gmail.modify` — so "the AI never deletes or archives
+  anything" is enforced at the OAuth-scope level, not just by code review. Refresh tokens are encrypted at
+  rest (`agent/service/TokenEncryptionService.java`, AES-256-GCM, key from `TOKEN_ENCRYPTION_KEY`).
+  Known simplification: the OAuth `state` is the bare restaurantId, not a signed one-time nonce — see the
+  comment on `GmailConnectionService` for the CSRF-style edge case this leaves open and why it's an
+  acceptable trade for a single-restaurant tool today.
+- Polling: `agent/service/GmailPollingService.java`, triggered by `GET /cron/agent-poll`
+  (`agent/controller/CronController.java`, shared-secret-gated via `CRON_SECRET`, meant for Google Cloud
+  Scheduler — Cloud Run scales to zero, so an in-process `@Scheduled` job can't be relied on to fire).
+  Lists recent unread inbox messages (not yet the History API's incremental diff — `history_id` exists on
+  `gmail_connections` for that as a follow-up), classifies each new one, logs it to `processed_emails`
+  regardless of classification, and for anything but `NOT_EVENT_RELATED` creates the `EmailThread` +
+  `AgentDraft` pair via `DraftGenerationService`. Poll failures are logged to `pipeline_health_events` and
+  surfaced on the connection's `last_poll_status`/`last_error` — no in-app banner UI for this yet.
+
+Not yet built: any frontend for Gmail connect/status/knowledge-base (backend-only so far), the
+approval-gated real send (approving a draft still only sets `APPROVED`), the post-generation rule
+validator that would actually populate `rule_violations`, and the correction-analysis job. None of the
+Gmail/OAuth code has run against a real Google account or a real Postgres in this environment — no Docker
+daemon available in this sandbox — so treat it as reviewed-by-hand-and-compiled, not proven, until tested
+against a real inbox.
+
+Flow (target, partially real now): Gmail poll → classify → (event_request/event_followup/uncertain)
+EmailThread → Claude draft, constrained by knowledge base + active rules → AgentDraft(PENDING) → floor
+manager reviews/edits → approve triggers the real Gmail send (not yet built; reject stores nothing
+further). Corrections (draft vs. approved final) feed a scheduled analysis job that proposes rule/KB
+changes — staff approve, edit, or dismiss each one; nothing is applied automatically (not yet built).
 
 ## GCP / Cloud SQL Migration Path
 

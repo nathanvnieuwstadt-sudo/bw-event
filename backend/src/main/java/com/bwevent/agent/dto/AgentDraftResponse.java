@@ -1,10 +1,12 @@
 package com.bwevent.agent.dto;
 
 import com.bwevent.domain.enums.DraftStatus;
+import com.bwevent.domain.enums.EmailClassification;
 import com.bwevent.domain.model.AgentDraft;
 import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -24,6 +26,9 @@ public class AgentDraftResponse {
     private Instant createdAt;
     private UUID reviewedBy;
     private Instant reviewedAt;
+    private EmailClassification classification;
+    private BigDecimal confidence;
+    private String finalBody;
 
     public static AgentDraftResponse from(AgentDraft d) {
         String contactName = null;
@@ -48,6 +53,9 @@ public class AgentDraftResponse {
                 .createdAt(d.getCreatedAt())
                 .reviewedBy(d.getReviewedBy())
                 .reviewedAt(d.getReviewedAt())
+                .classification(d.getClassification())
+                .confidence(d.getConfidence())
+                .finalBody(d.getFinalBody())
                 .build();
     }
 }

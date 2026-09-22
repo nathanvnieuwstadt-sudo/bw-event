@@ -30,6 +30,12 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/actuator/health").permitAll()
+                // Cloud Scheduler and Google's OAuth redirect call these without a JWT;
+                // both are authorized by their own mechanism instead (a shared secret
+                // header on /cron/**, checked in CronController; the OAuth `code`/`state`
+                // params on the callback, checked in GmailConnectionController).
+                .requestMatchers("/cron/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/agent/gmail/callback").permitAll()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

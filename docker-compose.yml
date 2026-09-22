@@ -30,6 +30,16 @@ services:
       DB_PASSWORD: bwevent_local
       JWT_SECRET: local-dev-secret-change-in-production-must-be-32-chars-min
       JWT_EXPIRATION_MS: 86400000
+      # All optional — set on the host shell (docker-compose reads them from the
+      # environment when the value is blank here) to exercise the real AI agent
+      # locally. Without them: Claude drafts fall back to the mock generator,
+      # and Gmail ingestion just stays disconnected.
+      CLAUDE_API_KEY: ${CLAUDE_API_KEY:-}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      GOOGLE_REDIRECT_URI: ${GOOGLE_REDIRECT_URI:-}
+      TOKEN_ENCRYPTION_KEY: ${TOKEN_ENCRYPTION_KEY:-}
+      CRON_SECRET: ${CRON_SECRET:-}
     ports:
       - "8080:8080"
     depends_on:
