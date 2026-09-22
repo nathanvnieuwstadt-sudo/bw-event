@@ -1,5 +1,6 @@
 package com.bwevent.domain.model;
 
+import com.bwevent.domain.enums.BanquetLocation;
 import com.bwevent.domain.enums.BanquetSource;
 import com.bwevent.domain.enums.BanquetStatus;
 import jakarta.persistence.*;
@@ -53,6 +54,9 @@ public class Banquet {
 
     @Column(name = "end_time")
     private LocalTime endTime;
+
+    @Enumerated(EnumType.STRING)
+    private BanquetLocation location;
 
     private Integer headcount;
 

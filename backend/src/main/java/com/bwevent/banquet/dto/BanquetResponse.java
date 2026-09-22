@@ -1,6 +1,7 @@
 package com.bwevent.banquet.dto;
 
 import com.bwevent.contact.dto.ContactResponse;
+import com.bwevent.domain.enums.BanquetLocation;
 import com.bwevent.domain.enums.BanquetSource;
 import com.bwevent.domain.enums.BanquetStatus;
 import com.bwevent.domain.model.Banquet;
@@ -28,6 +29,7 @@ public class BanquetResponse {
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
+    private BanquetLocation location;
     private Integer headcount;
     private BigDecimal budget;
     private String roomSetup;
@@ -54,6 +56,7 @@ public class BanquetResponse {
                 .date(b.getDate())
                 .startTime(b.getStartTime())
                 .endTime(b.getEndTime())
+                .location(b.getLocation())
                 .headcount(b.getHeadcount())
                 .budget(b.getBudget())
                 .roomSetup(b.getRoomSetup())

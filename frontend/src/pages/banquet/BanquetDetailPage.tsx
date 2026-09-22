@@ -4,6 +4,7 @@ import { deleteBanquet, getBanquet } from '../../api/banquets'
 import { useAuth } from '../../auth/useAuth'
 import { BanquetStatusBadge } from '../../components/banquet/BanquetStatusBadge'
 import { Button } from '../../components/ui/Button'
+import { BANQUET_LOCATION_LABELS } from '../../types/banquet'
 import type { Banquet } from '../../types/banquet'
 
 function Field({ label, value }: { label: string; value: React.ReactNode }) {
@@ -116,6 +117,7 @@ export function BanquetDetailPage() {
           <dl className="grid grid-cols-2 gap-6 p-6 sm:grid-cols-3">
             <Field label="Date" value={banquet.date} />
             <Field label="Horaire" value={timeValue} />
+            <Field label="Lieu" value={banquet.location ? BANQUET_LOCATION_LABELS[banquet.location] : null} />
             <Field label="Invités" value={banquet.headcount} />
             <Field
               label="Budget"

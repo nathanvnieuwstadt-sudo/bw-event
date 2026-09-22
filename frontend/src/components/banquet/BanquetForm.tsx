@@ -3,7 +3,8 @@ import { Button } from '../ui/Button'
 import { MenuItemEditor } from './MenuItemEditor'
 import { listContacts } from '../../api/contacts'
 import { listEventTypes } from '../../api/eventTypes'
-import type { BanquetRequest, BanquetStatus, MenuItemRequest } from '../../types/banquet'
+import { BANQUET_LOCATIONS, BANQUET_LOCATION_LABELS } from '../../types/banquet'
+import type { BanquetLocation, BanquetRequest, BanquetStatus, MenuItemRequest } from '../../types/banquet'
 import type { Contact } from '../../types/contact'
 import type { EventType } from '../../types/eventType'
 
@@ -59,6 +60,7 @@ export function BanquetForm({
   const [date, setDate] = useState(initial.date ?? '')
   const [startTime, setStartTime] = useState(initial.startTime ?? '')
   const [endTime, setEndTime] = useState(initial.endTime ?? '')
+  const [location, setLocation] = useState<BanquetLocation | ''>(initial.location ?? '')
   const [headcount, setHeadcount] = useState(String(initial.headcount ?? ''))
   const [budget, setBudget] = useState(String(initial.budget ?? ''))
   const [roomSetup, setRoomSetup] = useState(initial.roomSetup ?? '')
@@ -94,6 +96,7 @@ export function BanquetForm({
         date: date || undefined,
         startTime: startTime || undefined,
         endTime: endTime || undefined,
+        location: location || undefined,
         headcount: headcount ? parseInt(headcount, 10) : undefined,
         budget: budget ? parseFloat(budget) : undefined,
         roomSetup: roomSetup || undefined,
@@ -249,6 +252,18 @@ export function BanquetForm({
           <div>
             <Label>Heure de fin</Label>
             <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} className={inputCls} />
+          </div>
+          <div>
+            <Label>Lieu</Label>
+            <select value={location} onChange={(e) => setLocation(e.target.value as BanquetLocation | '')} className={selectCls}>
+              <option value="">— Non spécifié —</option>
+              {BANQUET_LOCATIONS.map((loc) => (
+                <option key={loc} value={loc}>{BANQUET_LOCATION_LABELS[loc]}</option>
+              ))}
+            </select>
+            <p className="mt-1.5 text-xs text-neutral-500">
+              Le choix dépend du nombre d'invités et du budget — à évaluer au cas par cas.
+            </p>
           </div>
         </div>
       </Card>

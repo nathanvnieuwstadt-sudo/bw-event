@@ -60,6 +60,7 @@ public class BanquetService {
                 .date(request.getDate())
                 .startTime(request.getStartTime())
                 .endTime(request.getEndTime())
+                .location(request.getLocation())
                 .headcount(request.getHeadcount())
                 .budget(request.getBudget())
                 .roomSetup(request.getRoomSetup())
@@ -91,6 +92,7 @@ public class BanquetService {
         banquet.setDate(request.getDate());
         banquet.setStartTime(request.getStartTime());
         banquet.setEndTime(request.getEndTime());
+        banquet.setLocation(request.getLocation());
         banquet.setHeadcount(request.getHeadcount());
         banquet.setBudget(request.getBudget());
         banquet.setRoomSetup(request.getRoomSetup());

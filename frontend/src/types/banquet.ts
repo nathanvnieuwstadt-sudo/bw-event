@@ -3,6 +3,16 @@ import type { EventType } from './eventType'
 
 export type BanquetStatus = 'DRAFT' | 'CONFIRMED' | 'CANCELLED'
 export type BanquetSource = 'MANUAL' | 'EMAIL'
+/** Placeholder venue names — swap for the restaurant's real 3 locations whenever convenient. */
+export type BanquetLocation = 'MAIN_HALL' | 'PRIVATE_ROOM' | 'TERRACE'
+
+export const BANQUET_LOCATIONS: BanquetLocation[] = ['MAIN_HALL', 'PRIVATE_ROOM', 'TERRACE']
+
+export const BANQUET_LOCATION_LABELS: Record<BanquetLocation, string> = {
+  MAIN_HALL: 'Salle principale',
+  PRIVATE_ROOM: 'Salle privée',
+  TERRACE: 'Terrasse',
+}
 
 export interface MenuItem {
   id: string
@@ -24,6 +34,7 @@ export interface BanquetSummary {
   date: string | null
   startTime: string | null
   endTime: string | null
+  location: BanquetLocation | null
   headcount: number | null
   contactName: string | null
   contactOrganization: string | null
@@ -38,6 +49,7 @@ export interface Banquet {
   date: string | null
   startTime: string | null
   endTime: string | null
+  location: BanquetLocation | null
   headcount: number | null
   budget: number | null
   roomSetup: string | null
@@ -62,6 +74,7 @@ export interface BanquetRequest {
   date?: string
   startTime?: string
   endTime?: string
+  location?: BanquetLocation
   headcount?: number
   budget?: number
   roomSetup?: string

@@ -1,5 +1,6 @@
 package com.bwevent.banquet.dto;
 
+import com.bwevent.domain.enums.BanquetLocation;
 import com.bwevent.domain.enums.BanquetSource;
 import com.bwevent.domain.enums.BanquetStatus;
 import com.bwevent.menuitem.dto.MenuItemRequest;
@@ -24,6 +25,7 @@ public class BanquetRequest {
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
+    private BanquetLocation location;
 
     @Min(value = 1, message = "Headcount must be at least 1")
     private Integer headcount;

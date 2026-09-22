@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { listBanquets } from '../../api/banquets'
 import { useAuth } from '../../auth/useAuth'
 import { BanquetTable } from '../../components/banquet/BanquetTable'
 import { BanquetCalendar } from '../../components/banquet/BanquetCalendar'
 import { Button } from '../../components/ui/Button'
-import type { BanquetSummary } from '../../types/banquet'
+import { BANQUET_LOCATIONS, BANQUET_LOCATION_LABELS } from '../../types/banquet'
+import type { BanquetLocation, BanquetSummary } from '../../types/banquet'
 
 type View = 'calendar' | 'table'
 
@@ -51,6 +52,9 @@ function IconSearch() {
   )
 }
 
+const selectCls =
+  'min-h-[44px] rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none'
+
 export function BanquetListPage() {
   const { restaurantId, hasRole } = useAuth()
   const navigate = useNavigate()
@@ -59,6 +63,11 @@ export function BanquetListPage() {
   const [error, setError] = useState<string | null>(null)
   const [view, setView] = useState<View>('calendar')
   const [search, setSearch] = useState('')
+  const [dateFrom, setDateFrom] = useState('')
+  const [dateTo, setDateTo] = useState('')
+  const [location, setLocation] = useState<BanquetLocation | ''>('')
+  const [minGuests, setMinGuests] = useState('')
+  const [maxGuests, setMaxGuests] = useState('')
 
   useEffect(() => {
     if (!restaurantId) {
@@ -72,13 +81,32 @@ export function BanquetListPage() {
       .finally(() => setLoading(false))
   }, [restaurantId])
 
-  const q = search.trim().toLowerCase()
-  const filtered = q
-    ? banquets.filter((b) =>
-        (b.contactName ?? '').toLowerCase().includes(q) ||
-        (b.contactOrganization ?? '').toLowerCase().includes(q)
-      )
-    : banquets
+  const filtersActive = Boolean(search || dateFrom || dateTo || location || minGuests || maxGuests)
+
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase()
+    const min = minGuests ? Number(minGuests) : null
+    const max = maxGuests ? Number(maxGuests) : null
+    return banquets.filter((b) => {
+      if (q && !(b.contactName ?? '').toLowerCase().includes(q) &&
+          !(b.contactOrganization ?? '').toLowerCase().includes(q)) return false
+      if (dateFrom && (!b.date || b.date < dateFrom)) return false
+      if (dateTo && (!b.date || b.date > dateTo)) return false
+      if (location && b.location !== location) return false
+      if (min != null && (b.headcount == null || b.headcount < min)) return false
+      if (max != null && (b.headcount == null || b.headcount > max)) return false
+      return true
+    })
+  }, [banquets, search, dateFrom, dateTo, location, minGuests, maxGuests])
+
+  function resetFilters() {
+    setSearch('')
+    setDateFrom('')
+    setDateTo('')
+    setLocation('')
+    setMinGuests('')
+    setMaxGuests('')
+  }
 
   return (
     <div>
@@ -112,11 +140,9 @@ export function BanquetListPage() {
           ))}
         </div>
       ) : !error ? (
-        view === 'calendar' ? (
-          <BanquetCalendar banquets={banquets} />
-        ) : (
-          <div className="space-y-3">
-            <div className="relative max-w-xs">
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-end gap-3">
+            <div className="relative w-full max-w-xs">
               <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500">
                 <IconSearch />
               </span>
@@ -127,9 +153,71 @@ export function BanquetListPage() {
                 className="w-full min-h-[44px] rounded-md border border-neutral-700 bg-neutral-900 py-2.5 pl-9 pr-3 text-sm text-neutral-100 placeholder:text-neutral-500 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none"
               />
             </div>
-            <BanquetTable banquets={filtered} />
+            <div>
+              <label className="mb-1 block text-xs font-medium text-neutral-500">Du</label>
+              <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className={selectCls} />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium text-neutral-500">Au</label>
+              <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className={selectCls} />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium text-neutral-500">Lieu</label>
+              <select
+                value={location}
+                onChange={(e) => setLocation(e.target.value as BanquetLocation | '')}
+                className={selectCls}
+              >
+                <option value="">Tous</option>
+                {BANQUET_LOCATIONS.map((loc) => (
+                  <option key={loc} value={loc}>{BANQUET_LOCATION_LABELS[loc]}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium text-neutral-500">Invités min.</label>
+              <input
+                type="number"
+                min={0}
+                value={minGuests}
+                onChange={(e) => setMinGuests(e.target.value)}
+                placeholder="0"
+                className={`${selectCls} w-24`}
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium text-neutral-500">Invités max.</label>
+              <input
+                type="number"
+                min={0}
+                value={maxGuests}
+                onChange={(e) => setMaxGuests(e.target.value)}
+                placeholder="—"
+                className={`${selectCls} w-24`}
+              />
+            </div>
+            {filtersActive && (
+              <button
+                onClick={resetFilters}
+                className="min-h-[44px] rounded-md px-3 text-sm font-medium text-neutral-400 transition-colors duration-100 hover:bg-neutral-800 hover:text-neutral-100"
+              >
+                Réinitialiser
+              </button>
+            )}
           </div>
-        )
+
+          {filtersActive && (
+            <p className="text-sm text-neutral-500">
+              {filtered.length} {filtered.length === 1 ? 'résultat' : 'résultats'} sur {banquets.length}
+            </p>
+          )}
+
+          {view === 'calendar' ? (
+            <BanquetCalendar banquets={filtered} />
+          ) : (
+            <BanquetTable banquets={filtered} />
+          )}
+        </div>
       ) : null}
     </div>
   )

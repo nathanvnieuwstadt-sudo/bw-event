@@ -6,7 +6,7 @@ import { success } from "../../lib/response.js";
 import { NotFoundError, BadRequestError } from "../../lib/errors.js";
 import { requireAuth, requireRole, getAuth } from "../../middleware/auth.js";
 import type { AppEnv } from "../../middleware/auth.js";
-import type { BanquetSource, BanquetStatus, FieldType } from "../../types.js";
+import type { BanquetLocation, BanquetSource, BanquetStatus, FieldType } from "../../types.js";
 import { requiredParam } from "../../lib/params.js";
 
 const menuItemSchema = z.object({
@@ -22,6 +22,7 @@ const banquetSchema = z.object({
   date: z.string().nullable().optional(), // YYYY-MM-DD
   startTime: z.string().nullable().optional(), // HH:mm[:ss]
   endTime: z.string().nullable().optional(),
+  location: z.enum(["MAIN_HALL", "PRIVATE_ROOM", "TERRACE"]).nullable().optional(),
   headcount: z.number().int().min(1, "Headcount must be at least 1").nullable().optional(),
   budget: z.number().nullable().optional(),
   roomSetup: z.string().nullable().optional(),
@@ -124,6 +125,7 @@ interface BanquetRow {
   date: string | null;
   start_time: string | null;
   end_time: string | null;
+  location: BanquetLocation | null;
   headcount: number | null;
   budget: string | null;
   room_setup: string | null;
@@ -144,6 +146,7 @@ async function findBanquetOrThrow(id: string): Promise<BanquetRow> {
            to_char(event_date, 'YYYY-MM-DD') AS date,
            to_char(start_time, 'HH24:MI:SS') AS start_time,
            to_char(end_time, 'HH24:MI:SS') AS end_time,
+           location,
            headcount, budget::text AS budget, room_setup, dietary_restrictions, av_needs,
            deposit_paid, deposit_amount::text AS deposit_amount, notes, event_type_id, created_by,
            created_at, updated_at
@@ -184,6 +187,7 @@ async function buildResponse(b: BanquetRow) {
     date: b.date,
     startTime: b.start_time,
     endTime: b.end_time,
+    location: b.location,
     headcount: b.headcount,
     budget: num(b.budget),
     roomSetup: b.room_setup,
@@ -266,6 +270,7 @@ banquetsRoutes.get(
              to_char(b.event_date, 'YYYY-MM-DD') AS date,
              to_char(b.start_time, 'HH24:MI:SS') AS start_time,
              to_char(b.end_time, 'HH24:MI:SS') AS end_time,
+             b.location,
              b.headcount, ct.name AS contact_name, ct.organization AS contact_organization
       FROM banquets b LEFT JOIN contacts ct ON ct.id = b.contact_id
       WHERE b.restaurant_id = ${restaurantId}
@@ -279,6 +284,7 @@ banquetsRoutes.get(
           date: b.date,
           startTime: b.start_time,
           endTime: b.end_time,
+          location: b.location,
           headcount: b.headcount,
           contactName: b.contact_name,
           contactOrganization: b.contact_organization,
@@ -301,6 +307,7 @@ banquetsRoutes.get(
              to_char(b.event_date, 'YYYY-MM-DD') AS date,
              to_char(b.start_time, 'HH24:MI:SS') AS start_time,
              to_char(b.end_time, 'HH24:MI:SS') AS end_time,
+             b.location,
              b.headcount, ct.name AS contact_name, ct.organization AS contact_organization
       FROM banquets b LEFT JOIN contacts ct ON ct.id = b.contact_id
       WHERE b.restaurant_id = ${restaurantId}
@@ -316,6 +323,7 @@ banquetsRoutes.get(
           date: b.date,
           startTime: b.start_time,
           endTime: b.end_time,
+          location: b.location,
           headcount: b.headcount,
           contactName: b.contact_name,
           contactOrganization: b.contact_organization,
@@ -350,12 +358,12 @@ banquetsRoutes.post(
     const created = await sql.begin(async (tx) => {
       const rows = await tx<{ id: string }[]>`
         INSERT INTO banquets (
-          restaurant_id, contact_id, status, source, event_date, start_time, end_time,
+          restaurant_id, contact_id, status, source, event_date, start_time, end_time, location,
           headcount, budget, room_setup, dietary_restrictions, av_needs,
           deposit_paid, deposit_amount, notes, event_type_id, created_by
         ) VALUES (
           ${restaurantId}, ${body.contactId ?? null}, ${status}, ${body.source ?? "MANUAL"},
-          ${body.date ?? null}, ${body.startTime ?? null}, ${body.endTime ?? null},
+          ${body.date ?? null}, ${body.startTime ?? null}, ${body.endTime ?? null}, ${body.location ?? null},
           ${body.headcount ?? null}, ${body.budget ?? null}, ${body.roomSetup ?? null},
           ${body.dietaryRestrictions ?? null}, ${body.avNeeds ?? null},
           ${body.depositPaid ?? false}, ${body.depositAmount ?? null}, ${body.notes ?? null},
@@ -395,7 +403,8 @@ banquetsRoutes.put(
         UPDATE banquets SET
           contact_id = ${contactId}, status = ${status},
           event_date = ${body.date ?? null}, start_time = ${body.startTime ?? null},
-          end_time = ${body.endTime ?? null}, headcount = ${body.headcount ?? null},
+          end_time = ${body.endTime ?? null}, location = ${body.location ?? null},
+          headcount = ${body.headcount ?? null},
           budget = ${body.budget ?? null}, room_setup = ${body.roomSetup ?? null},
           dietary_restrictions = ${body.dietaryRestrictions ?? null}, av_needs = ${body.avNeeds ?? null},
           deposit_paid = ${depositPaid}, deposit_amount = ${body.depositAmount ?? null},

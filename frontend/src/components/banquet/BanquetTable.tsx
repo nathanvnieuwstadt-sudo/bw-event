@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { Table } from '../ui/Table'
 import { BanquetStatusBadge } from './BanquetStatusBadge'
+import { BANQUET_LOCATION_LABELS } from '../../types/banquet'
 import type { BanquetSummary } from '../../types/banquet'
 
 function formatDate(date: string | null): string {
@@ -57,6 +58,15 @@ export function BanquetTable({ banquets }: Props) {
                 <div className="text-xs text-neutral-500 mt-0.5">{b.contactOrganization}</div>
               )}
             </div>
+          ),
+        },
+        {
+          key: 'location',
+          header: 'Lieu',
+          render: (b) => (
+            <span className="text-neutral-300">
+              {b.location ? BANQUET_LOCATION_LABELS[b.location] : '—'}
+            </span>
           ),
         },
         {
