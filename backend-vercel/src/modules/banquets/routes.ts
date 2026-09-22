@@ -22,7 +22,7 @@ const banquetSchema = z.object({
   date: z.string().nullable().optional(), // YYYY-MM-DD
   startTime: z.string().nullable().optional(), // HH:mm[:ss]
   endTime: z.string().nullable().optional(),
-  location: z.enum(["MAIN_HALL", "PRIVATE_ROOM", "TERRACE"]).nullable().optional(),
+  location: z.enum(["FLOOR", "BAR", "COUNTER"]).nullable().optional(),
   headcount: z.number().int().min(1, "Headcount must be at least 1").nullable().optional(),
   budget: z.number().nullable().optional(),
   roomSetup: z.string().nullable().optional(),

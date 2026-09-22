@@ -115,11 +115,11 @@ components/
 - date, startTime, endTime, location?, headcount, budget?, roomSetup?, dietaryRestrictions?, avNeeds?
 - depositPaid (bool), depositAmount?, notes?, createdBy→User, createdAt, updatedAt
 - **Validation rule:** CONFIRMED requires date, startTime, endTime, headcount, contactId all non-null
-- **location** (nullable): which of the restaurant's 3 physical venues — `MAIN_HALL` / `PRIVATE_ROOM` /
-  `TERRACE`, placeholder names pending the real ones. Plain picker, no capacity/budget enforcement by
-  design (deliberately simple for now — real-world choice depends on guest count and budget, but nothing
-  validates that yet). Filterable on the banquets table view (date range, location, guest-count range) —
-  not added to the Contacts list since contacts don't carry these fields themselves.
+- **location** (nullable): which of the restaurant's 3 physical venues — `FLOOR` (Étage) / `BAR` (Bar) /
+  `COUNTER` (Comptoir). Plain picker, no capacity/budget enforcement by design (deliberately simple for
+  now — real-world choice depends on guest count and budget, but nothing validates that yet). Filterable
+  on the banquets table view (date range, location, guest-count range) — not added to the Contacts list
+  since contacts don't carry these fields themselves.
 
 ### MenuItem
 - id, restaurantId, banquetId→Banquet (cascade delete), dishName, quantity, notes?

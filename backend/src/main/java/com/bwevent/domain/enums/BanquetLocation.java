@@ -1,8 +1,8 @@
 package com.bwevent.domain.enums;
 
-/** Placeholder venue names — swap for the restaurant's real 3 locations whenever convenient. */
+/** The restaurant's 3 physical venues: Étage, Bar, Comptoir. */
 public enum BanquetLocation {
-    MAIN_HALL,
-    PRIVATE_ROOM,
-    TERRACE
+    FLOOR,
+    BAR,
+    COUNTER
 }

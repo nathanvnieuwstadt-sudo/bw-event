@@ -3,15 +3,14 @@ import type { EventType } from './eventType'
 
 export type BanquetStatus = 'DRAFT' | 'CONFIRMED' | 'CANCELLED'
 export type BanquetSource = 'MANUAL' | 'EMAIL'
-/** Placeholder venue names — swap for the restaurant's real 3 locations whenever convenient. */
-export type BanquetLocation = 'MAIN_HALL' | 'PRIVATE_ROOM' | 'TERRACE'
+export type BanquetLocation = 'FLOOR' | 'BAR' | 'COUNTER'
 
-export const BANQUET_LOCATIONS: BanquetLocation[] = ['MAIN_HALL', 'PRIVATE_ROOM', 'TERRACE']
+export const BANQUET_LOCATIONS: BanquetLocation[] = ['FLOOR', 'BAR', 'COUNTER']
 
 export const BANQUET_LOCATION_LABELS: Record<BanquetLocation, string> = {
-  MAIN_HALL: 'Salle principale',
-  PRIVATE_ROOM: 'Salle privée',
-  TERRACE: 'Terrasse',
+  FLOOR: 'Étage',
+  BAR: 'Bar',
+  COUNTER: 'Comptoir',
 }
 
 export interface MenuItem {
