@@ -1,10 +1,10 @@
-package com.bwevent.eventtype.dto;
+package com.bwevent.menu.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class EventTypeMenuItemRequest {
+public class MenuDishRequest {
 
     @NotBlank(message = "Dish name is required")
     private String dishName;

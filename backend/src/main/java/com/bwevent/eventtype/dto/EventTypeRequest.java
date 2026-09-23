@@ -17,7 +17,4 @@ public class EventTypeRequest {
 
     @Valid
     private List<EventTypeFieldRequest> fields = new ArrayList<>();
-
-    @Valid
-    private List<EventTypeMenuRequest> menus = new ArrayList<>();
 }

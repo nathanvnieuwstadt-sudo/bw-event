@@ -1,6 +1,5 @@
 import { Hono } from "hono";
 import { z } from "zod";
-import type { TransactionSql } from "postgres";
 import { sql } from "../../db.js";
 import { success } from "../../lib/response.js";
 import { NotFoundError, BadRequestError } from "../../lib/errors.js";
@@ -17,29 +16,15 @@ const fieldSchema = z.object({
   displayOrder: z.number().int().nullable().optional(),
 });
 
-const menuItemSchema = z.object({
-  dishName: z.string().min(1, "Dish name is required"),
-  description: z.string().nullable().optional(),
-  displayOrder: z.number().int().nullable().optional(),
-});
-
-const menuSchema = z.object({
-  name: z.string().min(1, "Menu name is required"),
-  description: z.string().nullable().optional(),
-  displayOrder: z.number().int().nullable().optional(),
-  items: z.array(menuItemSchema).optional(),
-});
-
 const eventTypeSchema = z.object({
   name: z.string().min(1, "Event type name is required"),
   description: z.string().nullable().optional(),
   fields: z.array(fieldSchema).optional(),
-  menus: z.array(menuSchema).optional(),
 });
 
 /** Converts a human label to a snake_case key, e.g. "Dress Code" -> "dress_code" */
 function toKey(label: string): string {
-  const normalized = label.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const normalized = label.normalize("NFD").replace(/[̀-ͯ]/g, "");
   return normalized
     .trim()
     .toLowerCase()
@@ -66,22 +51,6 @@ interface FieldRow {
   display_order: number;
 }
 
-interface MenuRow {
-  id: string;
-  event_type_id: string;
-  name: string;
-  description: string | null;
-  display_order: number;
-}
-
-interface MenuItemRow {
-  id: string;
-  menu_id: string;
-  dish_name: string;
-  description: string | null;
-  display_order: number;
-}
-
 function fieldToResponse(f: FieldRow) {
   const options = f.options
     ? f.options.split(",").map((s) => s.trim()).filter((s) => s.length > 0)
@@ -97,39 +66,15 @@ function fieldToResponse(f: FieldRow) {
   };
 }
 
-function menuItemToResponse(i: MenuItemRow) {
-  return {
-    id: i.id,
-    dishName: i.dish_name,
-    description: i.description,
-    displayOrder: i.display_order,
-  };
-}
-
-async function menuToResponse(m: MenuRow) {
-  const items = await sql<MenuItemRow[]>`
-    SELECT * FROM event_type_menu_items WHERE menu_id = ${m.id} ORDER BY display_order ASC`;
-  return {
-    id: m.id,
-    name: m.name,
-    description: m.description,
-    displayOrder: m.display_order,
-    items: items.map(menuItemToResponse),
-  };
-}
-
 async function toResponse(e: EventTypeRow) {
   const fields = await sql<FieldRow[]>`
     SELECT * FROM event_type_fields WHERE event_type_id = ${e.id} ORDER BY display_order ASC`;
-  const menus = await sql<MenuRow[]>`
-    SELECT * FROM event_type_menus WHERE event_type_id = ${e.id} ORDER BY display_order ASC`;
   return {
     id: e.id,
     restaurantId: e.restaurant_id,
     name: e.name,
     description: e.description,
     fields: fields.map(fieldToResponse),
-    menus: await Promise.all(menus.map(menuToResponse)),
     createdAt: e.created_at,
   };
 }
@@ -139,30 +84,6 @@ async function findOrThrow(id: string): Promise<EventTypeRow> {
   const row = rows[0];
   if (!row) throw new NotFoundError(`EventType not found: ${id}`);
   return row;
-}
-
-async function insertMenus(
-  tx: TransactionSql,
-  eventTypeId: string,
-  menus: z.infer<typeof menuSchema>[] | undefined,
-) {
-  if (!menus?.length) return;
-  for (let i = 0; i < menus.length; i++) {
-    const m = menus[i];
-    const rows = await tx<{ id: string }[]>`
-      INSERT INTO event_type_menus (event_type_id, name, description, display_order)
-      VALUES (${eventTypeId}, ${m.name}, ${m.description ?? null}, ${m.displayOrder ?? i})
-      RETURNING id`;
-    const menuId = rows[0].id;
-    if (m.items?.length) {
-      for (let j = 0; j < m.items.length; j++) {
-        const it = m.items[j];
-        await tx`
-          INSERT INTO event_type_menu_items (menu_id, dish_name, description, display_order)
-          VALUES (${menuId}, ${it.dishName}, ${it.description ?? null}, ${it.displayOrder ?? j})`;
-      }
-    }
-  }
 }
 
 function parseBody(body: unknown) {
@@ -217,7 +138,6 @@ eventTypesRoutes.post("/", requireRole("DEV", "GENERAL_MANAGER"), async (c) => {
           )`;
       }
     }
-    await insertMenus(tx, eventType.id, body.menus);
     return eventType;
   });
 
@@ -246,8 +166,6 @@ eventTypesRoutes.put("/:id", requireRole("DEV", "GENERAL_MANAGER"), async (c) =>
           )`;
       }
     }
-    await tx`DELETE FROM event_type_menus WHERE event_type_id = ${id}`;
-    await insertMenus(tx, id, body.menus);
     return rows[0];
   });
 

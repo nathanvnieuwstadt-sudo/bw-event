@@ -36,11 +36,6 @@ public class EventType {
     @Builder.Default
     private List<EventTypeField> fields = new ArrayList<>();
 
-    @OneToMany(mappedBy = "eventType", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @OrderBy("displayOrder ASC")
-    @Builder.Default
-    private List<EventTypeMenu> menus = new ArrayList<>();
-
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private Instant createdAt;

@@ -2,27 +2,30 @@ package com.bwevent.domain.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/** A restaurant-wide preset menu (e.g. "Menu Découverte") — not owned by any
+ * particular event type, since the same menu is often reused across several. */
 @Entity
-@Table(name = "event_type_menus")
+@Table(name = "menus")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EventTypeMenu {
+public class Menu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_type_id", nullable = false)
-    private EventType eventType;
+    @Column(name = "restaurant_id", nullable = false)
+    private UUID restaurantId;
 
     @Column(nullable = false)
     private String name;
@@ -37,5 +40,9 @@ public class EventTypeMenu {
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @OrderBy("displayOrder ASC")
     @Builder.Default
-    private List<EventTypeMenuItem> items = new ArrayList<>();
+    private List<MenuDish> dishes = new ArrayList<>();
+
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private Instant createdAt;
 }

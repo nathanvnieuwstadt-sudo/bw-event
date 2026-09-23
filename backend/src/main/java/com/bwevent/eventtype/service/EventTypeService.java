@@ -2,11 +2,7 @@ package com.bwevent.eventtype.service;
 
 import com.bwevent.domain.model.EventType;
 import com.bwevent.domain.model.EventTypeField;
-import com.bwevent.domain.model.EventTypeMenu;
-import com.bwevent.domain.model.EventTypeMenuItem;
 import com.bwevent.eventtype.dto.EventTypeFieldRequest;
-import com.bwevent.eventtype.dto.EventTypeMenuRequest;
-import com.bwevent.eventtype.dto.EventTypeMenuItemRequest;
 import com.bwevent.eventtype.dto.EventTypeRequest;
 import com.bwevent.eventtype.dto.EventTypeResponse;
 import com.bwevent.eventtype.repository.EventTypeRepository;
@@ -42,7 +38,6 @@ public class EventTypeService {
                 .description(request.getDescription())
                 .build();
         applyFields(eventType, request);
-        applyMenus(eventType, request);
         return EventTypeResponse.from(eventTypeRepository.save(eventType));
     }
 
@@ -53,8 +48,6 @@ public class EventTypeService {
         eventType.setDescription(request.getDescription());
         eventType.getFields().clear();
         applyFields(eventType, request);
-        eventType.getMenus().clear();
-        applyMenus(eventType, request);
         return EventTypeResponse.from(eventTypeRepository.save(eventType));
     }
 
@@ -77,31 +70,6 @@ public class EventTypeService {
                     .displayOrder(fr.getDisplayOrder() != null ? fr.getDisplayOrder() : i)
                     .build();
             eventType.getFields().add(field);
-        }
-    }
-
-    private void applyMenus(EventType eventType, EventTypeRequest request) {
-        if (request.getMenus() == null) return;
-        for (int i = 0; i < request.getMenus().size(); i++) {
-            EventTypeMenuRequest mr = request.getMenus().get(i);
-            EventTypeMenu menu = EventTypeMenu.builder()
-                    .eventType(eventType)
-                    .name(mr.getName())
-                    .description(mr.getDescription())
-                    .displayOrder(mr.getDisplayOrder() != null ? mr.getDisplayOrder() : i)
-                    .build();
-            if (mr.getItems() != null) {
-                for (int j = 0; j < mr.getItems().size(); j++) {
-                    EventTypeMenuItemRequest ir = mr.getItems().get(j);
-                    menu.getItems().add(EventTypeMenuItem.builder()
-                            .menu(menu)
-                            .dishName(ir.getDishName())
-                            .description(ir.getDescription())
-                            .displayOrder(ir.getDisplayOrder() != null ? ir.getDisplayOrder() : j)
-                            .build());
-                }
-            }
-            eventType.getMenus().add(menu);
         }
     }
 

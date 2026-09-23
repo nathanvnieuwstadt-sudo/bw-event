@@ -6,13 +6,13 @@ import lombok.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "event_type_menu_items")
+@Table(name = "menu_dishes")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EventTypeMenuItem {
+public class MenuDish {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -20,7 +20,7 @@ public class EventTypeMenuItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id", nullable = false)
-    private EventTypeMenu menu;
+    private Menu menu;
 
     @Column(name = "dish_name", nullable = false)
     private String dishName;

@@ -1,4 +1,4 @@
-package com.bwevent.eventtype.dto;
+package com.bwevent.menu.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -8,15 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class EventTypeMenuRequest {
+public class MenuRequest {
 
     @NotBlank(message = "Menu name is required")
     private String name;
 
     private String description;
 
-    private Integer displayOrder = 0;
-
     @Valid
-    private List<EventTypeMenuItemRequest> items = new ArrayList<>();
+    private List<MenuDishRequest> dishes = new ArrayList<>();
 }
