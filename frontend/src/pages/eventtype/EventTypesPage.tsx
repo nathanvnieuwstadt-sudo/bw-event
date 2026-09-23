@@ -306,6 +306,11 @@ function EventTypeCard({
   onEdit: () => void
   onDelete: () => void
 }) {
+  // Defensive: falls back to [] if an older backend response doesn't include
+  // this field yet (e.g. mid-deploy version skew between frontend/backend).
+  const fields = eventType.fields ?? []
+  const menus = eventType.menus ?? []
+
   return (
     <div className="rounded-xl border border-neutral-200 bg-white shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
       <div className="flex items-start justify-between p-5">
@@ -315,13 +320,13 @@ function EventTypeCard({
             <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">{eventType.description}</p>
           )}
           <p className="mt-2 text-xs text-neutral-500">
-            {eventType.fields.length === 0
+            {fields.length === 0
               ? 'Aucun champ personnalisé'
-              : `${eventType.fields.length} champ${eventType.fields.length !== 1 ? 's' : ''}`}
+              : `${fields.length} champ${fields.length !== 1 ? 's' : ''}`}
             {' · '}
-            {eventType.menus.length === 0
+            {menus.length === 0
               ? 'Aucun menu'
-              : `${eventType.menus.length} menu${eventType.menus.length !== 1 ? 's' : ''}`}
+              : `${menus.length} menu${menus.length !== 1 ? 's' : ''}`}
           </p>
         </div>
         {canEdit && (
@@ -342,10 +347,10 @@ function EventTypeCard({
         )}
       </div>
 
-      {eventType.fields.length > 0 && (
+      {fields.length > 0 && (
         <div className="border-t border-neutral-200 px-5 pb-4 dark:border-neutral-800">
           <div className="mt-3 flex flex-wrap gap-2">
-            {eventType.fields.map((f) => (
+            {fields.map((f) => (
               <span
                 key={f.id}
                 className="inline-flex items-center gap-1 rounded-full border border-neutral-200 bg-neutral-50 px-2.5 py-1 text-xs text-neutral-500 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-400"
@@ -359,10 +364,10 @@ function EventTypeCard({
         </div>
       )}
 
-      {eventType.menus.length > 0 && (
+      {menus.length > 0 && (
         <div className="border-t border-neutral-200 px-5 pb-4 pt-3 dark:border-neutral-800">
           <div className="space-y-2.5">
-            {eventType.menus.map((m) => (
+            {menus.map((m) => (
               <div key={m.id}>
                 <p className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">{m.name}</p>
                 {m.items.length > 0 && (
@@ -399,14 +404,14 @@ export function EventTypesPage() {
     return {
       name: et.name,
       description: et.description ?? '',
-      fields: et.fields.map((f) => ({
+      fields: (et.fields ?? []).map((f) => ({
         fieldLabel: f.fieldLabel,
         fieldType: f.fieldType,
         options: f.options.join(', '),
         required: f.required,
         displayOrder: f.displayOrder,
       })),
-      menus: et.menus.map((m) => ({
+      menus: (et.menus ?? []).map((m) => ({
         name: m.name,
         displayOrder: m.displayOrder,
         items: m.items.map((i) => ({ dishName: i.dishName, displayOrder: i.displayOrder })),
@@ -461,9 +466,9 @@ export function EventTypesPage() {
     <div className="mx-auto max-w-3xl py-6 px-4">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">Types d'événements</h1>
+          <h1 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">Types d'événements &amp; menus</h1>
           <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-            Définissez les types d'événements que vous organisez et les informations nécessaires pour chacun.
+            Définissez les types d'événements que vous organisez, les informations nécessaires et les menus proposés pour chacun.
           </p>
         </div>
         {canEdit && editingId === null && (

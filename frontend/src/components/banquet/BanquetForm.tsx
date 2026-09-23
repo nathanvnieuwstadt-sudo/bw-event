@@ -355,7 +355,7 @@ export function BanquetForm({
 
       {/* Menu */}
       <Card title="Menu">
-        {selectedEventType && selectedEventType.menus.length > 0 && (
+        {selectedEventType && (selectedEventType.menus ?? []).length > 0 && (
           <div className="mb-5 space-y-3">
             <p className="text-xs font-semibold uppercase tracking-widest text-neutral-500">
               Menus suggérés — {selectedEventType.name}

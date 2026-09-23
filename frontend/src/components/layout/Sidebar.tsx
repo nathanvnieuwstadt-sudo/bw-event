@@ -119,7 +119,7 @@ const ownerItems: NavItem[] = [
 const devItems: NavItem[] = [
   { label: 'Banquets',          to: '/banquets',     icon: <IconCalendar /> },
   { label: 'Contacts',          to: '/contacts',     icon: <IconUsers /> },
-  { label: 'Types d\'événements', to: '/event-types', icon: <IconTag /> },
+  { label: 'Types & menus', to: '/event-types', icon: <IconTag /> },
   { label: 'Personnel',         to: '/staff',        icon: <IconIdCard /> },
   { label: 'Cuisine',           to: '/kitchen',      icon: <IconCutlery /> },
   { label: 'Vue d\'ensemble',   to: '/overview',     icon: <IconGrid /> },
