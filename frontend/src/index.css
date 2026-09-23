@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply antialiased bg-neutral-950 text-neutral-100;
+    @apply antialiased bg-neutral-50 text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100;
     -webkit-font-smoothing: antialiased;
   }
 
@@ -15,7 +15,7 @@
 
 @layer utilities {
   .section-label {
-    @apply text-[10px] font-semibold uppercase tracking-widest text-neutral-500;
+    @apply text-[10px] font-semibold uppercase tracking-widest text-neutral-500 dark:text-neutral-500;
   }
 }
 

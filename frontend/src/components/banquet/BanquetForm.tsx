@@ -17,24 +17,24 @@ interface Props {
 }
 
 const inputCls =
-  'w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 placeholder:text-neutral-500 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none'
+  'w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500'
 
 const selectCls =
-  'w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none appearance-none cursor-pointer'
+  'w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none appearance-none cursor-pointer dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100'
 
 function Label({ children, required }: { children: React.ReactNode; required?: boolean }) {
   return (
-    <label className="mb-1.5 block text-xs font-medium text-neutral-400">
+    <label className="mb-1.5 block text-xs font-medium text-neutral-500 dark:text-neutral-400">
       {children}
-      {required && <span className="ml-0.5 text-red-400">*</span>}
+      {required && <span className="ml-0.5 text-red-500 dark:text-red-400">*</span>}
     </label>
   )
 }
 
 function Card({ title, children, accent }: { title: string; children: React.ReactNode; accent?: boolean }) {
   return (
-    <div className={`rounded-xl border bg-neutral-900 shadow-sm ${accent ? 'border-neutral-700' : 'border-neutral-800'}`}>
-      <div className={`border-b px-6 py-4 ${accent ? 'border-neutral-800 bg-neutral-950' : 'border-neutral-800'}`}>
+    <div className={`rounded-xl border bg-white shadow-sm dark:bg-neutral-900 ${accent ? 'border-neutral-300 dark:border-neutral-700' : 'border-neutral-200 dark:border-neutral-800'}`}>
+      <div className={`border-b px-6 py-4 ${accent ? 'border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-950' : 'border-neutral-200 dark:border-neutral-800'}`}>
         <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-500">{title}</h2>
       </div>
       <div className="p-6">{children}</div>
@@ -122,7 +122,7 @@ export function BanquetForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {error && (
-        <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-5 py-4 text-sm text-red-400">
+        <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-5 py-4 text-sm text-red-700 dark:text-red-400">
           {error}
         </div>
       )}
@@ -162,7 +162,7 @@ export function BanquetForm({
         </div>
 
         {selectedEventType && selectedEventType.fields.length > 0 && (
-          <div className="mt-5 rounded-lg border border-neutral-800 bg-neutral-950 p-4">
+          <div className="mt-5 rounded-lg border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-800 dark:bg-neutral-950">
             <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-neutral-500">
               {selectedEventType.name} — informations requises
             </p>
@@ -175,11 +175,11 @@ export function BanquetForm({
                         type="checkbox"
                         checked={fieldValues[field.id] === 'true'}
                         onChange={(e) => setFieldValue(field.id, e.target.checked ? 'true' : 'false')}
-                        className="h-5 w-5 rounded border-neutral-700 cursor-pointer"
+                        className="h-5 w-5 rounded border-neutral-300 cursor-pointer dark:border-neutral-700"
                       />
-                      <span className="text-sm text-neutral-300">
+                      <span className="text-sm text-neutral-700 dark:text-neutral-300">
                         {field.fieldLabel}
-                        {field.required && <span className="ml-0.5 text-red-400">*</span>}
+                        {field.required && <span className="ml-0.5 text-red-500 dark:text-red-400">*</span>}
                       </span>
                     </label>
                   ) : field.fieldType === 'SELECT' ? (
@@ -324,9 +324,9 @@ export function BanquetForm({
               type="checkbox"
               checked={depositPaid}
               onChange={(e) => setDepositPaid(e.target.checked)}
-              className="h-5 w-5 rounded border-neutral-700 cursor-pointer"
+              className="h-5 w-5 rounded border-neutral-300 cursor-pointer dark:border-neutral-700"
             />
-            <span className="text-sm text-neutral-300">Acompte reçu</span>
+            <span className="text-sm text-neutral-700 dark:text-neutral-300">Acompte reçu</span>
           </label>
           <div className="w-40">
             <input

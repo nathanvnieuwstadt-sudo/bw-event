@@ -4,7 +4,7 @@ import { TopBar } from './TopBar'
 
 export function AppShell() {
   return (
-    <div className="flex h-screen overflow-hidden bg-neutral-950">
+    <div className="flex h-screen overflow-hidden bg-neutral-50 dark:bg-neutral-950">
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <TopBar />

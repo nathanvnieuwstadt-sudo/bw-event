@@ -11,8 +11,8 @@ function Field({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-1">
       <dt className="text-xs font-medium uppercase tracking-wide text-neutral-500">{label}</dt>
-      <dd className="text-sm text-neutral-200">
-        {value != null && value !== '' ? value : <span className="text-neutral-700">—</span>}
+      <dd className="text-sm text-neutral-800 dark:text-neutral-200">
+        {value != null && value !== '' ? value : <span className="text-neutral-300 dark:text-neutral-700">—</span>}
       </dd>
     </div>
   )
@@ -42,8 +42,8 @@ export function BanquetDetailPage() {
   if (loading) {
     return (
       <div className="mx-auto max-w-4xl space-y-4 py-8">
-        <div className="h-8 w-56 animate-pulse rounded bg-neutral-800" />
-        <div className="h-72 animate-pulse rounded-xl bg-neutral-800" />
+        <div className="h-8 w-56 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800" />
+        <div className="h-72 animate-pulse rounded-xl bg-neutral-200 dark:bg-neutral-800" />
       </div>
     )
   }
@@ -68,7 +68,7 @@ export function BanquetDetailPage() {
         <div>
           <button
             onClick={() => navigate('/banquets')}
-            className="-ml-2.5 mb-1 flex min-h-[40px] items-center gap-1.5 rounded-md px-2.5 text-xs text-neutral-500 transition-colors hover:bg-neutral-900 hover:text-neutral-300 active:scale-[0.97]"
+            className="-ml-2.5 mb-1 flex min-h-[40px] items-center gap-1.5 rounded-md px-2.5 text-xs text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 active:scale-[0.97] dark:hover:bg-neutral-900 dark:hover:text-neutral-300"
           >
             <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 4L6 10l6 6" />
@@ -76,17 +76,17 @@ export function BanquetDetailPage() {
             Banquets
           </button>
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-semibold text-neutral-100">
+            <h1 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
               {banquet.contact?.name ?? 'Banquet sans nom'}
             </h1>
             <BanquetStatusBadge status={banquet.status} />
           </div>
-          <div className="mt-1 flex items-center gap-3 text-sm text-neutral-400">
+          <div className="mt-1 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
             {banquet.date && <span>{banquet.date}</span>}
             {banquet.eventType && (
               <>
-                {banquet.date && <span className="text-neutral-700">·</span>}
-                <span className="rounded-full bg-neutral-800 px-2.5 py-0.5 text-xs font-medium text-neutral-400">
+                {banquet.date && <span className="text-neutral-300 dark:text-neutral-700">·</span>}
+                <span className="rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs font-medium text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400">
                   {banquet.eventType.name}
                 </span>
               </>
@@ -110,8 +110,8 @@ export function BanquetDetailPage() {
 
       <div className="space-y-4">
         {/* Event details */}
-        <div className="rounded-xl border border-neutral-800 bg-neutral-900 shadow-sm">
-          <div className="border-b border-neutral-800 px-6 py-4">
+        <div className="rounded-xl border border-neutral-200 bg-white shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+          <div className="border-b border-neutral-200 px-6 py-4 dark:border-neutral-800">
             <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-500">Détails de l'événement</h2>
           </div>
           <dl className="grid grid-cols-2 gap-6 p-6 sm:grid-cols-3">
@@ -129,8 +129,8 @@ export function BanquetDetailPage() {
         </div>
 
         {/* Contact */}
-        <div className="rounded-xl border border-neutral-800 bg-neutral-900 shadow-sm">
-          <div className="border-b border-neutral-800 px-6 py-4">
+        <div className="rounded-xl border border-neutral-200 bg-white shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+          <div className="border-b border-neutral-200 px-6 py-4 dark:border-neutral-800">
             <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-500">Contact</h2>
           </div>
           <dl className="grid grid-cols-2 gap-6 p-6 sm:grid-cols-4">
@@ -142,8 +142,8 @@ export function BanquetDetailPage() {
         </div>
 
         {/* Requirements */}
-        <div className="rounded-xl border border-neutral-800 bg-neutral-900 shadow-sm">
-          <div className="border-b border-neutral-800 px-6 py-4">
+        <div className="rounded-xl border border-neutral-200 bg-white shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+          <div className="border-b border-neutral-200 px-6 py-4 dark:border-neutral-800">
             <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-500">Exigences</h2>
           </div>
           <dl className="grid grid-cols-1 gap-6 p-6 sm:grid-cols-3">
@@ -155,8 +155,8 @@ export function BanquetDetailPage() {
 
         {/* Event type custom fields */}
         {banquet.eventType && banquet.eventType.fields.length > 0 && (
-          <div className="rounded-xl border border-neutral-800 bg-neutral-900 shadow-sm">
-            <div className="border-b border-neutral-800 px-6 py-4">
+          <div className="rounded-xl border border-neutral-200 bg-white shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+            <div className="border-b border-neutral-200 px-6 py-4 dark:border-neutral-800">
               <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-500">
                 Détails — {banquet.eventType.name}
               </h2>
@@ -176,22 +176,22 @@ export function BanquetDetailPage() {
 
         {/* Notes */}
         {banquet.notes && (
-          <div className="rounded-xl border border-neutral-800 bg-neutral-900 shadow-sm">
-            <div className="border-b border-neutral-800 px-6 py-4">
+          <div className="rounded-xl border border-neutral-200 bg-white shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+            <div className="border-b border-neutral-200 px-6 py-4 dark:border-neutral-800">
               <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-500">Notes</h2>
             </div>
-            <p className="p-6 text-sm leading-relaxed text-neutral-300">{banquet.notes}</p>
+            <p className="p-6 text-sm leading-relaxed text-neutral-700 dark:text-neutral-300">{banquet.notes}</p>
           </div>
         )}
 
         {/* Menu items */}
         {banquet.menuItems.length > 0 && (
-          <div className="rounded-xl border border-neutral-800 bg-neutral-900 shadow-sm">
-            <div className="flex items-center justify-between border-b border-neutral-800 px-6 py-4">
+          <div className="rounded-xl border border-neutral-200 bg-white shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+            <div className="flex items-center justify-between border-b border-neutral-200 px-6 py-4 dark:border-neutral-800">
               <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-500">Menu</h2>
               <span className="text-xs text-neutral-500">{banquet.menuItems.length} plats</span>
             </div>
-            <div className="divide-y divide-neutral-800">
+            <div className="divide-y divide-neutral-200 dark:divide-neutral-800">
               <div className="grid grid-cols-[1fr_60px_1fr] px-6 py-2.5 text-xs font-semibold uppercase tracking-wide text-neutral-500">
                 <span>Plat</span>
                 <span className="text-right">Qté</span>
@@ -202,8 +202,8 @@ export function BanquetDetailPage() {
                   key={item.id}
                   className="grid grid-cols-[1fr_60px_1fr] items-center px-6 py-3.5"
                 >
-                  <span className="text-sm font-medium text-neutral-200">{item.dishName}</span>
-                  <span className="text-sm tabular-nums text-neutral-400 text-right">{item.quantity}</span>
+                  <span className="text-sm font-medium text-neutral-800 dark:text-neutral-200">{item.dishName}</span>
+                  <span className="text-sm tabular-nums text-neutral-500 text-right dark:text-neutral-400">{item.quantity}</span>
                   <span className="pl-6 text-sm text-neutral-500">{item.notes ?? '—'}</span>
                 </div>
               ))}

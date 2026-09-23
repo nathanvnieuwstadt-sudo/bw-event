@@ -15,9 +15,9 @@ const STATUS_DOT: Record<BanquetStatus, string> = {
 }
 
 const STATUS_PILL: Record<BanquetStatus, string> = {
-  CONFIRMED: 'bg-green-500/10 text-green-400 ring-green-500/30',
-  DRAFT:     'bg-amber-500/10 text-amber-400 ring-amber-500/30',
-  CANCELLED: 'bg-red-500/10 text-red-400 ring-red-500/30 line-through opacity-60',
+  CONFIRMED: 'bg-green-500/10 text-green-700 ring-green-500/30 dark:text-green-400',
+  DRAFT:     'bg-amber-500/10 text-amber-700 ring-amber-500/30 dark:text-amber-400',
+  CANCELLED: 'bg-red-500/10 text-red-700 ring-red-500/30 line-through opacity-60 dark:text-red-400',
 }
 
 const STATUS_LABEL: Record<BanquetStatus, string> = {
@@ -86,13 +86,13 @@ export function BanquetCalendar({ banquets }: Props) {
   })
 
   return (
-    <div className="rounded-lg border border-neutral-800 bg-neutral-900 shadow-card overflow-hidden">
+    <div className="rounded-lg border border-neutral-200 bg-white shadow-card overflow-hidden dark:border-neutral-800 dark:bg-neutral-900">
       {/* Toolbar */}
-      <div className="flex items-center justify-between border-b border-neutral-800 px-5 py-3">
+      <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-3 dark:border-neutral-800">
         <div className="flex items-center gap-2">
           <button
             onClick={prevMonth}
-            className="flex h-11 w-11 items-center justify-center rounded-md text-neutral-500 transition-colors duration-75 hover:bg-neutral-800 hover:text-neutral-300 active:scale-[0.93]"
+            className="flex h-11 w-11 items-center justify-center rounded-md text-neutral-500 transition-colors duration-75 hover:bg-neutral-100 hover:text-neutral-700 active:scale-[0.93] dark:hover:bg-neutral-800 dark:hover:text-neutral-300"
             aria-label="Mois précédent"
           >
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
@@ -101,25 +101,25 @@ export function BanquetCalendar({ banquets }: Props) {
           </button>
           <button
             onClick={nextMonth}
-            className="flex h-11 w-11 items-center justify-center rounded-md text-neutral-500 transition-colors duration-75 hover:bg-neutral-800 hover:text-neutral-300 active:scale-[0.93]"
+            className="flex h-11 w-11 items-center justify-center rounded-md text-neutral-500 transition-colors duration-75 hover:bg-neutral-100 hover:text-neutral-700 active:scale-[0.93] dark:hover:bg-neutral-800 dark:hover:text-neutral-300"
             aria-label="Mois suivant"
           >
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
               <path d="M6 3l5 5-5 5" />
             </svg>
           </button>
-          <h2 className="ml-1 text-sm font-semibold capitalize text-neutral-200">{monthLabel}</h2>
+          <h2 className="ml-1 text-sm font-semibold capitalize text-neutral-800 dark:text-neutral-200">{monthLabel}</h2>
         </div>
         <button
           onClick={goToday}
-          className="min-h-[40px] rounded-md border border-neutral-800 px-3.5 py-2 text-xs font-medium text-neutral-400 transition-colors duration-75 hover:bg-neutral-950 hover:text-neutral-100 active:scale-[0.97]"
+          className="min-h-[40px] rounded-md border border-neutral-200 px-3.5 py-2 text-xs font-medium text-neutral-500 transition-colors duration-75 hover:bg-neutral-50 hover:text-neutral-900 active:scale-[0.97] dark:border-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-950 dark:hover:text-neutral-100"
         >
           Aujourd'hui
         </button>
       </div>
 
       {/* Weekday headers */}
-      <div className="grid grid-cols-7 border-b border-neutral-800">
+      <div className="grid grid-cols-7 border-b border-neutral-200 dark:border-neutral-800">
         {WEEKDAYS.map((d) => (
           <div key={d} className="py-2.5 text-center">
             <span className="section-label">{d}</span>
@@ -128,7 +128,7 @@ export function BanquetCalendar({ banquets }: Props) {
       </div>
 
       {/* Day grid */}
-      <div className="grid grid-cols-7 divide-x divide-neutral-800">
+      <div className="grid grid-cols-7 divide-x divide-neutral-200 dark:divide-neutral-800">
         {grid.map((day, i) => {
           const key = isoDate(day)
           const inMonth = day.getMonth() === month
@@ -140,8 +140,8 @@ export function BanquetCalendar({ banquets }: Props) {
             <div
               key={i}
               className={[
-                'min-h-[100px] border-b border-neutral-800 p-1.5',
-                !inMonth ? 'bg-neutral-950/60' : isWeekend ? 'bg-neutral-950/40' : 'bg-neutral-900',
+                'min-h-[100px] border-b border-neutral-200 p-1.5 dark:border-neutral-800',
+                !inMonth ? 'bg-neutral-50/60 dark:bg-neutral-950/60' : isWeekend ? 'bg-neutral-50/40 dark:bg-neutral-950/40' : 'bg-white dark:bg-neutral-900',
               ].join(' ')}
             >
               <div className="mb-1 flex justify-end">
@@ -151,8 +151,8 @@ export function BanquetCalendar({ banquets }: Props) {
                     todayCell
                       ? 'bg-brand-600 text-white'
                       : inMonth
-                      ? 'text-neutral-300'
-                      : 'text-neutral-700',
+                      ? 'text-neutral-700 dark:text-neutral-300'
+                      : 'text-neutral-300 dark:text-neutral-700',
                   ].join(' ')}
                 >
                   {day.getDate()}
@@ -192,7 +192,7 @@ export function BanquetCalendar({ banquets }: Props) {
       </div>
 
       {/* Legend */}
-      <div className="flex items-center gap-5 border-t border-neutral-800 px-5 py-3">
+      <div className="flex items-center gap-5 border-t border-neutral-200 px-5 py-3 dark:border-neutral-800">
         {(['CONFIRMED', 'DRAFT', 'CANCELLED'] as BanquetStatus[]).map((s) => (
           <div key={s} className="flex items-center gap-1.5">
             <span className={`h-2 w-2 rounded-full ${STATUS_DOT[s]}`} />

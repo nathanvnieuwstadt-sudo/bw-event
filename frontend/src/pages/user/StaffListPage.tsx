@@ -47,25 +47,25 @@ function StaffForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {error && <div className="rounded-md bg-red-500/10 px-4 py-3 text-sm text-red-400">{error}</div>}
+      {error && <div className="rounded-md bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-400">{error}</div>}
       <div>
-        <label className="block text-xs font-medium text-neutral-400 mb-1.5">E-mail *</label>
+        <label className="block text-xs font-medium text-neutral-500 mb-1.5 dark:text-neutral-400">E-mail *</label>
         <input required type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-          className="w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none" />
+          className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100" />
       </div>
       <div>
-        <label className="block text-xs font-medium text-neutral-400 mb-1.5">Mot de passe provisoire *</label>
+        <label className="block text-xs font-medium text-neutral-500 mb-1.5 dark:text-neutral-400">Mot de passe provisoire *</label>
         <input required type="text" minLength={8} value={password} onChange={(e) => setPassword(e.target.value)}
           placeholder="Au moins 8 caractères"
-          className="w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 placeholder:text-neutral-500 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none" />
+          className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500" />
         <p className="mt-1.5 text-xs text-neutral-500">
           Communiquez-le à la personne concernée — il n'existe pas encore de réinitialisation en libre-service.
         </p>
       </div>
       <div>
-        <label className="block text-xs font-medium text-neutral-400 mb-1.5">Rôle *</label>
+        <label className="block text-xs font-medium text-neutral-500 mb-1.5 dark:text-neutral-400">Rôle *</label>
         <select required value={role} onChange={(e) => setRole(e.target.value as Exclude<UserRole, 'DEV'>)}
-          className="w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none appearance-none cursor-pointer">
+          className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none appearance-none cursor-pointer dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100">
           {STAFF_ROLES.map((r) => (
             <option key={r} value={r}>{ROLE_LABELS[r]}</option>
           ))}
@@ -113,11 +113,11 @@ export function StaffListPage() {
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-lg font-semibold text-neutral-100">Personnel</h1>
+        <h1 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Personnel</h1>
         <Button onClick={() => setModalOpen(true)}>Nouveau compte</Button>
       </div>
 
-      {error && <div className="mb-4 rounded-md bg-red-500/10 px-4 py-3 text-sm text-red-400">{error}</div>}
+      {error && <div className="mb-4 rounded-md bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-400">{error}</div>}
 
       {loading ? (
         <div className="text-sm text-neutral-500">Chargement…</div>
@@ -127,7 +127,7 @@ export function StaffListPage() {
           rows={staff}
           emptyMessage="Aucun compte pour le moment."
           columns={[
-            { key: 'email', header: 'E-mail', render: (u) => <span className="font-medium text-neutral-200">{u.email}</span> },
+            { key: 'email', header: 'E-mail', render: (u) => <span className="font-medium text-neutral-800 dark:text-neutral-200">{u.email}</span> },
             { key: 'role', header: 'Rôle', render: (u) => ROLE_LABELS[u.role] ?? u.role },
             {
               key: 'actions',
@@ -135,7 +135,7 @@ export function StaffListPage() {
               render: (u) => u.id === userId ? null : (
                 <div className="flex justify-end">
                   <button onClick={() => handleDelete(u)}
-                    className="min-h-[40px] rounded-md px-3 py-2 text-xs font-medium text-red-400 transition-colors duration-100 hover:bg-red-500/10 active:scale-[0.97]">Supprimer</button>
+                    className="min-h-[40px] rounded-md px-3 py-2 text-xs font-medium text-red-600 transition-colors duration-100 hover:bg-red-500/10 active:scale-[0.97] dark:text-red-400">Supprimer</button>
                 </div>
               ),
               className: 'text-right',

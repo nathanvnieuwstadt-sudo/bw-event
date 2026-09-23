@@ -8,9 +8,9 @@ import type { AgentDraft, DraftStatus } from '../../types/agent'
 import type { Contact } from '../../types/contact'
 
 const inputCls =
-  'w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-500 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none'
+  'w-full rounded-md border border-neutral-300 bg-white px-3 py-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500'
 const selectCls =
-  'w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2.5 text-sm text-neutral-100 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none appearance-none cursor-pointer'
+  'w-full rounded-md border border-neutral-300 bg-white px-3 py-2.5 text-sm text-neutral-900 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none appearance-none cursor-pointer dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100'
 
 function SimulateEmailForm({
   restaurantId,
@@ -57,19 +57,19 @@ function SimulateEmailForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <p className="text-sm text-neutral-400 leading-relaxed">
+      <p className="text-sm text-neutral-500 leading-relaxed dark:text-neutral-400">
         Aucune boîte Gmail n'est encore connectée. Utilisez ce formulaire pour simuler un e-mail
         entrant — l'agent générera un brouillon de réponse comme il le ferait pour un vrai message.
       </p>
 
       {error && (
-        <div className="rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+        <div className="rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-400">
           {error}
         </div>
       )}
 
       <div>
-        <label className="mb-1.5 block text-xs font-medium text-neutral-400">Contact</label>
+        <label className="mb-1.5 block text-xs font-medium text-neutral-500 dark:text-neutral-400">Contact</label>
         <select value={contactId} onChange={(e) => setContactId(e.target.value)} className={selectCls}>
           <option value="">— Nouveau contact —</option>
           {contacts.map((c) => (
@@ -82,7 +82,7 @@ function SimulateEmailForm({
 
       {!contactId && (
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-neutral-400">Nom de l'expéditeur</label>
+          <label className="mb-1.5 block text-xs font-medium text-neutral-500 dark:text-neutral-400">Nom de l'expéditeur</label>
           <input
             required
             value={senderName}
@@ -94,7 +94,7 @@ function SimulateEmailForm({
       )}
 
       <div>
-        <label className="mb-1.5 block text-xs font-medium text-neutral-400">Objet</label>
+        <label className="mb-1.5 block text-xs font-medium text-neutral-500 dark:text-neutral-400">Objet</label>
         <input
           required
           value={subject}
@@ -105,7 +105,7 @@ function SimulateEmailForm({
       </div>
 
       <div>
-        <label className="mb-1.5 block text-xs font-medium text-neutral-400">Message</label>
+        <label className="mb-1.5 block text-xs font-medium text-neutral-500 dark:text-neutral-400">Message</label>
         <textarea
           required
           rows={6}
@@ -135,10 +135,10 @@ function formatDateTime(iso: string | null) {
 }
 
 const STATUS_STYLES: Record<DraftStatus, { label: string; cls: string }> = {
-  PENDING:  { label: 'En attente', cls: 'bg-amber-500/10 text-amber-400 border-amber-500/30' },
-  APPROVED: { label: 'Approuvé',   cls: 'bg-green-500/10 text-green-400 border-green-500/30' },
-  REJECTED: { label: 'Rejeté',     cls: 'bg-red-500/10 text-red-400 border-red-500/30' },
-  SENT:     { label: 'Envoyé',     cls: 'bg-neutral-950 text-neutral-400 border-neutral-800' },
+  PENDING:  { label: 'En attente', cls: 'bg-amber-500/10 text-amber-700 border-amber-500/30 dark:text-amber-400' },
+  APPROVED: { label: 'Approuvé',   cls: 'bg-green-500/10 text-green-700 border-green-500/30 dark:text-green-400' },
+  REJECTED: { label: 'Rejeté',     cls: 'bg-red-500/10 text-red-700 border-red-500/30 dark:text-red-400' },
+  SENT:     { label: 'Envoyé',     cls: 'bg-neutral-50 text-neutral-500 border-neutral-200 dark:bg-neutral-950 dark:text-neutral-400 dark:border-neutral-800' },
 }
 
 function StatusBadge({ status }: { status: DraftStatus }) {
@@ -246,7 +246,7 @@ export function AgentDraftPage() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-lg font-semibold text-neutral-100">Boîte de l'agent</h1>
+          <h1 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Boîte de l'agent</h1>
           <p className="mt-0.5 text-sm text-neutral-500">
             {loading ? 'Chargement…' : pendingTotal > 0
               ? `${pendingTotal} brouillon${pendingTotal !== 1 ? 's' : ''} en attente de relecture`
@@ -261,13 +261,13 @@ export function AgentDraftPage() {
       {loading ? (
         <div className="flex gap-5">
           <div className="w-64 space-y-1.5">
-            {[...Array(4)].map((_, i) => <div key={i} className="h-16 animate-pulse rounded-md bg-neutral-800" />)}
+            {[...Array(4)].map((_, i) => <div key={i} className="h-16 animate-pulse rounded-md bg-neutral-100 dark:bg-neutral-800" />)}
           </div>
-          <div className="flex-1 h-64 animate-pulse rounded-lg bg-neutral-800" />
+          <div className="flex-1 h-64 animate-pulse rounded-lg bg-neutral-100 dark:bg-neutral-800" />
         </div>
       ) : threads.length === 0 ? (
-        <div className="flex items-start gap-4 rounded-lg border border-neutral-800 bg-neutral-900 p-6 shadow-card">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-neutral-800 bg-neutral-950">
+        <div className="flex items-start gap-4 rounded-lg border border-neutral-200 bg-white p-6 shadow-card dark:border-neutral-800 dark:bg-neutral-900">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-950">
             <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-neutral-500">
               <rect x="3" y="8" width="14" height="10" rx="2" />
               <path d="M7 8V6a3 3 0 0 1 6 0v2" />
@@ -277,14 +277,14 @@ export function AgentDraftPage() {
             </svg>
           </div>
           <div>
-            <p className="text-sm font-medium text-neutral-300">Aucun brouillon</p>
+            <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Aucun brouillon</p>
             <p className="mt-1 text-sm text-neutral-500 leading-relaxed">
               Une fois connecté, les e-mails de réservation entrants seront analysés par l'agent IA et les brouillons de réponse apparaîtront ici pour relecture.
             </p>
             {canReview && (
               <button
                 onClick={() => setSimulateOpen(true)}
-                className="mt-3 min-h-[40px] rounded-md px-3 py-2 -ml-3 text-sm font-medium text-brand-400 transition-colors hover:bg-neutral-800 active:scale-[0.97]"
+                className="mt-3 min-h-[40px] rounded-md px-3 py-2 -ml-3 text-sm font-medium text-brand-600 transition-colors hover:bg-neutral-100 active:scale-[0.97] dark:text-brand-400 dark:hover:bg-neutral-800"
               >
                 Simuler un e-mail pour tester →
               </button>
@@ -294,7 +294,7 @@ export function AgentDraftPage() {
       ) : (
         <div className="flex gap-5 items-start">
           {/* Thread list */}
-          <div className="w-64 flex-none overflow-hidden rounded-lg border border-neutral-800 bg-neutral-900 shadow-card divide-y divide-neutral-800">
+          <div className="w-64 flex-none overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-card divide-y divide-neutral-200 dark:border-neutral-800 dark:bg-neutral-900 dark:divide-neutral-800">
             {threads.map((t) => (
               <button
                 key={t.threadId}
@@ -303,11 +303,11 @@ export function AgentDraftPage() {
                   'w-full px-4 py-3.5 text-left transition-colors duration-75',
                   selectedThreadId === t.threadId
                     ? 'bg-brand-500/10'
-                    : 'hover:bg-neutral-950 active:bg-neutral-800',
+                    : 'hover:bg-neutral-50 active:bg-neutral-100 dark:hover:bg-neutral-950 dark:active:bg-neutral-800',
                 ].join(' ')}
               >
                 <div className="flex items-start justify-between gap-2">
-                  <p className={`text-sm font-medium leading-snug line-clamp-2 ${selectedThreadId === t.threadId ? 'text-brand-400' : 'text-neutral-200'}`}>
+                  <p className={`text-sm font-medium leading-snug line-clamp-2 ${selectedThreadId === t.threadId ? 'text-brand-600 dark:text-brand-400' : 'text-neutral-800 dark:text-neutral-200'}`}>
                     {t.subject ?? 'Sans objet'}
                   </p>
                   {t.pendingCount > 0 && (
@@ -329,18 +329,18 @@ export function AgentDraftPage() {
               <>
                 {/* Incoming email */}
                 {selectedThread.senderMessage && (
-                  <div className="rounded-lg border border-neutral-800 bg-neutral-900 shadow-card">
-                    <div className="flex items-center justify-between border-b border-neutral-800 px-5 py-3.5">
+                  <div className="rounded-lg border border-neutral-200 bg-white shadow-card dark:border-neutral-800 dark:bg-neutral-900">
+                    <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-3.5 dark:border-neutral-800">
                       <div>
-                        <p className="text-sm font-semibold text-neutral-100">{selectedThread.subject}</p>
+                        <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">{selectedThread.subject}</p>
                         <p className="mt-0.5 text-xs text-neutral-500">
                           {selectedThread.contactName ?? 'Client'} · {formatDateTime(selectedThread.lastMessageAt)}
                         </p>
                       </div>
-                      <span className="text-xs text-neutral-500 bg-neutral-800 rounded px-2 py-1">Reçu</span>
+                      <span className="text-xs text-neutral-500 bg-neutral-100 rounded px-2 py-1 dark:bg-neutral-800">Reçu</span>
                     </div>
                     <div className="px-5 py-4">
-                      <pre className="whitespace-pre-wrap font-sans text-sm text-neutral-300 leading-relaxed">
+                      <pre className="whitespace-pre-wrap font-sans text-sm text-neutral-700 leading-relaxed dark:text-neutral-300">
                         {selectedThread.senderMessage}
                       </pre>
                     </div>
@@ -352,28 +352,28 @@ export function AgentDraftPage() {
                   .slice()
                   .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
                   .map((draft) => (
-                    <div key={draft.id} className="rounded-lg border border-neutral-800 bg-neutral-900 shadow-card">
-                      <div className="flex items-center justify-between border-b border-neutral-800 px-5 py-3.5">
+                    <div key={draft.id} className="rounded-lg border border-neutral-200 bg-white shadow-card dark:border-neutral-800 dark:bg-neutral-900">
+                      <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-3.5 dark:border-neutral-800">
                         <div className="flex items-center gap-3">
-                          <span className="text-xs font-medium text-neutral-400">Brouillon IA</span>
-                          <span className="text-neutral-800">·</span>
+                          <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">Brouillon IA</span>
+                          <span className="text-neutral-300 dark:text-neutral-800">·</span>
                           <span className="text-xs text-neutral-500">{formatDateTime(draft.createdAt)}</span>
                         </div>
                         <StatusBadge status={draft.status} />
                       </div>
 
                       <div className="px-5 py-4">
-                        <pre className="whitespace-pre-wrap font-sans text-sm text-neutral-300 leading-relaxed">
+                        <pre className="whitespace-pre-wrap font-sans text-sm text-neutral-700 leading-relaxed dark:text-neutral-300">
                           {draft.draftBody}
                         </pre>
                       </div>
 
                       {draft.status === 'PENDING' && canReview && (
-                        <div className="flex items-center justify-end gap-2 border-t border-neutral-800 px-5 py-3">
+                        <div className="flex items-center justify-end gap-2 border-t border-neutral-200 px-5 py-3 dark:border-neutral-800">
                           <button
                             onClick={() => handleReject(draft.id)}
                             disabled={busy === draft.id}
-                            className="min-h-[44px] rounded-md border border-neutral-800 bg-neutral-900 px-4 py-2.5 text-sm font-medium text-neutral-400 hover:border-red-500/50 hover:text-red-400 transition-colors disabled:opacity-50"
+                            className="min-h-[44px] rounded-md border border-neutral-300 bg-white px-4 py-2.5 text-sm font-medium text-neutral-500 hover:border-red-500/50 hover:text-red-600 transition-colors disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-400 dark:hover:text-red-400"
                           >
                             Rejeter
                           </button>
@@ -388,7 +388,7 @@ export function AgentDraftPage() {
                       )}
 
                       {(draft.status === 'APPROVED' || draft.status === 'REJECTED') && draft.reviewedAt && (
-                        <div className="border-t border-neutral-800 px-5 py-2.5">
+                        <div className="border-t border-neutral-200 px-5 py-2.5 dark:border-neutral-800">
                           <p className="text-xs text-neutral-500">
                             {draft.status === 'APPROVED' ? 'Approuvé' : 'Rejeté'} le {formatDateTime(draft.reviewedAt)}
                           </p>
@@ -398,7 +398,7 @@ export function AgentDraftPage() {
                   ))}
               </>
             ) : (
-              <div className="flex h-48 items-center justify-center rounded-lg border border-dashed border-neutral-800 text-sm text-neutral-500">
+              <div className="flex h-48 items-center justify-center rounded-lg border border-dashed border-neutral-300 text-sm text-neutral-500 dark:border-neutral-800">
                 Sélectionnez un fil pour voir les brouillons
               </div>
             )}

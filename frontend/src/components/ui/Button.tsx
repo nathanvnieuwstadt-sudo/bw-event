@@ -14,11 +14,11 @@ const variantClasses: Record<Variant, string> = {
   primary:
     'bg-brand-600 text-white hover:bg-brand-700 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-1',
   secondary:
-    'bg-neutral-900 text-neutral-300 border border-neutral-700 hover:bg-neutral-800 hover:border-neutral-500 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-1',
+    'bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-100 hover:border-neutral-400 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-1 dark:bg-neutral-900 dark:text-neutral-300 dark:border-neutral-700 dark:hover:bg-neutral-800 dark:hover:border-neutral-500',
   danger:
     'bg-red-600 text-white hover:bg-red-700 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-1',
   ghost:
-    'bg-transparent text-neutral-400 hover:bg-neutral-800 hover:text-neutral-100 focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1',
+    'bg-transparent text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-1 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-100',
 }
 
 const sizeClasses: Record<Size, string> = {

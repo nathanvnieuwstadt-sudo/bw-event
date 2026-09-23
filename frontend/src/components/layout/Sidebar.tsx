@@ -156,17 +156,17 @@ export function Sidebar() {
       'group flex min-h-[52px] items-center gap-3.5 rounded-xl px-4 py-3.5',
       'text-[15px] font-medium transition-colors duration-100 active:scale-[0.98]',
       isActive
-        ? 'bg-neutral-800 text-neutral-100 ring-1 ring-inset ring-neutral-700'
-        : 'bg-neutral-900/60 text-neutral-400 ring-1 ring-inset ring-neutral-800/60 hover:bg-neutral-900 hover:text-neutral-100 active:bg-neutral-800',
+        ? 'bg-neutral-100 text-neutral-900 ring-1 ring-inset ring-neutral-200 dark:bg-neutral-800 dark:text-neutral-100 dark:ring-neutral-700'
+        : 'bg-neutral-50/60 text-neutral-500 ring-1 ring-inset ring-neutral-200/60 hover:bg-neutral-100 hover:text-neutral-900 active:bg-neutral-100 dark:bg-neutral-900/60 dark:text-neutral-400 dark:ring-neutral-800/60 dark:hover:bg-neutral-900 dark:hover:text-neutral-100 dark:active:bg-neutral-800',
     ].join(' ')
 
   return (
-    <aside className="flex h-full w-72 flex-col bg-neutral-950">
+    <aside className="flex h-full w-72 flex-col bg-white dark:bg-neutral-950">
       {/* Brand */}
-      <div className="flex h-16 items-center border-b border-neutral-800 px-5">
+      <div className="flex h-16 items-center border-b border-neutral-200 px-5 dark:border-neutral-800">
         <Link
           to="/"
-          className="text-[13px] font-semibold tracking-[0.08em] text-neutral-100 uppercase hover:text-neutral-300 transition-colors duration-100"
+          className="text-[13px] font-semibold tracking-[0.08em] text-neutral-900 uppercase hover:text-neutral-600 transition-colors duration-100 dark:text-neutral-100 dark:hover:text-neutral-300"
         >
           BW Event
         </Link>
@@ -183,7 +183,7 @@ export function Sidebar() {
           </li>
         </ul>
 
-        <p className="section-label mb-3 px-3 text-neutral-600">Navigation</p>
+        <p className="section-label mb-3 px-3 text-neutral-400 dark:text-neutral-600">Navigation</p>
         <ul className="space-y-2">
           {roleItems.map((item) => (
             <li key={item.to}>
@@ -197,13 +197,13 @@ export function Sidebar() {
       </nav>
 
       {/* User / role footer */}
-      <div className="flex items-center gap-3 border-t border-neutral-800 px-4 py-4">
+      <div className="flex items-center gap-3 border-t border-neutral-200 px-4 py-4 dark:border-neutral-800">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-600 text-sm font-semibold text-white">
           {initial}
         </div>
         <div className="min-w-0">
-          <p className="truncate text-sm font-medium text-neutral-300">{email}</p>
-          <p className="text-[10px] font-medium uppercase tracking-wide text-neutral-600">
+          <p className="truncate text-sm font-medium text-neutral-700 dark:text-neutral-300">{email}</p>
+          <p className="text-[10px] font-medium uppercase tracking-wide text-neutral-400 dark:text-neutral-600">
             {ROLE_LABELS[role ?? ''] ?? role}
           </p>
         </div>

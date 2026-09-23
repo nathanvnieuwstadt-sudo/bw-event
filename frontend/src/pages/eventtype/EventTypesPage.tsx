@@ -12,9 +12,9 @@ const FIELD_TYPES: { value: FieldType; label: string }[] = [
 ]
 
 const inputCls =
-  'w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 placeholder:text-neutral-500 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none transition-colors'
+  'w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none transition-colors dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500'
 const selectCls =
-  'w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none transition-colors appearance-none cursor-pointer'
+  'w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none transition-colors appearance-none cursor-pointer dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100'
 
 function emptyField(order: number): EventTypeFieldRequest {
   return { fieldLabel: '', fieldType: 'TEXT', options: '', required: false, displayOrder: order }
@@ -47,7 +47,7 @@ function FieldEditor({
   return (
     <div className="space-y-2">
       {fields.map((f, i) => (
-        <div key={i} className="flex items-start gap-2 rounded-lg border border-neutral-800 bg-neutral-950 p-3">
+        <div key={i} className="flex items-start gap-2 rounded-lg border border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-800 dark:bg-neutral-950">
           <div className="flex-1 grid grid-cols-2 gap-2">
             <input
               placeholder="Libellé du champ (ex. Code vestimentaire)"
@@ -73,19 +73,19 @@ function FieldEditor({
               />
             )}
           </div>
-          <label className="flex items-center gap-2 pt-2 shrink-0 text-xs text-neutral-400 cursor-pointer select-none">
+          <label className="flex items-center gap-2 pt-2 shrink-0 text-xs text-neutral-500 cursor-pointer select-none dark:text-neutral-400">
             <input
               type="checkbox"
               checked={f.required}
               onChange={(e) => update(i, { required: e.target.checked })}
-              className="h-5 w-5 rounded border-neutral-700 text-neutral-300 cursor-pointer"
+              className="h-5 w-5 rounded border-neutral-300 text-neutral-700 cursor-pointer dark:border-neutral-700 dark:text-neutral-300"
             />
             Obligatoire
           </label>
           <button
             type="button"
             onClick={() => remove(i)}
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-neutral-500 transition-colors hover:bg-red-500/10 hover:text-red-400 active:scale-[0.95]"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-neutral-500 transition-colors hover:bg-red-500/10 hover:text-red-600 active:scale-[0.95] dark:hover:text-red-400"
             title="Supprimer le champ"
           >
             <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
@@ -97,7 +97,7 @@ function FieldEditor({
       <button
         type="button"
         onClick={add}
-        className="flex min-h-[40px] items-center gap-1.5 rounded-md px-2.5 text-sm text-neutral-400 transition-colors hover:bg-neutral-800 hover:text-neutral-100 active:scale-[0.97]"
+        className="flex min-h-[40px] items-center gap-1.5 rounded-md px-2.5 text-sm text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-900 active:scale-[0.97] dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
       >
         <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
           <path d="M10 4v12M4 10h12" />
@@ -131,7 +131,7 @@ function EventTypeForm({
     >
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-neutral-400">Nom</label>
+          <label className="mb-1.5 block text-xs font-medium text-neutral-500 dark:text-neutral-400">Nom</label>
           <input
             required
             placeholder="ex. Mariage"
@@ -141,7 +141,7 @@ function EventTypeForm({
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-neutral-400">Description</label>
+          <label className="mb-1.5 block text-xs font-medium text-neutral-500 dark:text-neutral-400">Description</label>
           <input
             placeholder="Description courte (facultatif)"
             value={form.description}
@@ -152,14 +152,14 @@ function EventTypeForm({
       </div>
 
       <div>
-        <p className="mb-2 text-xs font-medium text-neutral-400">Champs personnalisés</p>
+        <p className="mb-2 text-xs font-medium text-neutral-500 dark:text-neutral-400">Champs personnalisés</p>
         <FieldEditor
           fields={form.fields}
           onChange={(fields) => setForm({ ...form, fields })}
         />
       </div>
 
-      <div className="flex justify-end gap-2 border-t border-neutral-800 pt-3">
+      <div className="flex justify-end gap-2 border-t border-neutral-200 pt-3 dark:border-neutral-800">
         <Button type="button" variant="secondary" size="sm" onClick={onCancel}>
           Annuler
         </Button>
@@ -183,12 +183,12 @@ function EventTypeCard({
   onDelete: () => void
 }) {
   return (
-    <div className="rounded-xl border border-neutral-800 bg-neutral-900 shadow-sm">
+    <div className="rounded-xl border border-neutral-200 bg-white shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
       <div className="flex items-start justify-between p-5">
         <div>
-          <p className="text-sm font-semibold text-neutral-100">{eventType.name}</p>
+          <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">{eventType.name}</p>
           {eventType.description && (
-            <p className="mt-0.5 text-xs text-neutral-400">{eventType.description}</p>
+            <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">{eventType.description}</p>
           )}
           <p className="mt-2 text-xs text-neutral-500">
             {eventType.fields.length === 0
@@ -200,13 +200,13 @@ function EventTypeCard({
           <div className="flex shrink-0 gap-1.5">
             <button
               onClick={onEdit}
-              className="min-h-[40px] rounded-md px-3 py-2 text-xs font-medium text-neutral-400 transition-colors hover:bg-neutral-800 hover:text-neutral-100 active:scale-[0.97]"
+              className="min-h-[40px] rounded-md px-3 py-2 text-xs font-medium text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-900 active:scale-[0.97] dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
             >
               Modifier
             </button>
             <button
               onClick={onDelete}
-              className="min-h-[40px] rounded-md px-3 py-2 text-xs font-medium text-neutral-500 transition-colors hover:bg-red-500/10 hover:text-red-400 active:scale-[0.97]"
+              className="min-h-[40px] rounded-md px-3 py-2 text-xs font-medium text-neutral-500 transition-colors hover:bg-red-500/10 hover:text-red-600 active:scale-[0.97] dark:hover:text-red-400"
             >
               Supprimer
             </button>
@@ -215,16 +215,16 @@ function EventTypeCard({
       </div>
 
       {eventType.fields.length > 0 && (
-        <div className="border-t border-neutral-800 px-5 pb-4">
+        <div className="border-t border-neutral-200 px-5 pb-4 dark:border-neutral-800">
           <div className="mt-3 flex flex-wrap gap-2">
             {eventType.fields.map((f) => (
               <span
                 key={f.id}
-                className="inline-flex items-center gap-1 rounded-full border border-neutral-800 bg-neutral-950 px-2.5 py-1 text-xs text-neutral-400"
+                className="inline-flex items-center gap-1 rounded-full border border-neutral-200 bg-neutral-50 px-2.5 py-1 text-xs text-neutral-500 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-400"
               >
                 {f.fieldLabel}
-                {f.required && <span className="text-red-400">*</span>}
-                <span className="text-neutral-500">· {FIELD_TYPES.find((t) => t.value === f.fieldType)?.label ?? f.fieldType}</span>
+                {f.required && <span className="text-red-700 dark:text-red-400">*</span>}
+                <span className="text-neutral-400 dark:text-neutral-500">· {FIELD_TYPES.find((t) => t.value === f.fieldType)?.label ?? f.fieldType}</span>
               </span>
             ))}
           </div>
@@ -302,8 +302,8 @@ export function EventTypesPage() {
     <div className="mx-auto max-w-3xl py-6 px-4">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-neutral-100">Types d'événements</h1>
-          <p className="mt-1 text-sm text-neutral-400">
+          <h1 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">Types d'événements</h1>
+          <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
             Définissez les types d'événements que vous organisez et les informations nécessaires pour chacun.
           </p>
         </div>
@@ -315,8 +315,8 @@ export function EventTypesPage() {
       </div>
 
       {editingId === 'new' && (
-        <div className="mb-6 rounded-xl border border-neutral-700 bg-neutral-900 p-5 shadow-sm">
-          <p className="mb-4 text-sm font-semibold text-neutral-100">Nouveau type d'événement</p>
+        <div className="mb-6 rounded-xl border border-neutral-300 bg-white p-5 shadow-sm dark:border-neutral-700 dark:bg-neutral-900">
+          <p className="mb-4 text-sm font-semibold text-neutral-900 dark:text-neutral-100">Nouveau type d'événement</p>
           <EventTypeForm
             initial={{ name: '', description: '', fields: [] }}
             onSave={handleSave}
@@ -329,16 +329,16 @@ export function EventTypesPage() {
       {loading ? (
         <div className="space-y-4">
           {[1, 2].map((n) => (
-            <div key={n} className="h-28 animate-pulse rounded-xl bg-neutral-800" />
+            <div key={n} className="h-28 animate-pulse rounded-xl bg-neutral-100 dark:bg-neutral-800" />
           ))}
         </div>
       ) : eventTypes.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-neutral-700 p-10 text-center">
-          <p className="text-sm text-neutral-400">Aucun type d'événement pour le moment.</p>
+        <div className="rounded-xl border border-dashed border-neutral-300 p-10 text-center dark:border-neutral-700">
+          <p className="text-sm text-neutral-500 dark:text-neutral-400">Aucun type d'événement pour le moment.</p>
           {canEdit && (
             <button
               onClick={() => setEditingId('new')}
-              className="mt-2 min-h-[40px] rounded-md px-3 py-2 text-sm text-neutral-400 transition-colors hover:bg-neutral-800 hover:text-neutral-100 active:scale-[0.97]"
+              className="mt-2 min-h-[40px] rounded-md px-3 py-2 text-sm text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-900 active:scale-[0.97] dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
             >
               Créer le premier →
             </button>
@@ -348,8 +348,8 @@ export function EventTypesPage() {
         <div className="space-y-4">
           {eventTypes.map((et) =>
             editingId === et.id ? (
-              <div key={et.id} className="rounded-xl border border-neutral-700 bg-neutral-900 p-5 shadow-sm">
-                <p className="mb-4 text-sm font-semibold text-neutral-100">Modifier — {et.name}</p>
+              <div key={et.id} className="rounded-xl border border-neutral-300 bg-white p-5 shadow-sm dark:border-neutral-700 dark:bg-neutral-900">
+                <p className="mb-4 text-sm font-semibold text-neutral-900 dark:text-neutral-100">Modifier — {et.name}</p>
                 <EventTypeForm
                   initial={toFormState(et)}
                   onSave={handleSave}

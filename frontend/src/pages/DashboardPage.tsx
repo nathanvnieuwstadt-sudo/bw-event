@@ -139,7 +139,7 @@ export function DashboardPage() {
   return (
     <div className="mx-auto max-w-4xl py-4">
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-neutral-100">
+        <h1 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
           {greetingWord()}{firstName ? `, ${firstName}` : ''}
         </h1>
         <p className="mt-1 text-sm text-neutral-500">Où souhaitez-vous aller ?</p>
@@ -150,13 +150,13 @@ export function DashboardPage() {
           <button
             key={card.to}
             onClick={() => navigate(card.to)}
-            className="group flex items-start gap-4 rounded-xl border border-neutral-800 bg-neutral-900 p-5 text-left shadow-card transition-all duration-150 hover:border-neutral-700 hover:bg-neutral-800/60 active:scale-[0.98]"
+            className="group flex items-start gap-4 rounded-xl border border-neutral-200 bg-white p-5 text-left shadow-card transition-all duration-150 hover:border-neutral-300 hover:bg-neutral-50 active:scale-[0.98] dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-neutral-700 dark:hover:bg-neutral-800/60"
           >
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-500/10 text-brand-400 transition-colors duration-150 group-hover:bg-brand-500/20">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-500/10 text-brand-600 transition-colors duration-150 group-hover:bg-brand-500/20 dark:text-brand-400">
               {card.icon}
             </div>
             <div className="pt-0.5">
-              <p className="text-sm font-semibold text-neutral-100">{card.label}</p>
+              <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">{card.label}</p>
               <p className="mt-0.5 text-xs leading-relaxed text-neutral-500">{card.description}</p>
             </div>
           </button>

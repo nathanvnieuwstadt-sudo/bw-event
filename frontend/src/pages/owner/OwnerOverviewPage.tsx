@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { listBanquets } from '../../api/banquets'
 import { useAuth } from '../../auth/useAuth'
+import { useTheme } from '../../theme/useTheme'
 import { BanquetStatusBadge } from '../../components/banquet/BanquetStatusBadge'
 import type { BanquetSummary, BanquetStatus } from '../../types/banquet'
 
@@ -14,9 +15,9 @@ function formatDate(d: string | null) {
 }
 
 const stats = [
-  { label: 'Confirmé',  status: 'CONFIRMED' as BanquetStatus, accent: 'text-green-400', bg: 'bg-green-500/10', border: 'border-green-500/20' },
-  { label: 'Brouillon', status: 'DRAFT'     as BanquetStatus, accent: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20' },
-  { label: 'Annulé',    status: 'CANCELLED' as BanquetStatus, accent: 'text-red-400',   bg: 'bg-red-500/10',   border: 'border-red-500/20'   },
+  { label: 'Confirmé',  status: 'CONFIRMED' as BanquetStatus, accent: 'text-green-700 dark:text-green-400', bg: 'bg-green-500/10', border: 'border-green-500/20' },
+  { label: 'Brouillon', status: 'DRAFT'     as BanquetStatus, accent: 'text-amber-700 dark:text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20' },
+  { label: 'Annulé',    status: 'CANCELLED' as BanquetStatus, accent: 'text-red-700 dark:text-red-400',   bg: 'bg-red-500/10',   border: 'border-red-500/20'   },
 ]
 
 const WEEKDAYS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
@@ -43,6 +44,7 @@ const DONUT_SEGMENTS: { status: BanquetStatus; color: string; dot: string }[] = 
 ]
 
 function StatusDonut({ banquets }: { banquets: BanquetSummary[] }) {
+  const { theme } = useTheme()
   const total = banquets.length
   const counts = DONUT_SEGMENTS.map((s) => count(banquets, s.status))
 
@@ -56,9 +58,10 @@ function StatusDonut({ banquets }: { banquets: BanquetSummary[] }) {
     stops.push(`${seg.color} ${start}deg ${end}deg`)
   })
 
+  const emptyColor = theme === 'dark' ? '#262626' : '#e5e5e5'
   const gradient = total > 0
     ? `conic-gradient(${stops.join(', ')})`
-    : 'conic-gradient(#262626 0deg 360deg)'
+    : `conic-gradient(${emptyColor} 0deg 360deg)`
 
   return (
     <div className="flex items-center gap-6">
@@ -66,8 +69,8 @@ function StatusDonut({ banquets }: { banquets: BanquetSummary[] }) {
         className="relative h-32 w-32 shrink-0 rounded-full"
         style={{ background: gradient }}
       >
-        <div className="absolute inset-[14px] flex flex-col items-center justify-center rounded-full bg-neutral-900">
-          <span className="text-xl font-bold tabular-nums text-neutral-100">{total}</span>
+        <div className="absolute inset-[14px] flex flex-col items-center justify-center rounded-full bg-white dark:bg-neutral-900">
+          <span className="text-xl font-bold tabular-nums text-neutral-900 dark:text-neutral-100">{total}</span>
           <span className="text-[10px] font-medium uppercase tracking-wide text-neutral-500">Total</span>
         </div>
       </div>
@@ -75,10 +78,10 @@ function StatusDonut({ banquets }: { banquets: BanquetSummary[] }) {
         {DONUT_SEGMENTS.map((seg, i) => (
           <div key={seg.status} className="flex items-center gap-2">
             <span className={`h-2 w-2 rounded-full ${seg.dot}`} />
-            <span className="text-xs text-neutral-400">
+            <span className="text-xs text-neutral-500 dark:text-neutral-400">
               {seg.status === 'CONFIRMED' ? 'Confirmé' : seg.status === 'DRAFT' ? 'Brouillon' : 'Annulé'}
             </span>
-            <span className="ml-auto text-xs font-semibold tabular-nums text-neutral-200">{counts[i]}</span>
+            <span className="ml-auto text-xs font-semibold tabular-nums text-neutral-800 dark:text-neutral-200">{counts[i]}</span>
           </div>
         ))}
       </div>
@@ -94,15 +97,15 @@ function BarChart({ banquets }: { banquets: BanquetSummary[] }) {
   return (
     <div>
       <div className="mb-5 flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-neutral-100">Répartition des événements</h2>
-        <div className="flex rounded-md border border-neutral-800 bg-neutral-950 p-0.5">
+        <h2 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">Répartition des événements</h2>
+        <div className="flex rounded-md border border-neutral-200 bg-neutral-50 p-0.5 dark:border-neutral-800 dark:bg-neutral-950">
           {(['week', 'month'] as Grouping[]).map((g) => (
             <button
               key={g}
               onClick={() => setGrouping(g)}
               className={[
                 'min-h-[36px] rounded px-3.5 py-1.5 text-xs font-medium transition-colors duration-100',
-                grouping === g ? 'bg-brand-600 text-white' : 'text-neutral-500 hover:text-neutral-200',
+                grouping === g ? 'bg-brand-600 text-white' : 'text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200',
               ].join(' ')}
             >
               {g === 'week' ? 'Semaine' : 'Mois'}
@@ -143,7 +146,7 @@ export function OwnerOverviewPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-lg font-semibold text-neutral-100">Vue d'ensemble</h1>
+        <h1 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Vue d'ensemble</h1>
         {!loading && (
           <p className="mt-0.5 text-sm text-neutral-500">{banquets.length} événements au total</p>
         )}
@@ -153,10 +156,10 @@ export function OwnerOverviewPage() {
         <div className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-20 animate-pulse rounded-lg bg-neutral-900" />
+              <div key={i} className="h-20 animate-pulse rounded-lg bg-neutral-100 dark:bg-neutral-900" />
             ))}
           </div>
-          <div className="h-64 animate-pulse rounded-lg bg-neutral-900" />
+          <div className="h-64 animate-pulse rounded-lg bg-neutral-100 dark:bg-neutral-900" />
         </div>
       ) : (
         <>
@@ -177,11 +180,11 @@ export function OwnerOverviewPage() {
 
           {/* Chart + donut */}
           <div className="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
-            <div className="rounded-lg border border-neutral-800 bg-neutral-900 p-5 shadow-card lg:col-span-2">
+            <div className="rounded-lg border border-neutral-200 bg-white p-5 shadow-card dark:border-neutral-800 dark:bg-neutral-900 lg:col-span-2">
               <BarChart banquets={banquets} />
             </div>
-            <div className="rounded-lg border border-neutral-800 bg-neutral-900 p-5 shadow-card">
-              <h2 className="mb-5 text-sm font-semibold text-neutral-100">Statuts</h2>
+            <div className="rounded-lg border border-neutral-200 bg-white p-5 shadow-card dark:border-neutral-800 dark:bg-neutral-900">
+              <h2 className="mb-5 text-sm font-semibold text-neutral-900 dark:text-neutral-100">Statuts</h2>
               <StatusDonut banquets={banquets} />
             </div>
           </div>
@@ -189,9 +192,9 @@ export function OwnerOverviewPage() {
           {/* Banquet list */}
           <div className="flex items-center gap-3 mb-3">
             <span className="section-label">Tous les événements</span>
-            <div className="flex-1 border-t border-neutral-800" />
+            <div className="flex-1 border-t border-neutral-200 dark:border-neutral-800" />
           </div>
-          <div className="overflow-hidden rounded-lg border border-neutral-800 bg-neutral-900 shadow-card divide-y divide-neutral-800">
+          <div className="overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-card divide-y divide-neutral-200 dark:border-neutral-800 dark:bg-neutral-900 dark:divide-neutral-800">
             {banquets.length === 0 && (
               <p className="px-4 py-8 text-center text-sm text-neutral-500">Aucun banquet trouvé.</p>
             )}
@@ -201,14 +204,14 @@ export function OwnerOverviewPage() {
                 className="flex items-center justify-between px-4 py-3"
               >
                 <div className="min-w-0">
-                  <span className="text-sm font-medium text-neutral-200">{b.contactName ?? '—'}</span>
+                  <span className="text-sm font-medium text-neutral-800 dark:text-neutral-200">{b.contactName ?? '—'}</span>
                   {b.contactOrganization && (
                     <span className="ml-2 text-sm text-neutral-500">{b.contactOrganization}</span>
                   )}
                 </div>
                 <div className="flex shrink-0 items-center gap-5 text-sm">
                   <span className="text-neutral-500">{formatDate(b.date)}</span>
-                  <span className="tabular-nums text-neutral-400">
+                  <span className="tabular-nums text-neutral-500 dark:text-neutral-400">
                     {b.headcount != null ? `${b.headcount} invités` : '—'}
                   </span>
                   <BanquetStatusBadge status={b.status} />

@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { ThemeProvider } from './theme/ThemeContext'
 import { AuthProvider } from './auth/AuthContext'
 import { ProtectedRoute } from './auth/ProtectedRoute'
 import { AppShell } from './components/layout/AppShell'
@@ -17,66 +18,68 @@ import { StaffListPage } from './pages/user/StaffListPage'
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
+    <ThemeProvider>
+      <BrowserRouter>
+        <AuthProvider>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
 
-          <Route element={<ProtectedRoute />}>
-            <Route element={<AppShell />}>
-              <Route path="/" element={<DashboardPage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route element={<AppShell />}>
+                <Route path="/" element={<DashboardPage />} />
 
-              {/* Banquets — OWNER gets read-only (list + detail), managers get full CRUD */}
-              <Route
-                element={
-                  <ProtectedRoute allowedRoles={['DEV', 'OWNER', 'GENERAL_MANAGER', 'FLOOR_MANAGER']} />
-                }
-              >
-                <Route path="/banquets" element={<BanquetListPage />} />
-                <Route path="/banquets/new" element={<BanquetFormPage />} />
-                <Route path="/banquets/:id" element={<BanquetDetailPage />} />
-                <Route path="/banquets/:id/edit" element={<BanquetFormPage />} />
-              </Route>
+                {/* Banquets — OWNER gets read-only (list + detail), managers get full CRUD */}
+                <Route
+                  element={
+                    <ProtectedRoute allowedRoles={['DEV', 'OWNER', 'GENERAL_MANAGER', 'FLOOR_MANAGER']} />
+                  }
+                >
+                  <Route path="/banquets" element={<BanquetListPage />} />
+                  <Route path="/banquets/new" element={<BanquetFormPage />} />
+                  <Route path="/banquets/:id" element={<BanquetDetailPage />} />
+                  <Route path="/banquets/:id/edit" element={<BanquetFormPage />} />
+                </Route>
 
-              {/* Contacts + Agent */}
-              <Route
-                element={
-                  <ProtectedRoute allowedRoles={['DEV', 'GENERAL_MANAGER', 'FLOOR_MANAGER']} />
-                }
-              >
-                <Route path="/contacts" element={<ContactListPage />} />
-                <Route path="/agent" element={<AgentDraftPage />} />
-                <Route path="/agent/rules" element={<AgentRulesPage />} />
-              </Route>
+                {/* Contacts + Agent */}
+                <Route
+                  element={
+                    <ProtectedRoute allowedRoles={['DEV', 'GENERAL_MANAGER', 'FLOOR_MANAGER']} />
+                  }
+                >
+                  <Route path="/contacts" element={<ContactListPage />} />
+                  <Route path="/agent" element={<AgentDraftPage />} />
+                  <Route path="/agent/rules" element={<AgentRulesPage />} />
+                </Route>
 
-              {/* Event Types — management, DEV + GENERAL_MANAGER only */}
-              <Route
-                element={<ProtectedRoute allowedRoles={['DEV', 'GENERAL_MANAGER']} />}
-              >
-                <Route path="/event-types" element={<EventTypesPage />} />
-                <Route path="/staff" element={<StaffListPage />} />
-              </Route>
+                {/* Event Types — management, DEV + GENERAL_MANAGER only */}
+                <Route
+                  element={<ProtectedRoute allowedRoles={['DEV', 'GENERAL_MANAGER']} />}
+                >
+                  <Route path="/event-types" element={<EventTypesPage />} />
+                  <Route path="/staff" element={<StaffListPage />} />
+                </Route>
 
-              {/* Kitchen */}
-              <Route element={<ProtectedRoute allowedRoles={['DEV', 'KITCHEN']} />}>
-                <Route path="/kitchen" element={<KitchenViewPage />} />
-              </Route>
+                {/* Kitchen */}
+                <Route element={<ProtectedRoute allowedRoles={['DEV', 'KITCHEN']} />}>
+                  <Route path="/kitchen" element={<KitchenViewPage />} />
+                </Route>
 
-              {/* Owner overview */}
-              <Route element={<ProtectedRoute allowedRoles={['DEV', 'OWNER']} />}>
-                <Route path="/overview" element={<OwnerOverviewPage />} />
+                {/* Owner overview */}
+                <Route element={<ProtectedRoute allowedRoles={['DEV', 'OWNER']} />}>
+                  <Route path="/overview" element={<OwnerOverviewPage />} />
+                </Route>
               </Route>
             </Route>
-          </Route>
 
-          <Route path="/unauthorized" element={
-            <div className="flex h-screen items-center justify-center text-sm text-gray-500">
-              You do not have permission to view this page.
-            </div>
-          } />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </AuthProvider>
-    </BrowserRouter>
+            <Route path="/unauthorized" element={
+              <div className="flex h-screen items-center justify-center text-sm text-gray-500">
+                You do not have permission to view this page.
+              </div>
+            } />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </AuthProvider>
+      </BrowserRouter>
+    </ThemeProvider>
   )
 }

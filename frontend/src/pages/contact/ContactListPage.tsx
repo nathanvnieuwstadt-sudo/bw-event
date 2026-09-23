@@ -38,26 +38,26 @@ function ContactForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {error && <div className="rounded-md bg-red-500/10 px-4 py-3 text-sm text-red-400">{error}</div>}
+      {error && <div className="rounded-md bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-400">{error}</div>}
       <div>
-        <label className="block text-xs font-medium text-neutral-400 mb-1.5">Nom *</label>
+        <label className="block text-xs font-medium text-neutral-500 mb-1.5 dark:text-neutral-400">Nom *</label>
         <input required value={name} onChange={(e) => setName(e.target.value)}
-          className="w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none" />
+          className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100" />
       </div>
       <div>
-        <label className="block text-xs font-medium text-neutral-400 mb-1.5">E-mail *</label>
+        <label className="block text-xs font-medium text-neutral-500 mb-1.5 dark:text-neutral-400">E-mail *</label>
         <input required type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-          className="w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none" />
+          className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100" />
       </div>
       <div>
-        <label className="block text-xs font-medium text-neutral-400 mb-1.5">Téléphone</label>
+        <label className="block text-xs font-medium text-neutral-500 mb-1.5 dark:text-neutral-400">Téléphone</label>
         <input value={phone} onChange={(e) => setPhone(e.target.value)}
-          className="w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none" />
+          className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100" />
       </div>
       <div>
-        <label className="block text-xs font-medium text-neutral-400 mb-1.5">Organisation</label>
+        <label className="block text-xs font-medium text-neutral-500 mb-1.5 dark:text-neutral-400">Organisation</label>
         <input value={organization} onChange={(e) => setOrganization(e.target.value)}
-          className="w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none" />
+          className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100" />
       </div>
       <div className="flex justify-end gap-3 pt-1">
         <Button type="button" variant="secondary" onClick={onCancel}>Annuler</Button>
@@ -109,13 +109,13 @@ export function ContactListPage() {
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-lg font-semibold text-neutral-100">Contacts</h1>
+        <h1 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Contacts</h1>
         {canEdit && (
           <Button onClick={() => { setEditing(null); setModalOpen(true) }}>Nouveau contact</Button>
         )}
       </div>
 
-      {error && <div className="mb-4 rounded-md bg-red-500/10 px-4 py-3 text-sm text-red-400">{error}</div>}
+      {error && <div className="mb-4 rounded-md bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-400">{error}</div>}
 
       {loading ? (
         <div className="text-sm text-neutral-500">Chargement…</div>
@@ -125,7 +125,7 @@ export function ContactListPage() {
           rows={contacts}
           emptyMessage="Aucun contact pour le moment."
           columns={[
-            { key: 'name', header: 'Nom', render: (c) => <span className="font-medium text-neutral-200">{c.name}</span> },
+            { key: 'name', header: 'Nom', render: (c) => <span className="font-medium text-neutral-800 dark:text-neutral-200">{c.name}</span> },
             { key: 'org', header: 'Organisation', render: (c) => c.organization ?? '—' },
             { key: 'email', header: 'E-mail', render: (c) => c.email },
             { key: 'phone', header: 'Téléphone', render: (c) => c.phone ?? '—' },
@@ -135,9 +135,9 @@ export function ContactListPage() {
               render: (c) => canEdit ? (
                 <div className="flex justify-end gap-1.5">
                   <button onClick={() => { setEditing(c); setModalOpen(true) }}
-                    className="min-h-[40px] rounded-md px-3 py-2 text-xs font-medium text-brand-400 transition-colors duration-100 hover:bg-neutral-800 active:scale-[0.97]">Modifier</button>
+                    className="min-h-[40px] rounded-md px-3 py-2 text-xs font-medium text-brand-600 transition-colors duration-100 hover:bg-neutral-100 active:scale-[0.97] dark:text-brand-400 dark:hover:bg-neutral-800">Modifier</button>
                   <button onClick={() => handleDelete(c)}
-                    className="min-h-[40px] rounded-md px-3 py-2 text-xs font-medium text-red-400 transition-colors duration-100 hover:bg-red-500/10 active:scale-[0.97]">Supprimer</button>
+                    className="min-h-[40px] rounded-md px-3 py-2 text-xs font-medium text-red-600 transition-colors duration-100 hover:bg-red-500/10 active:scale-[0.97] dark:text-red-400">Supprimer</button>
                 </div>
               ) : null,
               className: 'text-right',
