@@ -8,16 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class EventTypeRequest {
+public class EventTypeMenuRequest {
 
-    @NotBlank(message = "Event type name is required")
+    @NotBlank(message = "Menu name is required")
     private String name;
 
     private String description;
 
-    @Valid
-    private List<EventTypeFieldRequest> fields = new ArrayList<>();
+    private Integer displayOrder = 0;
 
     @Valid
-    private List<EventTypeMenuRequest> menus = new ArrayList<>();
+    private List<EventTypeMenuItemRequest> items = new ArrayList<>();
 }

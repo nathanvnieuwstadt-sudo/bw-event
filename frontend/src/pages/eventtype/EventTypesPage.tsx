@@ -2,7 +2,13 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '../../auth/useAuth'
 import { listEventTypes, createEventType, updateEventType, deleteEventType } from '../../api/eventTypes'
 import { Button } from '../../components/ui/Button'
-import type { EventType, EventTypeRequest, EventTypeFieldRequest, FieldType } from '../../types/eventType'
+import type {
+  EventType,
+  EventTypeRequest,
+  EventTypeFieldRequest,
+  EventTypeMenuRequest,
+  FieldType,
+} from '../../types/eventType'
 
 const FIELD_TYPES: { value: FieldType; label: string }[] = [
   { value: 'TEXT',    label: 'Texte' },
@@ -20,10 +26,19 @@ function emptyField(order: number): EventTypeFieldRequest {
   return { fieldLabel: '', fieldType: 'TEXT', options: '', required: false, displayOrder: order }
 }
 
+function emptyMenu(order: number): EventTypeMenuRequest {
+  return { name: '', displayOrder: order, items: [] }
+}
+
+function emptyMenuItem(order: number) {
+  return { dishName: '', displayOrder: order }
+}
+
 interface FormState {
   name: string
   description: string
   fields: EventTypeFieldRequest[]
+  menus: EventTypeMenuRequest[]
 }
 
 function FieldEditor({
@@ -108,6 +123,107 @@ function FieldEditor({
   )
 }
 
+function MenuEditor({
+  menus,
+  onChange,
+}: {
+  menus: EventTypeMenuRequest[]
+  onChange: (menus: EventTypeMenuRequest[]) => void
+}) {
+  function updateMenu(mi: number, patch: Partial<EventTypeMenuRequest>) {
+    onChange(menus.map((m, idx) => (idx === mi ? { ...m, ...patch } : m)))
+  }
+  function removeMenu(mi: number) {
+    onChange(menus.filter((_, idx) => idx !== mi))
+  }
+  function addMenu() {
+    onChange([...menus, emptyMenu(menus.length)])
+  }
+  function addItem(mi: number) {
+    const menu = menus[mi]
+    updateMenu(mi, { items: [...menu.items, emptyMenuItem(menu.items.length)] })
+  }
+  function updateItem(mi: number, ii: number, dishName: string) {
+    const menu = menus[mi]
+    updateMenu(mi, { items: menu.items.map((it, idx) => (idx === ii ? { ...it, dishName } : it)) })
+  }
+  function removeItem(mi: number, ii: number) {
+    const menu = menus[mi]
+    updateMenu(mi, { items: menu.items.filter((_, idx) => idx !== ii) })
+  }
+
+  return (
+    <div className="space-y-3">
+      {menus.map((m, mi) => (
+        <div key={mi} className="rounded-lg border border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-800 dark:bg-neutral-950">
+          <div className="flex items-center gap-2">
+            <input
+              placeholder="Nom du menu (ex. Menu Découverte)"
+              value={m.name}
+              onChange={(e) => updateMenu(mi, { name: e.target.value })}
+              className={inputCls}
+            />
+            <button
+              type="button"
+              onClick={() => removeMenu(mi)}
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-neutral-500 transition-colors hover:bg-red-500/10 hover:text-red-600 active:scale-[0.95] dark:hover:text-red-400"
+              title="Supprimer le menu"
+            >
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                <path d="M5 5l10 10M15 5L5 15" />
+              </svg>
+            </button>
+          </div>
+
+          <div className="mt-2 space-y-1.5 pl-1">
+            {m.items.map((it, ii) => (
+              <div key={ii} className="flex items-center gap-2">
+                <span className="h-1 w-1 shrink-0 rounded-full bg-neutral-300 dark:bg-neutral-700" />
+                <input
+                  placeholder="Plat (ex. Velouté de potiron)"
+                  value={it.dishName}
+                  onChange={(e) => updateItem(mi, ii, e.target.value)}
+                  className={`${inputCls} py-1.5`}
+                />
+                <button
+                  type="button"
+                  onClick={() => removeItem(mi, ii)}
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-neutral-400 transition-colors hover:bg-red-500/10 hover:text-red-600 active:scale-[0.95] dark:hover:text-red-400"
+                  title="Supprimer le plat"
+                >
+                  <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                    <path d="M5 5l10 10M15 5L5 15" />
+                  </svg>
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => addItem(mi)}
+              className="flex min-h-[32px] items-center gap-1.5 rounded-md px-2 text-xs text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-900 active:scale-[0.97] dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
+            >
+              <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                <path d="M10 4v12M4 10h12" />
+              </svg>
+              Ajouter un plat
+            </button>
+          </div>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={addMenu}
+        className="flex min-h-[40px] items-center gap-1.5 rounded-md px-2.5 text-sm text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-900 active:scale-[0.97] dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
+      >
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+          <path d="M10 4v12M4 10h12" />
+        </svg>
+        Ajouter un menu
+      </button>
+    </div>
+  )
+}
+
 function EventTypeForm({
   initial,
   onSave,
@@ -159,6 +275,14 @@ function EventTypeForm({
         />
       </div>
 
+      <div>
+        <p className="mb-2 text-xs font-medium text-neutral-500 dark:text-neutral-400">Menus et options de plats</p>
+        <MenuEditor
+          menus={form.menus}
+          onChange={(menus) => setForm({ ...form, menus })}
+        />
+      </div>
+
       <div className="flex justify-end gap-2 border-t border-neutral-200 pt-3 dark:border-neutral-800">
         <Button type="button" variant="secondary" size="sm" onClick={onCancel}>
           Annuler
@@ -194,6 +318,10 @@ function EventTypeCard({
             {eventType.fields.length === 0
               ? 'Aucun champ personnalisé'
               : `${eventType.fields.length} champ${eventType.fields.length !== 1 ? 's' : ''}`}
+            {' · '}
+            {eventType.menus.length === 0
+              ? 'Aucun menu'
+              : `${eventType.menus.length} menu${eventType.menus.length !== 1 ? 's' : ''}`}
           </p>
         </div>
         {canEdit && (
@@ -230,6 +358,23 @@ function EventTypeCard({
           </div>
         </div>
       )}
+
+      {eventType.menus.length > 0 && (
+        <div className="border-t border-neutral-200 px-5 pb-4 pt-3 dark:border-neutral-800">
+          <div className="space-y-2.5">
+            {eventType.menus.map((m) => (
+              <div key={m.id}>
+                <p className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">{m.name}</p>
+                {m.items.length > 0 && (
+                  <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">
+                    {m.items.map((i) => i.dishName).join(' · ')}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -261,6 +406,11 @@ export function EventTypesPage() {
         required: f.required,
         displayOrder: f.displayOrder,
       })),
+      menus: et.menus.map((m) => ({
+        name: m.name,
+        displayOrder: m.displayOrder,
+        items: m.items.map((i) => ({ dishName: i.dishName, displayOrder: i.displayOrder })),
+      })),
     }
   }
 
@@ -271,6 +421,15 @@ export function EventTypesPage() {
       fields: form.fields
         .filter((f) => f.fieldLabel.trim() !== '')
         .map((f, i) => ({ ...f, displayOrder: i })),
+      menus: form.menus
+        .filter((m) => m.name.trim() !== '')
+        .map((m, i) => ({
+          ...m,
+          displayOrder: i,
+          items: m.items
+            .filter((it) => it.dishName.trim() !== '')
+            .map((it, j) => ({ ...it, displayOrder: j })),
+        })),
     }
   }
 
@@ -318,7 +477,7 @@ export function EventTypesPage() {
         <div className="mb-6 rounded-xl border border-neutral-300 bg-white p-5 shadow-sm dark:border-neutral-700 dark:bg-neutral-900">
           <p className="mb-4 text-sm font-semibold text-neutral-900 dark:text-neutral-100">Nouveau type d'événement</p>
           <EventTypeForm
-            initial={{ name: '', description: '', fields: [] }}
+            initial={{ name: '', description: '', fields: [], menus: [] }}
             onSave={handleSave}
             onCancel={() => setEditingId(null)}
             saving={saving}

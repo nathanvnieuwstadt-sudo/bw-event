@@ -17,6 +17,7 @@ public class EventTypeResponse {
     private String name;
     private String description;
     private List<EventTypeFieldResponse> fields;
+    private List<EventTypeMenuResponse> menus;
     private Instant createdAt;
 
     public static EventTypeResponse from(EventType e) {
@@ -26,6 +27,7 @@ public class EventTypeResponse {
                 .name(e.getName())
                 .description(e.getDescription())
                 .fields(e.getFields().stream().map(EventTypeFieldResponse::from).toList())
+                .menus(e.getMenus().stream().map(EventTypeMenuResponse::from).toList())
                 .createdAt(e.getCreatedAt())
                 .build();
     }

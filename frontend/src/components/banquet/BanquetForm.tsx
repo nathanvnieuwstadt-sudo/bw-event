@@ -355,6 +355,51 @@ export function BanquetForm({
 
       {/* Menu */}
       <Card title="Menu">
+        {selectedEventType && selectedEventType.menus.length > 0 && (
+          <div className="mb-5 space-y-3">
+            <p className="text-xs font-semibold uppercase tracking-widest text-neutral-500">
+              Menus suggérés — {selectedEventType.name}
+            </p>
+            {selectedEventType.menus.map((menu) => (
+              <div
+                key={menu.id}
+                className="rounded-lg border border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-800 dark:bg-neutral-950"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200">{menu.name}</p>
+                  {menu.items.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setMenuItems([
+                          ...menuItems,
+                          ...menu.items.map((i) => ({ dishName: i.dishName, quantity: 1 })),
+                        ])
+                      }
+                      className="min-h-[32px] shrink-0 rounded-md px-2.5 text-xs font-medium text-brand-600 transition-colors hover:bg-brand-500/10 active:scale-[0.97] dark:text-brand-400"
+                    >
+                      + Ajouter tout le menu
+                    </button>
+                  )}
+                </div>
+                {menu.items.length > 0 && (
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {menu.items.map((item) => (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => setMenuItems([...menuItems, { dishName: item.dishName, quantity: 1 }])}
+                        className="inline-flex items-center gap-1 rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-xs text-neutral-600 transition-colors hover:border-brand-500 hover:text-brand-600 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-400 dark:hover:text-brand-400"
+                      >
+                        + {item.dishName}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
         <MenuItemEditor items={menuItems} onChange={setMenuItems} />
       </Card>
 
