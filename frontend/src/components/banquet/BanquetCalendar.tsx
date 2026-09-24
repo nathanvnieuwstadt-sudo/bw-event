@@ -118,6 +118,8 @@ export function BanquetCalendar({ banquets }: Props) {
         </button>
       </div>
 
+      <div className="overflow-x-auto">
+      <div className="min-w-[640px]">
       {/* Weekday headers */}
       <div className="grid grid-cols-7 border-b border-neutral-200 dark:border-neutral-800">
         {WEEKDAYS.map((d) => (
@@ -140,7 +142,7 @@ export function BanquetCalendar({ banquets }: Props) {
             <div
               key={i}
               className={[
-                'min-h-[100px] border-b border-neutral-200 p-1.5 dark:border-neutral-800',
+                'min-h-[76px] sm:min-h-[100px] border-b border-neutral-200 p-1.5 dark:border-neutral-800',
                 !inMonth ? 'bg-neutral-50/60 dark:bg-neutral-950/60' : isWeekend ? 'bg-neutral-50/40 dark:bg-neutral-950/40' : 'bg-white dark:bg-neutral-900',
               ].join(' ')}
             >
@@ -190,9 +192,11 @@ export function BanquetCalendar({ banquets }: Props) {
           )
         })}
       </div>
+      </div>
+      </div>
 
       {/* Legend */}
-      <div className="flex items-center gap-5 border-t border-neutral-200 px-5 py-3 dark:border-neutral-800">
+      <div className="flex flex-wrap items-center gap-5 border-t border-neutral-200 px-5 py-3 dark:border-neutral-800">
         {(['CONFIRMED', 'DRAFT', 'CANCELLED'] as BanquetStatus[]).map((s) => (
           <div key={s} className="flex items-center gap-1.5">
             <span className={`h-2 w-2 rounded-full ${STATUS_DOT[s]}`} />

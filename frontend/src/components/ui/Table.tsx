@@ -24,6 +24,7 @@ export function Table<T>({
 }: Props<T>) {
   return (
     <div className="overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-card dark:border-neutral-800 dark:bg-neutral-900">
+      <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-800">
         <thead>
           <tr className="bg-neutral-50 dark:bg-neutral-950">
@@ -75,6 +76,7 @@ export function Table<T>({
           )}
         </tbody>
       </table>
+      </div>
     </div>
   )
 }

@@ -55,8 +55,8 @@ export function KitchenViewPage() {
       </div>
 
       {loading ? (
-        <div className="flex gap-5">
-          <div className="w-56 space-y-1.5">
+        <div className="flex flex-col gap-5 md:flex-row">
+          <div className="w-full space-y-1.5 md:w-56">
             {[...Array(4)].map((_, i) => (
               <div key={i} className="h-14 animate-pulse rounded-md bg-neutral-100 dark:bg-neutral-800" />
             ))}
@@ -64,15 +64,15 @@ export function KitchenViewPage() {
           <div className="flex-1 h-64 animate-pulse rounded-lg bg-neutral-100 dark:bg-neutral-800" />
         </div>
       ) : (
-        <div className="flex gap-5">
+        <div className="flex flex-col gap-5 md:flex-row">
           {/* Event list */}
-          <div className="w-56 flex-none">
+          <div className="w-full md:w-56 md:flex-none">
             {summaries.length === 0 ? (
               <div className="rounded-lg border border-neutral-200 bg-white p-4 text-center text-sm text-neutral-500 dark:border-neutral-800 dark:bg-neutral-900">
                 Aucun événement à venir.
               </div>
             ) : (
-              <div className="overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-card divide-y divide-neutral-200 dark:border-neutral-800 dark:bg-neutral-900 dark:divide-neutral-800">
+              <div className="max-h-72 overflow-y-auto rounded-lg border border-neutral-200 bg-white shadow-card divide-y divide-neutral-200 dark:border-neutral-800 dark:bg-neutral-900 dark:divide-neutral-800 md:max-h-none md:overflow-visible">
                 {summaries.map((b) => (
                   <button
                     key={b.id}
@@ -132,7 +132,8 @@ export function KitchenViewPage() {
                   {selected.menuItems.length === 0 ? (
                     <p className="text-sm text-neutral-500">Aucun plat enregistré.</p>
                   ) : (
-                    <table className="w-full">
+                    <div className="overflow-x-auto">
+                    <table className="w-full min-w-[400px]">
                       <thead>
                         <tr className="border-b border-neutral-200 dark:border-neutral-800">
                           <th className="section-label pb-2.5 text-left">Plat</th>
@@ -150,6 +151,7 @@ export function KitchenViewPage() {
                         ))}
                       </tbody>
                     </table>
+                    </div>
                   )}
                 </div>
 

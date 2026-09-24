@@ -59,8 +59,8 @@ function FieldEditor({
   return (
     <div className="space-y-2">
       {fields.map((f, i) => (
-        <div key={i} className="flex items-start gap-2 rounded-lg border border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-800 dark:bg-neutral-950">
-          <div className="flex-1 grid grid-cols-2 gap-2">
+        <div key={i} className="flex flex-col gap-2 rounded-lg border border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-800 dark:bg-neutral-950 sm:flex-row sm:items-start">
+          <div className="flex-1 grid grid-cols-1 gap-2 sm:grid-cols-2">
             <input
               placeholder="Libellé du champ (ex. Code vestimentaire)"
               value={f.fieldLabel}
@@ -81,10 +81,11 @@ function FieldEditor({
                 placeholder="Options séparées par des virgules (ex. Intérieur, Extérieur, Terrasse)"
                 value={f.options ?? ''}
                 onChange={(e) => update(i, { options: e.target.value })}
-                className={`${inputCls} col-span-2`}
+                className={`${inputCls} sm:col-span-2`}
               />
             )}
           </div>
+          <div className="flex items-center justify-between gap-2 sm:contents">
           <label className="flex items-center gap-2 pt-2 shrink-0 text-xs text-neutral-500 cursor-pointer select-none dark:text-neutral-400">
             <input
               type="checkbox"
@@ -104,6 +105,7 @@ function FieldEditor({
               <path d="M5 5l10 10M15 5L5 15" />
             </svg>
           </button>
+          </div>
         </div>
       ))}
       <button
@@ -141,7 +143,7 @@ function EventTypeForm({
       }}
       className="space-y-4"
     >
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <label className="mb-1.5 block text-xs font-medium text-neutral-500 dark:text-neutral-400">Nom</label>
           <input
@@ -325,7 +327,7 @@ function MenuForm({
       }}
       className="space-y-4"
     >
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <label className="mb-1.5 block text-xs font-medium text-neutral-500 dark:text-neutral-400">Nom du menu</label>
           <input

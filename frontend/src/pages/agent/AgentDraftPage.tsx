@@ -259,8 +259,8 @@ export function AgentDraftPage() {
       </div>
 
       {loading ? (
-        <div className="flex gap-5">
-          <div className="w-64 space-y-1.5">
+        <div className="flex flex-col gap-5 lg:flex-row">
+          <div className="w-full space-y-1.5 lg:w-64">
             {[...Array(4)].map((_, i) => <div key={i} className="h-16 animate-pulse rounded-md bg-neutral-100 dark:bg-neutral-800" />)}
           </div>
           <div className="flex-1 h-64 animate-pulse rounded-lg bg-neutral-100 dark:bg-neutral-800" />
@@ -292,9 +292,9 @@ export function AgentDraftPage() {
           </div>
         </div>
       ) : (
-        <div className="flex gap-5 items-start">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-start">
           {/* Thread list */}
-          <div className="w-64 flex-none overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-card divide-y divide-neutral-200 dark:border-neutral-800 dark:bg-neutral-900 dark:divide-neutral-800">
+          <div className="w-full max-h-72 overflow-y-auto rounded-lg border border-neutral-200 bg-white shadow-card divide-y divide-neutral-200 dark:border-neutral-800 dark:bg-neutral-900 dark:divide-neutral-800 lg:w-64 lg:flex-none lg:max-h-none lg:overflow-visible">
             {threads.map((t) => (
               <button
                 key={t.threadId}

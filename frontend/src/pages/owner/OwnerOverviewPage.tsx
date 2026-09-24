@@ -154,7 +154,7 @@ export function OwnerOverviewPage() {
 
       {loading ? (
         <div className="space-y-4">
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             {[...Array(3)].map((_, i) => (
               <div key={i} className="h-20 animate-pulse rounded-lg bg-neutral-100 dark:bg-neutral-900" />
             ))}
@@ -164,7 +164,7 @@ export function OwnerOverviewPage() {
       ) : (
         <>
           {/* Stat tiles */}
-          <div className="mb-6 grid grid-cols-3 gap-4">
+          <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
             {stats.map(({ label, status, accent, bg, border }) => (
               <div
                 key={status}
@@ -201,7 +201,7 @@ export function OwnerOverviewPage() {
             {banquets.map((b) => (
               <div
                 key={b.id}
-                className="flex items-center justify-between px-4 py-3"
+                className="flex flex-col gap-1 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
               >
                 <div className="min-w-0">
                   <span className="text-sm font-medium text-neutral-800 dark:text-neutral-200">{b.contactName ?? '—'}</span>
@@ -209,7 +209,7 @@ export function OwnerOverviewPage() {
                     <span className="ml-2 text-sm text-neutral-500">{b.contactOrganization}</span>
                   )}
                 </div>
-                <div className="flex shrink-0 items-center gap-5 text-sm">
+                <div className="flex flex-wrap items-center gap-3 text-sm sm:shrink-0 sm:gap-5">
                   <span className="text-neutral-500">{formatDate(b.date)}</span>
                   <span className="tabular-nums text-neutral-500 dark:text-neutral-400">
                     {b.headcount != null ? `${b.headcount} invités` : '—'}

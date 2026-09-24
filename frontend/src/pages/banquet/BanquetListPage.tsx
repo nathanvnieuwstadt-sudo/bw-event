@@ -114,7 +114,7 @@ export function BanquetListPage() {
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Banquets</h1>
           {!loading && !error && (
@@ -123,7 +123,7 @@ export function BanquetListPage() {
             </p>
           )}
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <ViewToggle view={view} onChange={setView} />
           {hasRole('DEV', 'GENERAL_MANAGER', 'FLOOR_MANAGER') && (
             <Button onClick={() => navigate('/banquets/new')}>Nouveau banquet</Button>

@@ -135,7 +135,12 @@ const ROLE_LABELS: Record<string, string> = {
   KITCHEN:         'Cuisine',
 }
 
-export function Sidebar() {
+interface Props {
+  open: boolean
+  onClose: () => void
+}
+
+export function Sidebar({ open, onClose }: Props) {
   const { role, email } = useAuth()
 
   const roleItems =
@@ -161,15 +166,40 @@ export function Sidebar() {
     ].join(' ')
 
   return (
-    <aside className="flex h-full w-72 flex-col bg-white dark:bg-neutral-950">
+    <>
+      {/* Mobile backdrop */}
+      {open && (
+        <div
+          onClick={onClose}
+          className="fixed inset-0 z-30 bg-black/40 lg:hidden"
+          aria-hidden="true"
+        />
+      )}
+
+      <aside
+        className={[
+          'fixed inset-y-0 left-0 z-40 flex h-full w-72 flex-col bg-white transition-transform duration-200 ease-out dark:bg-neutral-950',
+          'lg:static lg:z-auto lg:translate-x-0',
+          open ? 'translate-x-0' : '-translate-x-full',
+        ].join(' ')}
+      >
       {/* Brand */}
-      <div className="flex h-16 items-center border-b border-neutral-200 px-5 dark:border-neutral-800">
+      <div className="flex h-16 items-center justify-between border-b border-neutral-200 px-5 dark:border-neutral-800">
         <Link
           to="/"
           className="text-[13px] font-semibold tracking-[0.08em] text-neutral-900 uppercase hover:text-neutral-600 transition-colors duration-100 dark:text-neutral-100 dark:hover:text-neutral-300"
         >
           BW Event
         </Link>
+        <button
+          onClick={onClose}
+          aria-label="Fermer le menu"
+          className="flex h-9 w-9 items-center justify-center rounded-lg text-neutral-500 transition-colors hover:bg-neutral-100 active:scale-[0.97] dark:text-neutral-400 dark:hover:bg-neutral-800 lg:hidden"
+        >
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+            <path d="M5 5l10 10M15 5L5 15" />
+          </svg>
+        </button>
       </div>
 
       {/* Nav */}
@@ -208,6 +238,7 @@ export function Sidebar() {
           </p>
         </div>
       </div>
-    </aside>
+      </aside>
+    </>
   )
 }

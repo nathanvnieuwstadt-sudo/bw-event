@@ -26,7 +26,7 @@ export function MenuItemEditor({ items, onChange, readOnly = false }: Props) {
   return (
     <div className="space-y-2">
       {items.length > 0 && (
-        <div className="grid grid-cols-[1fr_80px_140px_44px] gap-2 px-0.5">
+        <div className="hidden sm:grid sm:grid-cols-[1fr_80px_140px_44px] gap-2 px-0.5">
           <span className="section-label">Plat</span>
           <span className="section-label text-right">Qté</span>
           <span className="section-label">Notes</span>
@@ -35,7 +35,10 @@ export function MenuItemEditor({ items, onChange, readOnly = false }: Props) {
       )}
 
       {items.map((item, index) => (
-        <div key={index} className="grid grid-cols-[1fr_80px_140px_44px] items-center gap-2">
+        <div
+          key={index}
+          className="flex flex-col gap-2 rounded-md border border-neutral-200 p-2 dark:border-neutral-800 sm:grid sm:grid-cols-[1fr_80px_140px_44px] sm:items-center sm:gap-2 sm:border-0 sm:p-0"
+        >
           <input
             type="text"
             placeholder="Nom du plat"
@@ -44,37 +47,40 @@ export function MenuItemEditor({ items, onChange, readOnly = false }: Props) {
             disabled={readOnly}
             className={inputCls}
           />
-          <input
-            type="number"
-            placeholder="1"
-            min={1}
-            value={item.quantity}
-            onChange={(e) => update(index, 'quantity', parseInt(e.target.value, 10) || 1)}
-            disabled={readOnly}
-            className={`${inputCls} text-right tabular-nums`}
-          />
-          <input
-            type="text"
-            placeholder="Notes"
-            value={item.notes ?? ''}
-            onChange={(e) => update(index, 'notes', e.target.value)}
-            disabled={readOnly}
-            className={inputCls}
-          />
-          {!readOnly ? (
-            <button
-              type="button"
-              onClick={() => remove(index)}
-              className="flex h-11 w-11 items-center justify-center rounded-md text-neutral-500 transition-colors duration-100 hover:bg-red-500/10 hover:text-red-600 active:scale-[0.95] dark:hover:text-red-400"
-              aria-label="Supprimer"
-            >
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-                <path d="M3 3l10 10M13 3L3 13" />
-              </svg>
-            </button>
-          ) : (
-            <span />
-          )}
+          <div className="flex items-center gap-2 sm:contents">
+            <input
+              type="number"
+              placeholder="1"
+              min={1}
+              aria-label="Quantité"
+              value={item.quantity}
+              onChange={(e) => update(index, 'quantity', parseInt(e.target.value, 10) || 1)}
+              disabled={readOnly}
+              className={`${inputCls} w-20 shrink-0 text-right tabular-nums sm:w-auto`}
+            />
+            <input
+              type="text"
+              placeholder="Notes"
+              value={item.notes ?? ''}
+              onChange={(e) => update(index, 'notes', e.target.value)}
+              disabled={readOnly}
+              className={`${inputCls} min-w-0 flex-1`}
+            />
+            {!readOnly ? (
+              <button
+                type="button"
+                onClick={() => remove(index)}
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-neutral-500 transition-colors duration-100 hover:bg-red-500/10 hover:text-red-600 active:scale-[0.95] dark:hover:text-red-400"
+                aria-label="Supprimer"
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                  <path d="M3 3l10 10M13 3L3 13" />
+                </svg>
+              </button>
+            ) : (
+              <span className="hidden sm:inline" />
+            )}
+          </div>
         </div>
       ))}
 

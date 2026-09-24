@@ -133,7 +133,7 @@ export function BanquetForm({
 
       {/* Event type */}
       <Card title="Type d'événement">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <Label>Type d'événement</Label>
             <select
@@ -170,7 +170,7 @@ export function BanquetForm({
             <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-neutral-500">
               {selectedEventType.name} — informations requises
             </p>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {selectedEventType.fields.map((field) => (
                 <div key={field.id}>
                   {field.fieldType === 'BOOLEAN' ? (
@@ -222,8 +222,8 @@ export function BanquetForm({
 
       {/* Event details */}
       <Card title="Détails de l'événement">
-        <div className="grid grid-cols-3 gap-4">
-          <div className="col-span-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="sm:col-span-2">
             <Label>Contact</Label>
             <select value={contactId} onChange={(e) => setContactId(e.target.value)} className={selectCls}>
               <option value="">Sélectionner un contact</option>
@@ -274,7 +274,7 @@ export function BanquetForm({
 
       {/* Logistics */}
       <Card title="Logistique">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <Label>Budget (€)</Label>
             <input
