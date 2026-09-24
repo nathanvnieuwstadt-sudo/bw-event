@@ -1,55 +1,13 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/useAuth'
 import { useBanquetFilters } from './useBanquetFilters'
-import { BanquetTable } from '../../components/banquet/BanquetTable'
-import { BanquetCalendar } from '../../components/banquet/BanquetCalendar'
+import { BanquetAgenda } from '../../components/banquet/BanquetAgenda'
 import { BanquetFilterBar } from '../../components/banquet/BanquetFilterBar'
 import { Button } from '../../components/ui/Button'
 
-type View = 'calendar' | 'table'
-
-function ViewToggle({ view, onChange }: { view: View; onChange: (v: View) => void }) {
-  return (
-    <div className="flex rounded-md border border-neutral-200 bg-white p-0.5 shadow-card dark:border-neutral-800 dark:bg-neutral-900">
-      <button
-        onClick={() => onChange('calendar')}
-        className={[
-          'flex min-h-[40px] items-center gap-1.5 rounded px-4 py-2 text-sm font-medium transition-colors duration-100 active:scale-[0.97]',
-          view === 'calendar'
-            ? 'bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900'
-            : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100',
-        ].join(' ')}
-      >
-        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="2" y="3" width="12" height="12" rx="1.5" />
-          <path d="M2 7h12M5 2v2M11 2v2" />
-        </svg>
-        Calendrier
-      </button>
-      <button
-        onClick={() => onChange('table')}
-        className={[
-          'flex min-h-[40px] items-center gap-1.5 rounded px-4 py-2 text-sm font-medium transition-colors duration-100 active:scale-[0.97]',
-          view === 'table'
-            ? 'bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900'
-            : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100',
-        ].join(' ')}
-      >
-        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="1" y="3" width="14" height="10" rx="1" />
-          <path d="M1 6h14M5 6v7M11 6v7" />
-        </svg>
-        Tableau
-      </button>
-    </div>
-  )
-}
-
-export function BanquetListPage() {
+export function AgendaPage() {
   const { restaurantId, hasRole } = useAuth()
   const navigate = useNavigate()
-  const [view, setView] = useState<View>('calendar')
   const {
     banquets, loading, error, filtered, filtersActive,
     search, setSearch,
@@ -65,7 +23,7 @@ export function BanquetListPage() {
     <div>
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Banquets</h1>
+          <h1 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Agenda</h1>
           {!loading && !error && (
             <p className="mt-0.5 text-sm text-neutral-500">
               {banquets.length} {banquets.length === 1 ? 'événement' : 'événements'}
@@ -73,7 +31,12 @@ export function BanquetListPage() {
           )}
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <ViewToggle view={view} onChange={setView} />
+          <button
+            onClick={() => navigate('/banquets')}
+            className="min-h-[44px] rounded-md border border-neutral-200 px-3.5 text-sm font-medium text-neutral-500 transition-colors duration-100 hover:bg-neutral-100 hover:text-neutral-900 active:scale-[0.97] dark:border-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
+          >
+            Calendrier / Tableau
+          </button>
           {hasRole('DEV', 'GENERAL_MANAGER', 'FLOOR_MANAGER') && (
             <Button onClick={() => navigate('/banquets/new')}>Nouveau banquet</Button>
           )}
@@ -111,11 +74,7 @@ export function BanquetListPage() {
             </p>
           )}
 
-          {view === 'calendar' ? (
-            <BanquetCalendar banquets={filtered} />
-          ) : (
-            <BanquetTable banquets={filtered} />
-          )}
+          <BanquetAgenda banquets={filtered} />
         </div>
       ) : null}
     </div>

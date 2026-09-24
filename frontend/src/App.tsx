@@ -5,6 +5,7 @@ import { ProtectedRoute } from './auth/ProtectedRoute'
 import { AppShell } from './components/layout/AppShell'
 import { LoginPage } from './pages/LoginPage'
 import { DashboardPage } from './pages/DashboardPage'
+import { AgendaPage } from './pages/banquet/AgendaPage'
 import { BanquetListPage } from './pages/banquet/BanquetListPage'
 import { BanquetDetailPage } from './pages/banquet/BanquetDetailPage'
 import { BanquetFormPage } from './pages/banquet/BanquetFormPage'
@@ -34,6 +35,7 @@ export default function App() {
                     <ProtectedRoute allowedRoles={['DEV', 'OWNER', 'GENERAL_MANAGER', 'FLOOR_MANAGER']} />
                   }
                 >
+                  <Route path="/agenda" element={<AgendaPage />} />
                   <Route path="/banquets" element={<BanquetListPage />} />
                   <Route path="/banquets/new" element={<BanquetFormPage />} />
                   <Route path="/banquets/:id" element={<BanquetDetailPage />} />

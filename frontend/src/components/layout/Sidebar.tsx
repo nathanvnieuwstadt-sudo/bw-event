@@ -10,6 +10,15 @@ function IconHome() {
   )
 }
 
+function IconAgenda() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 4h14M3 10h14M3 16h9" />
+      <circle cx="16.5" cy="16" r="1.2" fill="currentColor" stroke="none" />
+    </svg>
+  )
+}
+
 function IconCalendar() {
   return (
     <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -100,6 +109,7 @@ interface NavItem {
 const HOME: NavItem = { label: 'Accueil', to: '/', icon: <IconHome /> }
 
 const managerItems: NavItem[] = [
+  { label: 'Agenda',            to: '/agenda',       icon: <IconAgenda /> },
   { label: 'Banquets',          to: '/banquets',     icon: <IconCalendar /> },
   { label: 'Contacts',          to: '/contacts',     icon: <IconUsers /> },
   { label: 'Boîte de l\'agent', to: '/agent',        icon: <IconBot /> },
@@ -117,6 +127,7 @@ const ownerItems: NavItem[] = [
 ]
 
 const devItems: NavItem[] = [
+  { label: 'Agenda',            to: '/agenda',       icon: <IconAgenda /> },
   { label: 'Banquets',          to: '/banquets',     icon: <IconCalendar /> },
   { label: 'Contacts',          to: '/contacts',     icon: <IconUsers /> },
   { label: 'Types & menus', to: '/event-types', icon: <IconTag /> },
