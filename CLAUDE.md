@@ -26,7 +26,7 @@ docker-compose up --build
 ```
 
 Dev seed user (created by V2 migration):
-- Email: `dev@bwevent.local`
+- Email: `dev@orgevent.local`
 - Password: `devpassword`
 - Role: `DEV`
 

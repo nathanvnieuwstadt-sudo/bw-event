@@ -1,4 +1,4 @@
-# BW Event — Banquet Management Platform
+# Org Event — Banquet Management Platform
 
 ## Product purpose
 Internal operations tool for restaurant staff to manage banquet bookings, kitchen coordination, and client contacts. Single restaurant, role-based access. Built to scale to multi-tenant SaaS later.

@@ -7,7 +7,7 @@ INSERT INTO users (id, restaurant_id, email, password_hash, role)
 VALUES (
     '00000000-0000-0000-0000-000000000014',
     '00000000-0000-0000-0000-000000000001',
-    'owner@bwevent.local',
+    'owner@orgevent.local',
     '$2y$12$/B/ica1dtp75fz6qVUL.e.GjGURmk9Pf.Gl0RlGzqMkLK.Gh.o7mS',
     'OWNER'
 );

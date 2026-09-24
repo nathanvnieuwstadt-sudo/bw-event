@@ -9,11 +9,11 @@ const inputCls =
   'w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 transition-colors duration-100 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500'
 
 const DEV_ACCOUNTS = [
-  { email: 'dev@bwevent.local',     role: 'DEV' },
-  { email: 'manager@bwevent.local', role: 'Directeur général' },
-  { email: 'floor@bwevent.local',   role: 'Responsable de salle' },
-  { email: 'kitchen@bwevent.local', role: 'Cuisine' },
-  { email: 'owner@bwevent.local',   role: 'Propriétaire' },
+  { email: 'dev@orgevent.local',     role: 'DEV' },
+  { email: 'manager@orgevent.local', role: 'Directeur général' },
+  { email: 'floor@orgevent.local',   role: 'Responsable de salle' },
+  { email: 'kitchen@orgevent.local', role: 'Cuisine' },
+  { email: 'owner@orgevent.local',   role: 'Propriétaire' },
 ]
 const DEV_PASSWORD = 'devpassword'
 

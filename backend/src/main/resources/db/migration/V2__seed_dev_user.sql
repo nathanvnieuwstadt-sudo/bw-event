@@ -10,7 +10,7 @@ INSERT INTO users (id, restaurant_id, email, password_hash, role)
 VALUES (
     '00000000-0000-0000-0000-000000000010',
     NULL,
-    'dev@bwevent.local',
+    'dev@orgevent.local',
     '$2y$12$/B/ica1dtp75fz6qVUL.e.GjGURmk9Pf.Gl0RlGzqMkLK.Gh.o7mS',
     'DEV'
 );
@@ -21,7 +21,7 @@ INSERT INTO users (id, restaurant_id, email, password_hash, role)
 VALUES (
     '00000000-0000-0000-0000-000000000011',
     '00000000-0000-0000-0000-000000000001',
-    'manager@bwevent.local',
+    'manager@orgevent.local',
     '$2y$12$/B/ica1dtp75fz6qVUL.e.GjGURmk9Pf.Gl0RlGzqMkLK.Gh.o7mS',
     'GENERAL_MANAGER'
 );
@@ -32,7 +32,7 @@ INSERT INTO users (id, restaurant_id, email, password_hash, role)
 VALUES (
     '00000000-0000-0000-0000-000000000012',
     '00000000-0000-0000-0000-000000000001',
-    'floor@bwevent.local',
+    'floor@orgevent.local',
     '$2y$12$/B/ica1dtp75fz6qVUL.e.GjGURmk9Pf.Gl0RlGzqMkLK.Gh.o7mS',
     'FLOOR_MANAGER'
 );
@@ -43,7 +43,7 @@ INSERT INTO users (id, restaurant_id, email, password_hash, role)
 VALUES (
     '00000000-0000-0000-0000-000000000013',
     '00000000-0000-0000-0000-000000000001',
-    'kitchen@bwevent.local',
+    'kitchen@orgevent.local',
     '$2y$12$/B/ica1dtp75fz6qVUL.e.GjGURmk9Pf.Gl0RlGzqMkLK.Gh.o7mS',
     'KITCHEN'
 );

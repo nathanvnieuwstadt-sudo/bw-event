@@ -200,7 +200,7 @@ export function Sidebar({ open, onClose }: Props) {
           to="/"
           className="text-[13px] font-semibold tracking-[0.08em] text-neutral-900 uppercase hover:text-neutral-600 transition-colors duration-100 dark:text-neutral-100 dark:hover:text-neutral-300"
         >
-          BW Event
+          Org Event
         </Link>
         <button
           onClick={onClose}
