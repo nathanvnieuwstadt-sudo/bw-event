@@ -50,7 +50,7 @@ export function LoginPage() {
       {/* Left — brand panel */}
       <div className="hidden lg:flex lg:w-[420px] lg:flex-col lg:justify-between border-r border-neutral-200 bg-neutral-50 px-10 py-12 dark:border-neutral-900 dark:bg-neutral-950">
         <span className="text-[13px] font-semibold uppercase tracking-[0.1em] text-neutral-900 dark:text-neutral-100">
-          BW Event
+          Org Event
         </span>
         <div>
           <p className="text-2xl font-semibold leading-snug text-neutral-900 dark:text-neutral-100">
@@ -85,7 +85,7 @@ export function LoginPage() {
         <div className="w-full max-w-sm">
           {/* Mobile brand */}
           <p className="mb-8 text-[13px] font-semibold uppercase tracking-[0.1em] text-neutral-500 lg:hidden">
-            BW Event
+            Org Event
           </p>
 
           <h1 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">Connexion</h1>
