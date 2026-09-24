@@ -4,45 +4,64 @@ import { listBanquets } from '../../api/banquets'
 import { useAuth } from '../../auth/useAuth'
 import { BanquetTable } from '../../components/banquet/BanquetTable'
 import { BanquetCalendar } from '../../components/banquet/BanquetCalendar'
+import { BanquetAgenda } from '../../components/banquet/BanquetAgenda'
 import { Button } from '../../components/ui/Button'
 import { BANQUET_LOCATIONS, BANQUET_LOCATION_LABELS } from '../../types/banquet'
 import type { BanquetLocation, BanquetSummary } from '../../types/banquet'
 
-type View = 'calendar' | 'table'
+type View = 'calendar' | 'agenda' | 'table'
+
+function IconCalendarView() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="3" width="12" height="12" rx="1.5" />
+      <path d="M2 7h12M5 2v2M11 2v2" />
+    </svg>
+  )
+}
+
+function IconAgendaView() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 3h12M2 8h12M2 13h8" />
+      <circle cx="13.5" cy="13" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  )
+}
+
+function IconTableView() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="1" y="3" width="14" height="10" rx="1" />
+      <path d="M1 6h14M5 6v7M11 6v7" />
+    </svg>
+  )
+}
+
+const VIEW_OPTIONS: { value: View; label: string; icon: React.ReactNode }[] = [
+  { value: 'calendar', label: 'Calendrier', icon: <IconCalendarView /> },
+  { value: 'agenda',   label: 'Agenda',     icon: <IconAgendaView /> },
+  { value: 'table',    label: 'Tableau',    icon: <IconTableView /> },
+]
 
 function ViewToggle({ view, onChange }: { view: View; onChange: (v: View) => void }) {
   return (
     <div className="flex rounded-md border border-neutral-200 bg-white p-0.5 shadow-card dark:border-neutral-800 dark:bg-neutral-900">
-      <button
-        onClick={() => onChange('calendar')}
-        className={[
-          'flex min-h-[40px] items-center gap-1.5 rounded px-4 py-2 text-sm font-medium transition-colors duration-100 active:scale-[0.97]',
-          view === 'calendar'
-            ? 'bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900'
-            : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100',
-        ].join(' ')}
-      >
-        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="2" y="3" width="12" height="12" rx="1.5" />
-          <path d="M2 7h12M5 2v2M11 2v2" />
-        </svg>
-        Calendrier
-      </button>
-      <button
-        onClick={() => onChange('table')}
-        className={[
-          'flex min-h-[40px] items-center gap-1.5 rounded px-4 py-2 text-sm font-medium transition-colors duration-100 active:scale-[0.97]',
-          view === 'table'
-            ? 'bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900'
-            : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100',
-        ].join(' ')}
-      >
-        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="1" y="3" width="14" height="10" rx="1" />
-          <path d="M1 6h14M5 6v7M11 6v7" />
-        </svg>
-        Tableau
-      </button>
+      {VIEW_OPTIONS.map((opt) => (
+        <button
+          key={opt.value}
+          onClick={() => onChange(opt.value)}
+          className={[
+            'flex min-h-[40px] items-center gap-1.5 rounded px-3 sm:px-4 py-2 text-sm font-medium transition-colors duration-100 active:scale-[0.97]',
+            view === opt.value
+              ? 'bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900'
+              : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100',
+          ].join(' ')}
+        >
+          {opt.icon}
+          <span className="hidden sm:inline">{opt.label}</span>
+        </button>
+      ))}
     </div>
   )
 }
@@ -218,6 +237,8 @@ export function BanquetListPage() {
 
           {view === 'calendar' ? (
             <BanquetCalendar banquets={filtered} />
+          ) : view === 'agenda' ? (
+            <BanquetAgenda banquets={filtered} />
           ) : (
             <BanquetTable banquets={filtered} />
           )}
